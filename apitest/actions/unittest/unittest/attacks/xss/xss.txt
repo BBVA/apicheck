@@ -1,0 +1,8 @@
+<
+%3C
+&lt
+&lt;
+\x3c
+<script>
+<ScrIpt>
+<IMG SRC="javascript:alert('XSS');">
