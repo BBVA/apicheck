@@ -4,7 +4,7 @@ apitest
 *apitest: Testing your API for security*
 
 
-.. image::  https://raw.githubusercontent.com/BBVA/apitest/master/doc/images/logo.jpg
+.. image::  https://raw.githubusercontent.com/BBVA/apitest/master/doc/images/apitest-logo.png
     :height: 64px
     :width: 64px
     :alt: API Test logo
