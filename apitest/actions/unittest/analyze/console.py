@@ -22,7 +22,7 @@ def launch_apitest_generate_load_in_console(shared_config, **kwargs):
     
     # Check if config is valid
     if not config.is_valid:
-        log.console("[!] Invalid ApiTest file format")
+        log.console("[!] Invalid input configuration ")
 
         if config.verbosity > 2:
             for prop, msg in config.validation_errors:
@@ -35,6 +35,9 @@ def launch_apitest_generate_load_in_console(shared_config, **kwargs):
 
         if not loaded_file.is_valid:
             log.critical("[!] File format is WRONG")
+
+            for tag, error in loaded_file.validation_errors:
+                log.critical("    - {}: {}".format(tag, error))
             return
     
         # Display a summary of API

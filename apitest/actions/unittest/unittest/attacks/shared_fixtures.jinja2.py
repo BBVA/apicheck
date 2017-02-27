@@ -24,7 +24,7 @@ def make_requests(make_request, request_good, request_bad):
         # --------------------------------------------------------------------------
         # Make the current request
         # --------------------------------------------------------------------------
-        resp_from_test = make_requests(url=url, method=method, headers=headers, data=body)
+        resp_from_test = make_request(url=url, method=method, headers=headers, body=body)
 
         return resp_from_test, resp_ok, resp_bad
 

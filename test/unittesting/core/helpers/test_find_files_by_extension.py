@@ -8,7 +8,7 @@ from apitest.core.helpers import find_files_by_extension, ApitestNotFoundError
 @pytest.fixture
 def test_path(tmpdir):
     
-    for x in ('xx1.jinja', 'xx1.jinja2', 'xx1.txt'):
+    for x in ('xx1.jinja2.py', 'xx1.jinja2.py', 'xx1.txt'):
         open(join(str(tmpdir), x), "w").write("xxx")
     
     return str(tmpdir)
@@ -16,7 +16,7 @@ def test_path(tmpdir):
 
 def test_find_files_by_extension_runs_ok(test_path):
     
-    oks_returns = {join(test_path, "xx1.jinja2"), join(test_path, "xx1.jinja")}
+    oks_returns = {join(test_path, "xx1.jinja2.py"), join(test_path, "xx1.jinja2.py")}
     func_returns = set(list(x for x in find_files_by_extension(test_path)))
 
     assert len(func_returns) == 2
@@ -25,8 +25,8 @@ def test_find_files_by_extension_runs_ok(test_path):
 
 def test_find_files_by_extension_invalid_extensions(test_path):
     
-    oks_returns = {join(test_path, "xx1.jinja2")}
-    func_returns = set(list(x for x in find_files_by_extension(test_path, extensions=("jinja", ))))
+    oks_returns = {join(test_path, "xx1.jinja2.py")}
+    func_returns = set(list(x for x in find_files_by_extension(test_path, extensions=("jinja2.py", ))))
 
     assert len(func_returns) == 1
     assert len(oks_returns.difference(func_returns)) == 1

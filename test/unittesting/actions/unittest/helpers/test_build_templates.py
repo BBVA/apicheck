@@ -8,7 +8,7 @@ from apitest.actions.unittest.helpers import build_templates, CustomTemplate
 
 @pytest.fixture
 def test_path(tmpdir):
-    for x in ('xx1.jinja', 'xx1.jinja2', 'xx1.txt'):
+    for x in ('xx1.jinja2.py', 'xx1.jinja2.py', 'xx1.txt'):
         open(join(str(tmpdir), x), "w").write("xxx")
     
     return str(tmpdir)
@@ -17,7 +17,7 @@ def test_path(tmpdir):
 @pytest.fixture
 def built_jinja_templates(tmpdir):
     
-    with open(str(tmpdir) + "/case_01.jinja", "w") as c01:
+    with open(str(tmpdir) + "/case_01.jinja2.py", "w") as c01:
         c01.write("""import re
         
 def test_sqli_case_001(make_requests):
@@ -27,7 +27,7 @@ def test_sqli_case_001(make_requests):
     assert bad.body == current.body
 """)
     
-    with open(str(tmpdir) + "/case_02.jinja", "w") as c02:
+    with open(str(tmpdir) + "/case_02.jinja2.py", "w") as c02:
         c02.write("""from apitest.helpers.fuzzer import build_fuzzed_method
         
 def test_sqli_case_001(make_requests):
@@ -37,7 +37,7 @@ def test_sqli_case_001(make_requests):
     assert bad.body == current.body
 """)
     
-    with open(str(tmpdir) + "/empty.jinja", "w") as c03:
+    with open(str(tmpdir) + "/empty.jinja2.py", "w") as c03:
         c03.write("")
 
     return str(tmpdir)
@@ -46,7 +46,7 @@ def test_sqli_case_001(make_requests):
 @pytest.fixture
 def fixtures_with_spaces(tmpdir):
 
-    with open(str(tmpdir) + "/case_03.jinja", "w") as f:
+    with open(str(tmpdir) + "/case_03.jinja2.py", "w") as f:
         f.write("""def test_sqli_case_001(make_requests):
         current, good, bad = make_requests("{{ url }}")
 

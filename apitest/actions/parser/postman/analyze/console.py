@@ -49,6 +49,9 @@ def launch_apitest_postman_analyze_in_console(shared_config: ApitestPostmanAnaly
                                                                                           endpoint=len(col.end_points)))
         else:
             log.console("[!] File format is WRONG")
+
+            for tag, error in loaded_file.validation_errors:
+                log.console("    - {}: {}".format(tag, error))
     
     except KeyboardInterrupt:
         log.console("[*] CTRL+C caught. Exiting...")

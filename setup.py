@@ -34,7 +34,7 @@ from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
 if sys.version_info < (3, 5, ):
-    raise RuntimeError("{{ cookiecutter.tool_name }} requires Python 3.5.0+")
+    raise RuntimeError("Apitest requires Python 3.5.0+")
 
 #
 # Get version software version

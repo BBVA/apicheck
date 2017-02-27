@@ -40,6 +40,9 @@ def launch_apitest_sento_proxy_console(shared_config: ApitestSendtoModel, **kwar
         
         if not loaded_file.is_valid:
             log.critical("[!] File format is WRONG")
+
+            for tag, error in loaded_file.validation_errors:
+                log.critical("    - {}: {}".format(tag, error))
             return
 
         # Display a summary of API

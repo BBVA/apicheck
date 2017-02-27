@@ -1,74 +1,73 @@
 apitest
 =======
 
-![Logo](doc/images/logo.jpg)
-
 *apitest: Testing your API for security*
 
-Code | https://github.com/cr0hn/apitest
----- | ----------------------------------------------
-Issues | https://github.com/cr0hn/apitest/issues/
-Python version | Python 3.5 and above
+
+.. image::  https://raw.githubusercontent.com/BBVA/apitest/master/doc/images/logo.jpg
+    :height: 64px
+    :width: 64px
+    :alt: API Test logo
+
++----------------+--------------------------------------------+
+|Current version | 1.0.0-alpha1                               |
++----------------+--------------------------------------------+
+|Project site    | https://github.com/bbva/apitest            |
++----------------+--------------------------------------------+
+|Issues          | https://github.com/bbva/apitest/issues/    |
++----------------+--------------------------------------------+
+|Documentation   | https://apitest.readthedocs.org/           |
++----------------+--------------------------------------------+
+|Authors         | Daniel Garcia (cr0hn)                      |
++----------------+--------------------------------------------+
+|Latest Version  | 1.0.0                                      |
++----------------+--------------------------------------------+
+|Python versions | 3.5 or above                               |
++----------------+--------------------------------------------+
 
 What's apitest
---------------
+==============
 
-Long description
+A Docker analysis tools
 
-What's new?
------------
+Very quick install
+==================
 
-This apitest version, add a lot of new features and fixes, like:
+**Install from Pypi**
 
-Version 1.0.0
-+++++++++++++
+.. code-block:: bash
 
-- First version released
+    > python3.5 -m pip install apitest
 
-You can read entire list in CHANGELOG file.
+**From source**
 
-Installation
-------------
+.. code-block:: bash
 
-Simple
-++++++
+    > git clone https://github.com/bbva/apitest.git apitest
+    > cd apitest
+    > python3.5 setup.py install
 
-Install apitest is so easy:
+Show options:
 
-```
-$ python -m pip install apitest
-```
+.. code-block:: bash
 
-With extra performance
-++++++++++++++++++++++
+    > apitest -h
 
-Apitest also includes some optional dependencies to add extra performance but requires a bit different installation, because they (usually) depends of C extensions.
+Documentation
+=============
 
-To install the tool with extra performance you must do:
+Go to documentation site: https://apitest.readthedocs.org/
 
-```
-$ python -m pip install 'apitest[performance]'
-```
+Contributing
+============
 
-**Remember that apitest only runs in Python 3.5 and above**.
+Any collaboration is welcome!
 
-Quick start
------------
+There're many tasks to do.You can check the `Issues <https://github.com/bbva/apitest/issues/>`_ and send us a Pull Request.
 
-You can display inline help writing:
+Also you can read the `TODO <https://github.com/bbva/apitest/blob/master/TODO.md>`_ file.
 
-From cloned project
-+++++++++++++++++++
+License
+=======
 
-```bash
-
-python apitest.py -h
-```
-
-From pip installation
-+++++++++++++++++++++
-
-```bash
-
-apitest -h
-```
+This project is distributed under `MIT license <https://github.com/bbva/apitest/blob/master/LICENSE>`_

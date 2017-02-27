@@ -1,15 +1,64 @@
 """
 This file contains aux function to handle Postman files and data types
 """
+import re
+
+from typing import List, Union
 
 try:
-    from ujson import load, loads
+    from ujson import load, loads, dumps
 except ImportError:  # pragma no cover
-    from json import load, loads
+    from json import load, loads, dumps
 
 from apitest import APITest, APITestContentType, APITestHeader, APITestBody, APITestCookie, \
-    APITestResponse, APITestEndPoint, APITestRequest, APITestCollection, ApitestValueError, ApitestInvalidFormatError
+    APITestResponse, APITestEndPoint, APITestRequest, APITestCollection, ApitestValueError, ApitestInvalidFormatError, \
+    ApitestMissingDataError
 
+
+class PostmanConfig:
+    def __init__(self, variables: Union[List, dict] = None):
+        """
+        Extra Postman configuration.
+        
+        Variables
+        ---------
+        
+        This could be passed as a dictionary or a List:
+        
+        As a dict
+        +++++++++
+        
+        >>> vars = {'var1': 'value1', 'var2': 'value2'}
+        >>> PostmanConfig(variables=vars)
+        
+        As a List
+        +++++++++
+        
+        >>> vars = ["var1=value1", "var2=value2"]
+        >>> PostmanConfig(variables=vars)
+        
+        """
+        assert isinstance(variables, (dict, list, tuple))
+        
+        self.variables = {}
+        
+        if isinstance(variables, (list, tuple)):
+            for x in variables:
+                key, value = x.split("=", maxsplit=1)
+                
+                self.variables["{{%s}}" % key] = value
+        
+        else:
+            for k, v in variables.items():
+                # Fix var format
+                _fixed_var = k
+                if not v.startswith("{{"):
+                    _fixed_var = "{{%s" % _fixed_var
+                if not v.endswith("}}"):
+                    _fixed_var = "%s}}" % _fixed_var
+                
+                self.variables[_fixed_var] = v
+    
 
 def from_http_content_type_get_type(headers: list, body_mode: str) -> str:
     """
@@ -91,6 +140,9 @@ def from_raw_body_get_python_object(data_type: str, data: str):
         return data
     elif content == APITestContentType.json:
         try:
+            if not data:
+                return {}
+            
             return loads(data)
         except ValueError as e:
             raise ApitestValueError("Invalid JSON string data")
@@ -100,17 +152,59 @@ def from_raw_body_get_python_object(data_type: str, data: str):
             return "&".join("%s=%s" % (item.get("key"), item.get("value").replace(" ", "+")) for item in data)
         except AttributeError:
             raise ApitestValueError("Invalid Form data")
+
+
+# --------------------------------------------------------------------------
+# Handle postman variables
+# --------------------------------------------------------------------------
+def extract_postman_variables(postman_info: dict) -> List[str]:
+    """
+    This function try to find Postman variables and return a list them.
     
+    Postman collections can have variables. These variables are necessary for build the requests.
+    
+    The Postman variable have the format:
+    
+    {{variable}}
+    
+    :return: a list of Postman variables
+    """
+    postman_variable_regex = r'''(\{{[\w\d\-\_\.\s]+}})'''
+    
+    variables_match = re.findall(postman_variable_regex, dumps(postman_info))
+    
+    if not variables_match:
+        return []
+    
+    return list(set(variables_match))
+    
+    
+def replace_postman_variables(postman_info: dict,
+                              postman_variables: list,
+                              postman_config: PostmanConfig) -> Union[dict, ApitestMissingDataError]:
+    _postman_info_as_text = dumps(postman_info)
+    
+    # Check that postman variables and postman config variables has all of required vars
+    if set(postman_variables).difference(set(postman_config.variables)):
+        raise ApitestMissingDataError("Missing variables to complete Postman collection")
+    
+    for postman_var in postman_variables:
+        _postman_info_as_text = _postman_info_as_text.replace(postman_var, postman_config.variables[postman_var])
+
+    return loads(_postman_info_as_text)
+
 
 # --------------------------------------------------------------------------
 # Manage data
 # --------------------------------------------------------------------------
-def postman_parser(postman_info: dict) -> APITest:
+def postman_parser(postman_info: dict, postman_config: PostmanConfig = None) -> APITest:
     """
     Get a parser collection, in JSON input format, and parser it
-    
     :param postman_info: JSON parser info
     :type postman_info: dict
+    
+    :param postman_config: Additional Postman Config
+    :type postman_config: PostmanConfig
     
     :return: a Postman object
     :rtype: APITest
@@ -119,6 +213,18 @@ def postman_parser(postman_info: dict) -> APITest:
     """
     assert isinstance(postman_info, dict)
     assert len(postman_info) > 0
+
+    postman_config = PostmanConfig(variables=dict(host="127.0.0.1:8000"))
+    
+    # Try to find Postman variables. The variable
+    postman_variables = extract_postman_variables(postman_info)
+    
+    # If variables was found, replace with the values
+    if postman_variables:
+        if not postman_config.variables:
+            raise ApitestMissingDataError("Missing variables to complete Postman collection")
+        else:
+            postman_info = replace_postman_variables(postman_info, postman_variables, postman_config)
     
     collections = []
     
@@ -149,7 +255,10 @@ def postman_parser(postman_info: dict) -> APITest:
                                                                                  data=query_info.get("body").get("formdata")))
                 
                 # Build request
-                request = APITestRequest(url=query_info.get("url"),
+                _request_url = query_info.get("url") \
+                    if query_info.get("url").startswith("http") \
+                    else "http://{}".format(query_info.get("url"))
+                request = APITestRequest(url=_request_url,
                                          method=query_info.get("method"),
                                          headers=request_headers,
                                          body=request_body)
@@ -238,5 +347,5 @@ def postman_parser_form_file(file_path: str):
     return postman_parser(loaded_data)
 
 
-__all__ = ("postman_parser", "postman_parser_form_file")
+__all__ = ("postman_parser", "postman_parser_form_file", "PostmanConfig")
 

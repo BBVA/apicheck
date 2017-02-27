@@ -1,5 +1,7 @@
 import logging
 
+from apitest import PostmanConfig
+
 from .api import *
 from .model import *
 
@@ -23,7 +25,10 @@ def launch_apitest_postman_parse_in_console(shared_config: ApitestPostmanParseMo
     try:
         log.console("[*] Analyzing parser file: '%s'" % config.file_path)
         
-        loaded_file = parse_postman_file(config.file_path)
+        # Build postman config
+        postman_config = PostmanConfig(variables=config.postman_variables)
+        
+        loaded_file = parse_postman_file(config.file_path, postman_config)
         
         if loaded_file.is_valid:
             log.console("[*] File format is OKs")
@@ -34,6 +39,9 @@ def launch_apitest_postman_parse_in_console(shared_config: ApitestPostmanParseMo
             
         else:
             log.console("[!] File format is WRONG")
+            
+            for tag, error in loaded_file.validation_errors:
+                log.console("    - {}: {}".format(tag, error))
     
     except KeyboardInterrupt:
         log.console("[*] CTRL+C caught. Exiting...")

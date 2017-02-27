@@ -9,9 +9,9 @@ def main():
     __package__ = str("apitest")
     
     # Run the cmd
-    from apitest.actions.parser.postman.cli import cli_postman
+    from apitest.actions.parser.postman.cli import cli_parser
 
-    cli_postman()
+    cli_parser()
 
 if __name__ == "__main__":
     main()  # pragma no cover

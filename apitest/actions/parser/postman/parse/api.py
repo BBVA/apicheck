@@ -3,10 +3,10 @@ try:
 except ImportError:
     from json import load
 
-from apitest import APITest, postman_parser
+from apitest import APITest, postman_parser, PostmanConfig
 
 
-def parse_postman_file(path: str) -> APITest:
+def parse_postman_file(path: str, postman_config: PostmanConfig) -> APITest:
     """
     This function parse a Postman file and return an APITest object instance
     
@@ -21,7 +21,7 @@ def parse_postman_file(path: str) -> APITest:
     with open(path, "r") as f:
         json_info = load(f)
     
-        return postman_parser(json_info)
+        return postman_parser(json_info, postman_config)
 
         
 __all__ = ("parse_postman_file", )

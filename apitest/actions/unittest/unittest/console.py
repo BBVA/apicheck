@@ -24,11 +24,8 @@ def launch_apitest_generate_unittest_in_console(shared_config, **kwargs):
     
     # Check if config is valid
     if not config.is_valid:
-        log.console("[!] Invalid ApiTest file format")
-
-        if config.verbosity > 2:
-            for prop, msg in config.validation_errors:
-                log.console("[!] '%s' property %s" % (prop, msg))
+        for prop, msg in config.validation_errors:
+            log.critical("[!] '%s' property %s" % (prop, msg))
         return
     
     try:
@@ -39,7 +36,7 @@ def launch_apitest_generate_unittest_in_console(shared_config, **kwargs):
             
         build_unittest(config, parser_data)
     
-    except KeyboardInterrupt:
+    except KeyboardInterrupt:  # pragma no cover
         log.console("[*] CTRL+C caught. Exiting...")
     except Exception as e:
         log.console("[!] Unhandled exception: %s" % str(e))

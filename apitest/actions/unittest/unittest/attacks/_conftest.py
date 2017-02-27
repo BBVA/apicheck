@@ -1,6 +1,8 @@
 import pytest
 import requests
 
+from requests.cookies import RequestsCookieJar
+
 try:
     import ujson as json
 except ImportError:
@@ -25,6 +27,8 @@ class Response(object):
         status_code = status_code or 200
         headers = headers or {}
         cookies = cookies or {}
+        if isinstance(cookies, RequestsCookieJar):
+            cookies = dict(cookies)
         reason = reason or "OK"
         
         assert isinstance(body, str)

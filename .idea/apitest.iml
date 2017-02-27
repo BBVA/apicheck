@@ -8,6 +8,10 @@
     <orderEntry type="jdk" jdkName="Python 3.5.1 virtualenv at ~/.virtualenvs/apitest" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="ReSTService">
+    <option name="workdir" value="$MODULE_DIR$/doc" />
+    <option name="DOC_DIR" value="$MODULE_DIR$/doc" />
+  </component>
   <component name="TestRunnerService">
     <option name="projectConfiguration" value="py.test" />
     <option name="PROJECT_TEST_RUNNER" value="py.test" />

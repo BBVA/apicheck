@@ -156,7 +156,7 @@ class build_templates(object):
             yield custom_template
                                 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        shared_fixtures = join(dirname(__file__), "unittest", "attacks", "shared_fixtures.jinja2")
+        shared_fixtures = join(dirname(__file__), "unittest", "attacks", "shared_fixtures.jinja2.py")
     
         # Check if there are content to save
         if not any(True for template in self.results if template.rendered):

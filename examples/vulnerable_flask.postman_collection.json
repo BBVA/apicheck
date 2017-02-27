@@ -1,0 +1,119 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Vulnerable Flask",
+		"_postman_id": "aea6083e-98f7-79c6-b845-13bb5dbf3b63",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/v1/products/",
+					"request": {
+						"url": "{{host}}/api/v1/products/",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"product_name\": \"jjjja\"}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/products/{product_id}",
+					"request": {
+						"url": "{{host}}/api/v1/products/3",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"product_name\": \"jjjja\"}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/products/",
+					"request": {
+						"url": "{{host}}/api/v1/products/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"product_name\": \"jjjja\"}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/products/{product_id}",
+					"request": {
+						"url": "{{host}}/api/v1/products/2",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"product_name\": \"jjjja\"}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/products/search",
+					"request": {
+						"url": "{{host}}/api/v1/products/search?q=mysearch<script>alert(1)</script>&format=text",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"product_name\": \"jjjja\"}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/products/{product_id}",
+					"request": {
+						"url": "{{host}}/api/v1/products/4",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"product_name\": \"jjjja\"}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

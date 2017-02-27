@@ -50,9 +50,16 @@ def make_directoriable(name: str) -> str:
     if not name:
         return ""
     
-    valid_chars = string.ascii_letters + "_" + string.whitespace + "-"
+    valid_chars = string.ascii_letters + "_-/ " + string.digits
     
-    return "".join(x.lower().replace(" ", "_").replace("-", "_") for x in name if x in valid_chars)
+    _tmp_path = "".join(x.lower().replace(" ", "_").replace("-", "_").replace("/", "_") for x in name if x in valid_chars)
+    
+    if _tmp_path.startswith("_"):
+        _tmp_path = _tmp_path[1:]
+    if _tmp_path.endswith("_"):
+        _tmp_path = _tmp_path[:-1]
+        
+    return _tmp_path
 
 
 def find_files_by_extension(base_dir: str, *, extensions: iter = None):
@@ -78,7 +85,7 @@ def find_files_by_extension(base_dir: str, *, extensions: iter = None):
     """
     assert isinstance(base_dir, str)
     
-    extensions = extensions or ("jinja2", "jinja")
+    extensions = extensions or ("jinja2.py", "jinja.py")
     
     if not exists(base_dir):
         raise ApitestNotFoundError("Base dir '{}' not found".format(base_dir))
@@ -255,6 +262,12 @@ def display_apitest_object_summary(data, *, display_function: object = None, pre
                                                                                           align=30,
                                                                                           endpoint=len(col.end_points)))
         
+        for end_point in col.end_points:
+            display_function("{space}         |-> [{method}] {name:{align}}".format(method=end_point.request.method,
+                                                                                    space=pre_space,
+                                                                                    name=end_point.name,
+                                                                                    align=40))
+
 
 __all__ = ("dict_to_obj", "make_directoriable", "find_files_by_extension", "find_files_by_extension",
            "find_data_type", "form_content2dict", "display_apitest_object_summary")  # noqa

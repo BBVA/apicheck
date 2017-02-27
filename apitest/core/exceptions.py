@@ -2,6 +2,10 @@ class ApitestError(Exception):  # noqa
     pass
 
 
+class ApitestMissingDataError(Exception):
+    pass
+
+
 class ApitestInvalidFormatError(Exception):
     pass
 
@@ -28,4 +32,4 @@ class ApitestNotFoundError(FileNotFoundError):
 
 __all__ = ("ApitestError", "ApitestValueError", "ApitestTypeError",
            "ApitestUnknownTypeError", "ApitestConnectionError", "ApitestInvalidFormatError",
-           "ApitestNotFoundError")
+           "ApitestNotFoundError", "ApitestMissingDataError")

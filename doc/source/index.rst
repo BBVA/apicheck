@@ -30,11 +30,3 @@ Contents
 
    generate
    postman
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
