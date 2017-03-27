@@ -5,16 +5,9 @@ python:
   - "3.5"
   - "3.6"
 
-matrix:
-  include:
-    - python: 3.5
-      env: TOXENV=py35
-    - python: 3.6
-      env: TOXENV=py36
-
 # command to install dependencies
 install:
-  - pip install tox
+  - pip install tox-travis
 
 # command to run tests
 script: tox
