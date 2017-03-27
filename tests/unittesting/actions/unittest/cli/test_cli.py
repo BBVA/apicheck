@@ -2,8 +2,8 @@ from click.testing import CliRunner
 from apitest.actions.cli import cli
 
 
-def test_parser_cli_runs_ok():
+def test_unittest_cli_runs_ok():
     runner = CliRunner()
-    result = runner.invoke(cli, ["-h"])
+    result = runner.invoke(cli, ["unittest"])
     
     assert result.exit_code == 0

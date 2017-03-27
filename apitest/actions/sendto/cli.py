@@ -13,10 +13,10 @@ log = logging.getLogger('apitest')
 # --------------------------------------------------------------------------
 # CLI APITest
 # --------------------------------------------------------------------------
-@global_options()
+@click.group()
 @click.pass_context
 def sendto(ctx, **kwargs):  # pragma no cover
-    ctx.obj = kwargs
+    ctx.obj.update(kwargs)
 
 
 @sendto.command(help="Send API end-point queries thought a proxy")

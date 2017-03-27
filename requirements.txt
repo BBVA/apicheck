@@ -4,8 +4,3 @@ jinja2
 aiohttp
 colorlog
 booby-ng
-requests
-mypy-lang
-
-pytest
-pytest-xdist

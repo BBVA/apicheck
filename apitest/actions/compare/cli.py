@@ -13,13 +13,13 @@ log = logging.getLogger('apitest')
 # --------------------------------------------------------------------------
 # CLI APITest
 # --------------------------------------------------------------------------
-@global_options()
+@click.group()
 @click.pass_context
-def comparer(ctx, **kwargs):  # pragma no cover
-    ctx.obj = kwargs
+def compare(ctx, **kwargs):  # pragma no cover
+    ctx.obj.update(kwargs)
 
 
-@comparer.command(help="Compare two APIs")
+@compare.command(help="Compare two APIs")
 @click.pass_context
 @click.argument('api_old_connection_string', required=True)
 @click.argument('api_current_connection_string', required=True)
@@ -27,4 +27,4 @@ def compare(ctx, **kwargs):
     launch_apitest_comparer_console(ctx.obj, **kwargs)
 
 
-__all__ = ("comparer", )
+__all__ = ("compare", )

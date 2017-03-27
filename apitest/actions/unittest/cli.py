@@ -12,10 +12,10 @@ from .unittest.console import *
 log = logging.getLogger('apitest')
 
 
-@global_options()
+@click.group()
 @click.pass_context
 def unittest(ctx, **kwargs):  # pragma no cover
-    ctx.obj = kwargs
+    ctx.obj.update(kwargs)
 
 
 @unittest.command(help="Load an ApiTest file and display a summary")

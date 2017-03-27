@@ -67,7 +67,15 @@ class PyTest(TestCommand):
     def run(self):
         import subprocess
         import sys
-        errno = subprocess.call([sys.executable, '-m', 'pytest', '--cov-report', 'html', '--cov-report', 'term', '--cov', 'apitest'])
+        errno = subprocess.call([sys.executable,
+                                 '-m',
+                                 'pytest',
+                                 '--cov-report',
+                                 'html',
+                                 '--cov-report',
+                                 'term',
+                                 '--cov',
+                                 'apitest'])
         raise SystemExit(errno)
 
 setup(
@@ -84,9 +92,7 @@ setup(
         'performance':  required_performance
     },
     entry_points={'console_scripts': [
-        'apitest-sendto = apitest.actions.sendto.cli:cli',
-        'apitest-unittest = apitest.actions.unittest.cli:cli',
-        'apitest-parser = apitest.actions.parser.cli:cli',
+        'apitest = apitest.actions.cli:cli',
     ]},
     description='Testing your API for security',
     long_description=long_description,
