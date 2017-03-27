@@ -1,7 +1,7 @@
 import pytest
 
+from actions.parser.postman.parsers import from_raw_body_get_python_object
 from apitest import APITestContentType, ApitestValueError
-from apitest.helpers.api_parsers.postman import from_raw_body_get_python_object
 
 
 def test_from_raw_body_get_python_object_runs_ok():

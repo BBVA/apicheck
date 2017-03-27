@@ -50,10 +50,10 @@ with codecs.open(version_file, 'r', 'latin1') as fp:
 
 with open(join(dirname(__file__), 'requirements.txt')) as f:
     required = f.read().splitlines()
-    
+
 with open(join(dirname(__file__), 'requirements-performance.txt')) as f:
     required_performance = f.read().splitlines()
-    
+
 with open(join(dirname(__file__), 'requirements-runtest.txt')) as f:
     required_test = f.read().splitlines()
 
@@ -63,7 +63,7 @@ with open(join(dirname(__file__), 'README.rst')) as f:
 
 class PyTest(TestCommand):
     user_options = []
-    
+
     def run(self):
         import subprocess
         import sys

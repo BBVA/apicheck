@@ -1,4 +1,4 @@
-from apitest.helpers.fuzzer import fuzz_value_from_type
+from apitest.utils.url_fuzzers import fuzz_value_from_type
 
 
 def test_fuzz_param_int():

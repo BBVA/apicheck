@@ -1,7 +1,7 @@
 import pytest
 
+from actions.parser.postman.parsers import from_http_content_type_get_type
 from apitest import APITestHeader
-from apitest.helpers.api_parsers.postman import from_http_content_type_get_type
 
 
 def test_from_http_content_type_get_type_runs_ok_with_body_mode():

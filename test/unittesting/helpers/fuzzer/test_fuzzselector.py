@@ -1,6 +1,6 @@
 import pytest
 
-from apitest.helpers.fuzzer import FUZZSelector
+from apitest.utils.url_fuzzers import FUZZSelector
 
 
 def test_fuzzselector_type():

@@ -13,8 +13,7 @@ from booby.fields import __all__ as __all__booby__
 # --------------------------------------------------------------------------
 class SharedConfig(Model):
     verbosity = Integer(default=0)
-    # worker = String(choices=['process', 'threads'])
-    # concurrency = Integer()
+    debug = Boolean(default=False)
     timeout = Integer(default=10)
 
 
@@ -29,7 +28,7 @@ class APITestContentType(Enum):
 
 class APITestCookie(Model):
     __ignore_missing__ = True
-    
+
     expires = String()
     host_only = Boolean(default=False)
     http_only = Boolean(default=False)
@@ -42,7 +41,7 @@ class APITestCookie(Model):
 
 class APITestBody(Model):
     __ignore_missing__ = True
-    
+
     #: HTTP Format content type. Example: "application/json"
     content_type = String()
     value = Raw()
@@ -50,14 +49,14 @@ class APITestBody(Model):
 
 class APITestHeader(Model):
     __ignore_missing__ = True
-    
+
     key = String()
     value = String()
 
 
 class APITestResponse(Model):
     __ignore_missing__ = True
-    
+
     code = Integer(default=200)
     status = String(default="OK")
     headers = Collection(APITestHeader)
@@ -67,7 +66,7 @@ class APITestResponse(Model):
 
 class APITestRequest(Model):
     __ignore_missing__ = True
-    
+
     url = URL()
     method = String()
     headers = Collection(APITestHeader)
@@ -76,7 +75,7 @@ class APITestRequest(Model):
 
 class APITestEndPoint(Model):
     __ignore_missing__ = True
-    
+
     name = String()
     description = String()
     request = Embedded(APITestRequest)
@@ -85,7 +84,7 @@ class APITestEndPoint(Model):
 
 class APITestCollection(Model):
     __ignore_missing__ = True
-    
+
     name = String()
     description = String()
     end_points = Collection(APITestEndPoint)
@@ -120,39 +119,39 @@ class APITest(Model):
 
     """
     __ignore_missing__ = True
-    
+
     title = String()
     description = String()
     version = Integer(default=2)
     collections = Collection(APITestCollection)
 
 
-def transform_apit_test_body_to_queryable(request: APITestBody):
+def transform_apitest_body_to_queryable(request: APITestBody):
     """
     This function get an instance of APITestBody and transform it into a valid data for a make a query.
-    
-    >>> transform_apit_test_body_to_queryable(APITestBody({}))
+
+    >>> transform_apitest_body_to_queryable(APITestBody({}))
     >>>
-    
+
     :param request:
     :type request:
     :return:
     :rtype:
     """
     assert isinstance(request, APITestBody)
-    
+
     # Select the type of data by Content-type in HTTP Header
     content_type = request.content_type
     body = request.value
-    
+
     if not content_type:
         content_type = "application/json"
-    
+
     try:
         content = APITestContentType(content_type)
     except ValueError:
         return body
-    
+
     if content == APITestContentType.raw:
         return body
     elif content == APITestContentType.json:
@@ -163,4 +162,4 @@ def transform_apit_test_body_to_queryable(request: APITestBody):
 
 __all__ = ("APITestContentType", "APITestCookie", "APITestBody", "APITestHeader",
            "APITestResponse", "APITestRequest", "APITestEndPoint", "APITestCollection", "APITest",
-           "transform_apit_test_body_to_queryable", "SharedConfig") + __all__booby__
+           "transform_apitest_body_to_queryable", "SharedConfig") + __all__booby__

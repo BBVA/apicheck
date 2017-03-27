@@ -4,8 +4,8 @@ import pytest
 
 from os.path import join, dirname, abspath
 
+from actions.parser.postman.parsers import postman_parser
 from apitest import APITest, ApitestInvalidFormatError
-from apitest.helpers.api_parsers.postman import postman_parser
 
 
 @pytest.fixture
@@ -16,13 +16,17 @@ def postman_info_json():
 
 
 def test_postman_parser_runs_ok(postman_info_json):
-    assert isinstance(postman_parser(postman_info_json), APITest)
+    assert isinstance(postman_parser(postman_info_json,
+                                     {
+                                         "echo_digest_nonce": "ex",
+                                         "echo_digest_realm": "ex2"
+                                     }), APITest)
 
 
 def test_postman_parser_runs_none_input():
     with pytest.raises(AssertionError):
         postman_parser(None)
-        
+
 
 def test_postman_parser_runs_empty_dict_input():
     with pytest.raises(AssertionError):

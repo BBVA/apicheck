@@ -5,37 +5,44 @@ import logging
 
 from apitest import global_options
 
-from .parse.console import *
-from .analyze.console import *
+from .model import *
+from .console import *
+from ...helpers import check_console_input_config
 
 
 log = logging.getLogger('apitest')
 
 
-# --------------------------------------------------------------------------
-# CLI APITest
-# --------------------------------------------------------------------------
-@global_options()
+@click.group()
+@click.option('-e', '--variable',
+              'postman_variables',
+              help="setup postman variables", multiple=True)
 @click.pass_context
-def cli_parser(ctx, **kwargs):  # pragma no cover
-    ctx.obj = kwargs
+def postman(ctx, **kwargs):  # pragma no cover
+    ctx.obj.update(kwargs)
 
 
-@cli_parser.command(help="Extract information from APITest collection")
-@click.pass_context
+@postman.command(help="Extract information from APITest collection")
 @click.argument('file_path', required=True)
+@click.pass_obj
 def analyze(ctx, **kwargs):
-    launch_apitest_postman_analyze_in_console(ctx.obj, **kwargs)
+    config = ApitestPostmanAnalyzeModel(**ctx, **kwargs)
+
+    # Check if valid
+    if check_console_input_config(config):
+        launch_apitest_postman_analyze_in_console(config)
 
 
-@cli_parser.command(help="Parse Postman collection and export information in apitest format")
+@postman.command(help="Parse Postman collection and export information in "
+                      "apitest format")
 @click.pass_context
-@click.option('-o', '--output', 'output_file', help="output file. This file is in JSON format")
-@click.option('-e', '--variable', 'postman_variables', help="setup postman varialbes", multiple=True)
+@click.option('-o', '--output',
+              'output_file',
+              help="output file. This file is in JSON format")
 @click.argument('file_path', required=True)
-def postman(ctx, **kwargs):
-    launch_apitest_postman_parse_in_console(ctx.obj, **kwargs)
+def extract(ctx, **kwargs):
+    config = ApitestPostmanParseModel(**ctx, **kwargs)
 
+    if check_console_input_config(config):
+        launch_apitest_postman_parse_in_console(ctx.obj)
 
-if __name__ == "__main__" and __package__ is None:  # pragma no cover
-    cli_parser()

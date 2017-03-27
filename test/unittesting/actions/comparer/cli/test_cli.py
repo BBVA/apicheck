@@ -1,5 +1,5 @@
 from click.testing import CliRunner
-from apitest.actions.comparer.cli import cli
+from apitest.actions.cli import cli
 
 
 def test_parser_cli_runs_ok():

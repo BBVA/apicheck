@@ -1,6 +1,6 @@
 import pytest
 
-from apitest.helpers.fuzzer import build_fuzzed_method
+from apitest.utils.url_fuzzers import build_fuzzed_method
 
 
 @pytest.fixture

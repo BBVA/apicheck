@@ -9,7 +9,7 @@ except ImportError:
     pass
 
 from collections import namedtuple
-from apitest import APITestEndPoint, APITest, transform_apit_test_body_to_queryable
+from apitest import APITestEndPoint, APITest, transform_apitest_body_to_queryable
 
 ProxyConfig = namedtuple("ProxyConfig", ("url", "user", "password"))
 RequestResponse = namedtuple("RequestResponse", ("status", "content", "headers"))
@@ -44,7 +44,7 @@ async def _coro_make_request(*,
     
     # Extract info
     url = endpoint.request.url
-    body = transform_apit_test_body_to_queryable(endpoint.request.body)
+    body = transform_apitest_body_to_queryable(endpoint.request.body)
     method = endpoint.request.method
     headers = {header.key: header.value for header in endpoint.request.headers}
 

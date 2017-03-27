@@ -2,8 +2,7 @@ import pytest
 
 from random import choice, randint
 
-from apitest.helpers.fuzzer import fuzz_value_from_type
-from apitest.helpers.fuzzer import build_fuzzed_x_form
+from apitest.utils.url_fuzzers import fuzz_value_from_type, build_fuzzed_x_form
 
 
 @pytest.fixture
