@@ -4,6 +4,9 @@ apitest
 .. image:: https://travis-ci.org/BBVA/apitest.svg?branch=master
     :target: https://travis-ci.org/BBVA/apitest
 
+.. image:: https://codecov.io/gh/BBVA/apitest/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/BBVA/apitest
+
 *apitest: Testing your API for security*
 
 
