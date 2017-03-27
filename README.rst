@@ -1,6 +1,9 @@
 apitest
 =======
 
+.. image:: https://travis-ci.org/BBVA/apitest.svg?branch=master
+    :target: https://travis-ci.org/BBVA/apitest
+
 *apitest: Testing your API for security*
 
 
