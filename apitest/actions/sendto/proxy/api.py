@@ -1,3 +1,16 @@
+# Copyright 2017 BBVA
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 import logging
 import aiohttp
 import asyncio
@@ -24,24 +37,24 @@ async def _coro_make_request(*,
                              accept_selfsigned_certs: bool = True):
     """
     A coroutine that makes the requests
-     
+
     :param endpoint: APITestEndPoint object instance
     :type endpoint: APITestEndPoint
-    
+
     :param proxy: ProxyConfig object instance
     :type proxy: ProxyConfig
-    
+
     :return: the
     :rtype:
     """
     assert isinstance(endpoint, APITestEndPoint)
     assert isinstance(proxy, ProxyConfig)
-    
+
     # Proxy needs authentication?
     proxy_auth = None
     if proxy.user is not None:
         proxy_auth = aiohttp.BasicAuth(proxy.user, proxy.password)
-    
+
     # Extract info
     url = endpoint.request.url
     body = transform_apitest_body_to_queryable(endpoint.request.body)
@@ -52,7 +65,7 @@ async def _coro_make_request(*,
     conn = None
     if accept_selfsigned_certs:
         conn = aiohttp.TCPConnector(verify_ssl=False)
-    
+
     # Do the Requests
     async with aiohttp.ClientSession(connector=conn) as session:
         async with session.request(method=method,
@@ -61,13 +74,13 @@ async def _coro_make_request(*,
                                    data=body,
                                    proxy=proxy.url,
                                    proxy_auth=proxy_auth) as resp:
-            
+
             if resp.status == 200:
                 log.console("    - Response OK for URL: '{}'".format(url))
             else:
                 log.console("    - Non-200 response for URL: '{}'".format(url))
                 log.console("      \_ HTTP status code: '{}'".format(resp.status))
-                
+
             # Download content?
             content = None
             if download_content:
@@ -81,21 +94,21 @@ async def _coro_make_request(*,
 
 def make_request(*, endpoint: APITestEndPoint, proxy: ProxyConfig = None):
     loop = asyncio.get_event_loop()
-    
+
     loop.run_until_complete(_coro_make_request(endpoint=endpoint,
                                                proxy=proxy))
 
 
 def make_all_requests(*, apitest_obj: APITest, proxy: ProxyConfig = None):
-    
+
     loop = asyncio.get_event_loop()
-    
+
     tasks = []
-    
+
     for collections in apitest_obj.collections:
         for endpoint in collections.end_points:
             tasks.append(_coro_make_request(endpoint=endpoint, proxy=proxy))
-    
+
     loop.run_until_complete(asyncio.wait(tasks))
 
 

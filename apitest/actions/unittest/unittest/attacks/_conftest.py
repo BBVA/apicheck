@@ -1,3 +1,16 @@
+# Copyright 2017 BBVA
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 import pytest
 import requests
 
@@ -16,13 +29,13 @@ class Response(object):
     """
     This class is a wrapper of requests response. This is necessary because py.test cache need a JSON serializable
     data type.
-    
+
     This class only get useful requests response data, and make it serializable.
     """
-    
+
     def __init__(self, *, status_code: int = 200, headers: dict = None, cookies: dict = None,
                  reason: str = None, body: str = None):
-        
+
         body = body or ""
         status_code = status_code or 200
         headers = headers or {}
@@ -30,23 +43,23 @@ class Response(object):
         if isinstance(cookies, RequestsCookieJar):
             cookies = dict(cookies)
         reason = reason or "OK"
-        
+
         assert isinstance(body, str)
         assert isinstance(reason, str)
         assert isinstance(headers, dict)
         assert isinstance(cookies, dict)
         assert isinstance(status_code, int)
         assert isinstance(status_code, int)
-        
+
         self.body = body
         self.reason = reason
         self.headers = headers
         self.cookies = cookies
         self.status_code = status_code
-        
+
         self.__content_type_cache = None
         self.__content_body_cache = None
-    
+
     @classmethod
     def build_from_json(cls, **kwargs):
         o = cls(status_code=kwargs.get("status_code"),
@@ -54,14 +67,14 @@ class Response(object):
                 body=kwargs.get("body"),
                 cookies=kwargs.get("cookies"),
                 reason=kwargs.get("reason"))
-        
+
         return o
-    
+
     @property
     def dump_json(self):
-        
+
         return {key: value for key, value in vars(self).items() if not key.startswith("_")}
-    
+
     @property
     def json_body(self):
         """
@@ -73,9 +86,9 @@ class Response(object):
                 self.__content_body_cache = json.loads(self.body)
             else:
                 self.__content_body_cache = self.body
-        
+
         return self.__content_body_cache
-    
+
     @property
     def content_type(self):
         """
@@ -87,7 +100,7 @@ class Response(object):
                 self.__content_type_cache = "json"
             else:
                 self.__content_type_cache = "raw"
-        
+
         return self.__content_type_cache
 
 
@@ -99,26 +112,26 @@ def request_good(request):
                                                      method=method,
                                                      headers=headers,
                                                      body=body)
-        
+
         response = request.config.cache.get(url_signature, None)
         # If response is not cached
         if not response:
             # Get and store a GOOD requests
             raw_response = requests.request(url=url, method=method, headers=headers, data=body)
-            
+
             response = Response(status_code=raw_response.status_code,
                                 headers=dict(raw_response.headers),
                                 cookies=raw_response.cookies,
                                 reason=raw_response.reason,
                                 body=raw_response.text)
-            
+
             request.config.cache.set(url_signature, response.dump_json)
         else:
             # Recover response from cached info
             response = Response.build_from_json(**response)
-        
+
         return response
-    
+
     return _new_fn
 
 
@@ -129,46 +142,46 @@ def request_bad(request):
                                                       method=method,
                                                       headers=headers,
                                                       body=body)
-        
+
         # Get selectors
         fuzz_opt = fuzz_selector or FUZZSelector.BODY | FUZZSelector.BODY
-        
+
         # Build fuzzer options
         fuzzer = FUZZSelector(fuzz_opt)
-        
+
         response = request.config.cache.get(url_signature, None)
         # If response is not cached
         if not response:
-    
+
             # --------------------------------------------------------------------------
             # Fuzz selected values
             # --------------------------------------------------------------------------
             fuzzed_url = build_fuzzed_url(url) if fuzzer.is_url else url
             fuzzed_headers = build_fuzzed_http_header(headers) if fuzzer.is_header else headers
             fuzzed_method = build_fuzzed_method() if fuzzer.is_method else method
-            
+
             if headers and "application/json" in headers.values():
                 # TODO: make for dump_json
                 fuzzed_body = build_fuzzed_x_form(body)
             else:
                 fuzzed_body = build_fuzzed_x_form(body)
-            
+
             # Get and store a BAD requests
             raw_response = requests.request(url=fuzzed_url, method=fuzzed_method, headers=fuzzed_headers, data=fuzzed_body)
-            
+
             response = Response(status_code=raw_response.status_code,
                                 headers=dict(raw_response.headers),
                                 cookies=raw_response.cookies,
                                 reason=raw_response.reason,
                                 body=raw_response.text)
-            
+
             request.config.cache.set(url_signature, response.dump_json)
-        
+
         else:
             response = Response.build_from_json(**response)
-        
+
         return response
-    
+
     return _new_fn
 
 
@@ -176,11 +189,11 @@ def request_bad(request):
 def make_request():
     def _new_fn(url: str, *, method: str = "GET", headers: dict = None, body: str = None):
         raw_response = requests.request(url=url, method=method, headers=headers, data=body)
-        
+
         return Response(status_code=raw_response.status_code,
                         headers=dict(raw_response.headers),
                         cookies=raw_response.cookies,
                         reason=raw_response.reason,
                         body=raw_response.text)
-    
+
     return _new_fn

@@ -76,4 +76,4 @@ Also you can read the `TODO <https://github.com/bbva/apitest/blob/master/TODO.rs
 License
 =======
 
-This project is distributed under `MIT license <https://github.com/bbva/apitest/blob/master/LICENSE>`_
+This project is distributed under `Apache 2 license <https://github.com/bbva/idsfree/blob/master/LICENSE>`_
