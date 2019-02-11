@@ -1,5 +1,0 @@
-pytest
-pytest-xdist
-pytest-coverage
-
-requests

@@ -1,5 +1,5 @@
 FROM python:3.5-slim
-MAINTAINER daniel.garcia2.contractor@bbva.com
+MAINTAINER daniel.garcia2@bbva.com
 
 ENV PORT=8888 \
     PYTHONDONTWRITEBYTECODE=1

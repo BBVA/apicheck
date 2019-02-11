@@ -1,6 +1,5 @@
-motor
-click
-jinja2
-aiohttp
-colorlog
-booby-ng
+tinydb
+pyyaml
+pymongo
+openapi3
+python-slugify

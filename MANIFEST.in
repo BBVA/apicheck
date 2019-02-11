@@ -1,4 +1,4 @@
-include LICENSE CHANGELOG README.md requirements.txt requirements-performance.txt requirements-runtest.txt
+include VERSION LICENSE CHANGELOG README.md requirements.txt
 
 recursive-exclude * __pycache__
 recursive-exclude * *.pyc
