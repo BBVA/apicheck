@@ -35,10 +35,10 @@ setup(
     name='apicheck',
     version="2.0.0",
     install_requires=[],
-    url='https://github.com/cr0hn/apitest',
+    url='https://github.com/bbva/apicheck',
     license='MIT',
-    author='cr0hn (@ggdaniel)',
-    author_email='cr0hn@cr0hn.com',
+    author='cr0hn (@ggdaniel)',  # TODO
+    author_email='cr0hn@cr0hn.com',  # TODO
     packages=find_packages(),
     include_package_data=True,
     entry_points={},
