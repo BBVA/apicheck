@@ -5,6 +5,13 @@ def test_has_endpoint_param():
         assert False, "EndPointparam not found"
 
 
+def test_has_endpoint_response():
+    try:
+        from apicheck.model import EndPointResponse
+    except ImportError:
+        assert False, "EndPointResponse not found"
+
+
 def test_has_action_to_dict():
     try:
         from apicheck.actions import model_to_dict

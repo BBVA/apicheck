@@ -92,3 +92,33 @@ def test_properties_invalid_types_has_exception():
             assert True
         else:
             assert False, f"Property '{incorrect_pro}' has invalid type"
+
+
+def test_default_values():
+    properties = {
+        "param_type": "string",
+        "description": "",
+        "default": None,
+        "minimum_value": None,
+        "maximum_value": None,
+        "max_length": 500,
+
+    }
+
+    e = EndPointParam("paco")
+
+    for pro_name, prop_default in properties.items():
+        assert getattr(e, pro_name) == prop_default, \
+                f"Property '{pro_name}' has invalid default " \
+                f"value: '{prop_default}'"
+
+
+def test_is_frozen():
+    e = EndPointParam("paco")
+
+    try:
+        e.name = "Francisco"
+    except AttributeError:
+        assert True
+    else:
+        assert False
