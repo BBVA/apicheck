@@ -1,1 +1,1 @@
-file_source = None
+from .source_file import file_source
