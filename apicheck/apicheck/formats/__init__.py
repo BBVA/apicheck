@@ -1,1 +1,1 @@
-openapi = None
+from .format_openapi import openapi
