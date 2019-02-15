@@ -1,4 +1,4 @@
 #!/bin/bash
 
-pipenv run pytest
+pipenv run pytest -v
 pipenv run pycodestyle apicheck

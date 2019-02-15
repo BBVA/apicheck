@@ -25,16 +25,15 @@ from setuptools.command.test import test as TestCommand
 if sys.version_info < (3, 7,):
     raise RuntimeError("Apitest requires Python 3.7.0+")
 
-with open(join(dirname(__file__), 'README.rst')) as f:
+with open(join(dirname(__file__), '../README.rst')) as f:
     long_description = f.read()
-
-with open(join(dirname(__file__), 'VERSION')) as f:
-    version = f.read()
 
 setup(
     name='apicheck',
     version="2.0.0",
-    install_requires=[],
+    install_requires=[
+        'openapi3'
+    ],
     url='https://github.com/bbva/apicheck',
     license='MIT',
     author='cr0hn (@ggdaniel)',  # TODO
