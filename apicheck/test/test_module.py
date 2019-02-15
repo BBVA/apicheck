@@ -24,3 +24,10 @@ def test_has_file_source():
         from apicheck.sources import file_source
     except ImportError:
         assert False, "Can't find 'file_source' source"
+
+
+def test_has_openapi_format():
+    try:
+        from apicheck.formats import openapi
+    except ImportError:
+        assert False, "Can't find 'openapi' in formats"
