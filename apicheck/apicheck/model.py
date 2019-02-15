@@ -1,6 +1,6 @@
 import mimetypes
 
-from typing import Optional, List
+from typing import Optional, List, Dict
 from dataclasses import dataclass, fields, field
 
 
@@ -42,16 +42,18 @@ class EndPointResponse(BaseAPICheck):
     http_code: Optional[int] = 200
     content_type: Optional[str] = "application/json"
     description: Optional[str] = None
-    params: List = field(default_factory=list)
+    params: List[EndPointParam] = field(default_factory=list)
+    headers: dict = field(default_factory=dict)
 
     def __post_init__(self):
         super(EndPointResponse, self).__post_init__()
 
         # Checking "params" type
         if type(self.params) is not list:
-            raise AttributeError("Invalid type for property 'params'")
+            raise ValueError("Invalid type for property 'params'")
         else:
-            if not all(type(x) is EndPointResponse for x in self.params):
+            if self.params and \
+                    not all(type(x) is EndPointParam for x in self.params):
                 raise ValueError("Invalid type for 'params' element")
 
         # Checking "http_code" ranges

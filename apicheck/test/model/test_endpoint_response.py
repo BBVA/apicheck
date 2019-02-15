@@ -8,7 +8,7 @@ def test_is_a_class():
 
 
 def test_can_create():
-    EndPointResponse(200, "application/json", "", [])
+    EndPointResponse(200, "application/json", "", [], {})
 
     assert True
 
@@ -20,6 +20,7 @@ def test_has_correct_properties():
         "content_type": "application/json",
         "description": "name",
         "params": [],
+        "headers": {},
 
     }
 
@@ -37,6 +38,7 @@ def test_properties_has_correct_types():
         "content_type": ("application/json", str),
         "description": ("des", str),
         "params": ([], list),
+        "headers": ({}, dict)
     }
 
     o = EndPointResponse(**{x: y[0] for x, y in properties.items()})
@@ -54,11 +56,15 @@ def test_properties_invalid_types_has_exception():
         "http_code": "",
         "content_type": 1,
         "description": 1,
+        "params": 1,
+        "headers": 1,
     }
     correct_properties = {
         "http_code": 0,
         "content_type": "name",
         "description": "name",
+        "params": [],
+        "headers": {},
     }
 
     for incorrect_pro, incorrect_value in incorrect_properties.items():
@@ -77,12 +83,13 @@ def test_property_params_has_correct_type():
         "http_code": 200,
         "content_type": "name",
         "description": "name",
-        "params": 0
+        "params": 0,
+        "headers": 0
     }
 
     try:
         EndPointResponse(**correct_properties)
-    except AttributeError:
+    except ValueError:
         assert True
     else:
         assert False
@@ -93,7 +100,8 @@ def test_property_params_hast_correct_linked_type():
         "http_code": 200,
         "content_type": "name",
         "description": "name",
-        "params": [EndPointParam("name")]
+        "params": [EndPointParam("name")],
+        "headers": {"Content-Type": "application/json"}
     }
 
     try:
@@ -110,6 +118,7 @@ def test_default_values():
         "content_type": "application/json",
         "description": None,
         "params": [],
+        "headers": {}
     }
 
     e = EndPointResponse()
