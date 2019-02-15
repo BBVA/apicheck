@@ -1,2 +1,2 @@
-def openapi():
+def openapi(content: str):
     pass
