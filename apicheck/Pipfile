@@ -8,6 +8,10 @@ verify_ssl = true
 [packages]
 pytest = "*"
 pycodestyle = "*"
+http-parser = "*"
+cython = "*"
+mitmproxy = "*"
+brotli = "*"
 
 [requires]
 python_version = "3.7"

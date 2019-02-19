@@ -1,6 +1,4 @@
-import mimetypes
-
-from typing import Optional, List, Dict
+from typing import Optional, List
 from dataclasses import dataclass, fields, field
 
 
