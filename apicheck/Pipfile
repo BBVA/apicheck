@@ -12,6 +12,9 @@ http-parser = "*"
 cython = "*"
 mitmproxy = "*"
 brotli = "*"
+sqlalchemy-aio = "*"
+pg8000 = "*"
+pymysql = "*"
 
 [requires]
 python_version = "3.7"

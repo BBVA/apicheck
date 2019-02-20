@@ -17,6 +17,9 @@ from mitmproxy import optmanager  # noqa
 from mitmproxy import proxy  # noqa
 from mitmproxy.utils import debug, arg_check  # noqa
 
+from apicheck.db import setup_db_engine
+from apicheck.sources.proxy import ProxyConfig
+
 OPTIONS_FILE_NAME = "config.yaml"
 
 
@@ -157,5 +160,53 @@ def mitmdump(args=None) -> typing.Optional[int]:  # pragma: no cover
     return None
 
 
-if __name__ == '__main__':
-    mitmdump(["-s", "apicheck/sources/mitm_print.py"])
+def launch_apicheck_proxy(running_config: ProxyConfig):
+    here = os.path.dirname(__file__)
+    mitm_addon_path = os.path.join(here, "mitm_proxy_addon.py")
+
+    args = []
+
+    #
+    # Attach addon
+    #
+    args.extend([
+        "-s",
+        mitm_addon_path,
+        "--flow-detail",
+        "0"
+    ])
+
+    #
+    # Specific Domain
+    #
+    if running_config.domain:
+        domain_filter = r'^(?!{})'.format(
+            running_config.domain.replace(".", "\.")
+        )
+        args.extend([
+            "--ignore",
+            f"\'{domain_filter}\'"
+        ])
+
+    #
+    # Listen port/address
+    #
+    if running_config.listen_addr:
+        args.extend([
+            "--listen-host",
+            running_config.listen_addr
+        ])
+
+    if running_config.listen_port:
+        args.extend([
+            "--listen-port",
+            running_config.listen_port
+        ])
+
+    # -------------------------------------------------------------------------
+    # Setup database
+    # -------------------------------------------------------------------------
+    setup_db_engine(running_config.db_connection_string)
+
+    mitmdump(args)
+

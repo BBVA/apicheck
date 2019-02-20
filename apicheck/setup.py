@@ -32,7 +32,7 @@ setup(
     name='apicheck',
     version="2.0.0",
     install_requires=[
-        'openapi3'
+        'openapi3', 'sqlalchemy'
     ],
     url='https://github.com/bbva/apicheck',
     license='MIT',
