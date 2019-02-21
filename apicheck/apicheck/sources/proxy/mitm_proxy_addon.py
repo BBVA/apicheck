@@ -1,4 +1,5 @@
 import json
+import uuid
 import asyncio
 
 from apicheck.sources.proxy import ProxyConfig
@@ -16,6 +17,7 @@ class APICheckDumpToDatabase:
     def __init__(self):
         self._connection = None
         self.proxy_config = ProxyConfig()
+        self.proxy_session_id = str(uuid.uuid4())
 
     def response(self, flow):
         asyncio.get_event_loop().create_task(self.save_response(flow))
@@ -68,6 +70,7 @@ class APICheckDumpToDatabase:
 
         try:
             await self._connection.execute(ProxyLogs.insert().values(
+                proxy_session_id=self.proxy_session_id,
                 request=str(plain_request)),
                 response=str(plain_response)
             )

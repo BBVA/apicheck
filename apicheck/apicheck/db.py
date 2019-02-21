@@ -4,7 +4,7 @@ from sqlalchemy.schema import CreateTable
 from sqlalchemy_aio import ASYNCIO_STRATEGY
 
 from sqlalchemy import (
-    Column, Integer, MetaData, Table, Text, create_engine)
+    Column, Integer, MetaData, Table, Text, create_engine, String)
 
 
 def setup_db_engine(db_query_string: str = None):
@@ -32,6 +32,7 @@ metadata = MetaData()
 ProxyLogs = Table(
     'proxy_logs', metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("proxy_session_id", String(40)),
     Column("request", Text, nullable=False),
     Column("response", Text, nullable=False),
 )
