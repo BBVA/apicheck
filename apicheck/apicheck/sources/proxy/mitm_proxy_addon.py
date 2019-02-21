@@ -62,9 +62,9 @@ class APICheckDumpToDatabase:
             if content_type not in VALID_CONTENT_TYPES:
                 exclude = "content"
 
-        plain_response = self.clean_content(
+        plain_response = json.dumps(self.clean_content(
             flow.response.__dict__, exclude=exclude
-        )
+        ))
 
         try:
             await self._connection.execute(ProxyLogs.insert().values(
