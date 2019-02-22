@@ -163,6 +163,7 @@ def mitmdump(args=None) -> typing.Optional[int]:  # pragma: no cover
 def launch_apicheck_proxy(running_config: ProxyConfig):
     here = os.path.dirname(__file__)
     mitm_addon_path = os.path.join(here, "mitm_proxy_addon.py")
+    cert_path = os.path.join(here, "certificates", "apicheck.pem")
 
     args = []
 
@@ -170,6 +171,8 @@ def launch_apicheck_proxy(running_config: ProxyConfig):
     # Attach addon
     #
     args.extend([
+        "--cert",
+        f"*={cert_path}",
         "-s",
         mitm_addon_path,
         "--flow-detail",

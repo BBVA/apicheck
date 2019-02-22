@@ -20,3 +20,9 @@ def cli_args_proxy(parser):
                             default=False,
                             dest="store_assets_content",
                             help="store assets content in database")
+    proxy_args.add_argument('-a', '--learning_mode',
+                            action="store_true",
+                            default=False,
+                            dest="learning_mode",
+                            help="enable learning mode to introspect the "
+                                 "REST API")

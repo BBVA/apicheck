@@ -10,3 +10,4 @@ class ProxyConfig(object, metaclass=Singleton):
     listen_addr: str = "127.0.0.1"
     listen_port: int = 8080
     store_assets_content: bool = False
+    learning_mode: bool = False
