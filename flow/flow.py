@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from itertools import tee, groupby, chain
-from typing import Iterable, Optional, Tuple
+from typing import Iterable, Optional, Tuple, Callable, Set
 from functools import partial, reduce
 import json
 
@@ -61,6 +61,7 @@ def response_content_type_filter(expected :str, reqres :ReqRes) -> bool:
 
 @dataclass
 class Step:
+    session :str
     origin :str
     destination :str
 
@@ -82,11 +83,32 @@ def content_type_flow(
         next(destination)
 
         origin_destination = zip(origin, destination)
-        return map(lambda x: Step(x[0], x[1]), origin_destination)
+        return map(lambda x: Step(session, x[0], x[1]), origin_destination)
 
     by_session = map(_proc_by_session, logs)
     return reduce(chain, by_session, iter([]))
-    
+
+
+def _execute(x : (Callable, Iterable[ReqRes])) -> Iterable[Step]:
+    fun, reqres = x
+    return fun(reqres)
+
+
+def _get_nodes(steps :Iterable[Step]) -> Set[str]:
+    def _add_to_set(acc :Set[str], step : Step) -> Set[str]:
+        acc.add(step.origin)
+        acc.add(step.destination)
+        return acc
+    return reduce(_add_to_set, steps, set())
+
+
+def sumarize(steps :Iterable[Step]) -> dict:
+    step_list = list(steps) # beause they can't be generators
+    nodes = _get_nodes(step_list)
+    print(list(nodes))
+    return {
+        "central": list()
+    }
 
 
 def main():
@@ -101,16 +123,16 @@ def main():
 
     res = list(map(parse_to_dataclass, session.query(Log).all()))
     res.sort(key=_by_session)
-    grouped_sessions :Tuple[str, Iterable[ReqRes]] = groupby(res, key=_by_session)
+    grouped_sessions = groupby(res, key=_by_session)
 
     processes = [
         partial(content_type_flow, "html"),
         partial(content_type_flow, "json")
     ]
-
-    analysis = map(lambda x: x[0](x[1]), zip(processes, tee(grouped_sessions)))
+    
+    analysis = map(_execute, zip(processes, tee(grouped_sessions)))
     for x in analysis:
-        print(list(x))
+        print(list(sumarize(x)))
 
 
 if __name__ == "__main__":
