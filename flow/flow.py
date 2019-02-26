@@ -3,6 +3,7 @@ from itertools import tee, groupby, chain
 from typing import Iterable, Optional, Tuple, Callable, Set
 from functools import partial, reduce
 import json
+import sys
 
 from sqlalchemy import Column, ForeignKey, Integer, String, BigInteger, Text
 from sqlalchemy.ext.declarative import declarative_base
@@ -45,6 +46,72 @@ def parse_to_dataclass(log :Log) -> Optional[ReqRes]:
     return None
 
 
+@dataclass
+class RequestInfo:
+    key :str
+    response_time :float
+    size :int
+
+
+@dataclass
+class RequestStats:
+    key :str=""
+    count :int=0
+    total :float=0
+    minimum :float=sys.float_info.max
+    maximum :float=sys.float_info.min
+    total_size :int=0
+    min_size :int=sys.maxsize
+    max_size :int=-sys.maxsize-1
+
+
+def collect_request_info(requests :Iterable[ReqRes]) -> None:
+    def _map_to_RequestInfo(reqres :ReqRes) -> RequestInfo:
+        try:
+            size = int(reqres.response["headers"]["Content-Length"])
+        except:
+            size = 0
+        start = reqres.request["timestamp_start"]
+        end = reqres.response["timestamp_end"]
+        return RequestInfo(
+            reqres.request["path"],
+            (end-start)*1000,
+            size
+        )
+
+    def _by_key(reqres :RequestInfo) -> str:
+        return reqres.key
+
+    def _collect_stats(
+            grouped_info : Tuple[RequestInfo, Iterable[RequestInfo]]
+        ) -> RequestStats:
+        _, current = grouped_info
+        return reduce(_get_stats, current, RequestStats())
+
+    def _get_stats(stats: RequestStats, info :RequestInfo) -> RequestStats:
+        stats.key = info.key
+        stats.count += 1
+        stats.total += info.response_time
+        stats.minimum = min(stats.minimum, info.response_time)
+        stats.maximum = max(stats.maximum, info.response_time)
+        stats.total_size += info.size
+        stats.min_size = min(stats.min_size, info.size)
+        stats.max_size = max(stats.max_size, info.size)
+        return stats
+    
+    request_info = list(map(_map_to_RequestInfo, requests))
+    request_info.sort(key=_by_key)
+    by_endpoint = groupby(request_info, key=_by_key)
+    return map(_collect_stats, by_endpoint)
+
+
+@dataclass
+class Step:
+    session :str
+    origin :str
+    destination :str
+
+
 def content_type(headers :dict) -> Optional[str]:
     if "Content-Type" in headers:
         return headers["Content-Type"]
@@ -57,13 +124,6 @@ def response_content_type_filter(expected :str, reqres :ReqRes) -> bool:
     if content:
         return expected in content
     return False
-
-
-@dataclass
-class Step:
-    session :str
-    origin :str
-    destination :str
 
 
 def content_type_flow(
@@ -89,26 +149,13 @@ def content_type_flow(
     return reduce(chain, by_session, iter([]))
 
 
-def _execute(x : (Callable, Iterable[ReqRes])) -> Iterable[Step]:
-    fun, reqres = x
-    return fun(reqres)
-
-
+# not in use
 def _get_nodes(steps :Iterable[Step]) -> Set[str]:
     def _add_to_set(acc :Set[str], step : Step) -> Set[str]:
         acc.add(step.origin)
         acc.add(step.destination)
         return acc
     return reduce(_add_to_set, steps, set())
-
-
-def sumarize(steps :Iterable[Step]) -> dict:
-    step_list = list(steps) # beause they can't be generators
-    nodes = _get_nodes(step_list)
-    print(list(nodes))
-    return {
-        "central": list()
-    }
 
 
 def main():
@@ -122,17 +169,31 @@ def main():
     session = DBSession()
 
     res = list(map(parse_to_dataclass, session.query(Log).all()))
+
+    # response metrics
+    metrics = list(collect_request_info(res))
+
+    # flows
+    def _execute(x : (Callable, Iterable[ReqRes])) -> Iterable[Step]:
+        fun, reqres = x
+        return fun(reqres)
+
     res.sort(key=_by_session)
     grouped_sessions = groupby(res, key=_by_session)
-
     processes = [
         partial(content_type_flow, "html"),
         partial(content_type_flow, "json")
     ]
     
-    analysis = map(_execute, zip(processes, tee(grouped_sessions)))
-    for x in analysis:
-        print(list(sumarize(x)))
+    steps = map(_execute, zip(processes, tee(grouped_sessions)))
+
+    # resources by host
+    def _by_host(elm :ReqRes) -> str:
+        return elm.request["host"]
+
+    res.sort(key=_by_host)
+    by_host = groupby(res, key=_by_host)
+    print(list(map(lambda x: x, by_host)))
 
 
 if __name__ == "__main__":
