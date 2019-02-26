@@ -182,7 +182,7 @@ def launch_apicheck_proxy(running_config: ProxyConfig):
     #
     # Specific Domain
     #
-    if running_config.domain:
+    if running_config.domain and running_config.promiscuous is False:
         domain_filter = r'^(?!{})'.format(
             running_config.domain.replace(".", "\.")
         )

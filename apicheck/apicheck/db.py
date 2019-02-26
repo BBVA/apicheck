@@ -26,7 +26,7 @@ def setup_db_engine(db_query_string: str = None):
     engine = builtins.apicheck_db_engine
 
     tables_to_create = [
-        ProxyLogs, APIDefinitionMetadata, APIRequests,APIResponses
+        ProxyLogs, APIMetadata, APIRequests, APIResponses, APIDefinitions
     ]
 
     for table in tables_to_create:
@@ -63,11 +63,11 @@ ProxyLogs = Table(
     Column("request_id", Integer, ForeignKey("requests.id"), nullable=True),
 )
 
-APIDefinitionMetadata = Table(
+APIMetadata = Table(
     'metadata', metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
     Column("api_name", String(200), unique=True),
-    Column("api_version", String(200)),
+    Column("api_version", String(200), unique=True),
 
 )
 
@@ -80,6 +80,7 @@ APIRequests = Table(
     Column("body", Text),
     Column("metadata_id", Integer, ForeignKey("metadata.id"), nullable=False),
 )
+
 APIResponses = Table(
     'responses', metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
@@ -88,4 +89,16 @@ APIResponses = Table(
     Column("headers", Text),
     Column("body", Text),
     Column("requests_id", Integer, ForeignKey("requests.id"), nullable=False),
+)
+
+APIDefinitions = Table(
+    'definitions', metadata,
+    Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("format", String(50), index=True),
+    Column("version", String(50), index=True),
+    Column("data", Text),
+    Column("metadata_id",
+           Integer,
+           ForeignKey("metadata.id"),
+           nullable=False)
 )

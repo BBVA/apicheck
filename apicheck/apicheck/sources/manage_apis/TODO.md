@@ -1,0 +1,1 @@
+[ ] Add delete method to the manage command

@@ -3,6 +3,7 @@ def cli_args_proxy(parser):
     proxy_args = parser.add_parser('proxy', help='start a HTTP(s) proxy')
     proxy_args.add_argument('domain',
                             metavar="domain",
+                            nargs="*",
                             help="Domain to inspect using proxy")
     proxy_args.add_argument('-l', '--listen',
                             dest="listen_addr",
@@ -11,10 +12,6 @@ def cli_args_proxy(parser):
     proxy_args.add_argument('-p', '--port',
                             dest="listen_port",
                             help="proxy listen port (default: 8080)")
-    proxy_args.add_argument('-C', '--connection-string',
-                            dest="db_connection_string",
-                            required=True,
-                            help="database connection string")
     proxy_args.add_argument('--store-assets',
                             action="store_true",
                             default=False,
@@ -26,3 +23,9 @@ def cli_args_proxy(parser):
                             dest="learning_mode",
                             help="enable learning mode to introspect the "
                                  "REST API")
+    proxy_args.add_argument('--promiscuous',
+                            action="store_true",
+                            default=False,
+                            dest="promiscuous",
+                            help="save all requests that passthroughs "
+                                 "the proxy")

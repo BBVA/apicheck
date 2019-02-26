@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 
 from apicheck.sources.proxy import ProxyConfig
 from apicheck.db import get_engine, ProxyLogs, APIRequests, APIResponses, \
-    APIDefinitionMetadata
+    APIMetadata
 
 VALID_CONTENT_TYPES = (
     "text/html", "application/json", "application/javascript",
@@ -38,6 +38,11 @@ class APICheckProxyMode:
         #
         # If not 'learning mode' is set, only stores the log
         #
+
+        if self.proxy_config.promiscuous is False \
+                and flow.request.host not in self.proxy_config.domain:
+            return
+
         if self.proxy_config.learning_mode:
             asyncio.get_event_loop().create_task(self.save_definition(flow))
         else:
@@ -79,7 +84,7 @@ class APICheckProxyMode:
             print("[*] Building metadata")
             try:
                 ret = await connection.execute(
-                    APIDefinitionMetadata.insert().values(
+                    APIMetadata.insert().values(
                         api_name=api_name,
                         api_version=api_version
                 ))
@@ -92,8 +97,8 @@ class APICheckProxyMode:
                 #
                 if " unique constraint" in str(e).lower():
                     ret = await connection.execute(
-                        APIDefinitionMetadata.select(
-                            APIDefinitionMetadata.c.api_name==api_name
+                        APIMetadata.select(
+                            APIMetadata.c.api_name==api_name
                         ))
                     # results = await ret.fetchone()
                     self._metadata_id, *_ = await ret.fetchone()
