@@ -1,6 +1,6 @@
 
 
-def cli_args_api_manage(parser):
+def cli(parser):
 
     proxy_args = parser.add_parser(
         'manage',

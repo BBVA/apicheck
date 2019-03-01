@@ -18,7 +18,7 @@ from mitmproxy import proxy  # noqa
 from mitmproxy.utils import debug, arg_check  # noqa
 
 from apicheck.db import setup_db_engine
-from apicheck.sources.proxy import ProxyConfig
+from apicheck.sources.proxy.model import RunningConfig
 
 OPTIONS_FILE_NAME = "config.yaml"
 
@@ -61,7 +61,7 @@ def process_options(parser, opts, args):
     return proxy.config.ProxyConfig(opts)
 
 
-def run(
+def run_mitm(
         master_cls: typing.Type[master.Master],
         make_parser: typing.Callable[[options.Options], argparse.ArgumentParser],
         arguments: typing.Sequence[str],
@@ -154,13 +154,14 @@ def mitmdump(args=None) -> typing.Optional[int]:  # pragma: no cover
             )
         return {}
 
-    m = run(dump.DumpMaster, cmdline.mitmdump, args, extra)
+    m = run_mitm(dump.DumpMaster, cmdline.mitmdump, args, extra)
     if m and m.errorcheck.has_errored:  # type: ignore
         return 1
     return None
 
 
-def launch_apicheck_proxy(running_config: ProxyConfig):
+def run(running_config: RunningConfig):
+
     here = os.path.dirname(__file__)
     mitm_addon_path = os.path.join(here, "mitm_proxy_addon.py")
     cert_path = os.path.join(here, "certificates", "apicheck.pem")

@@ -1,0 +1,47 @@
+#%RAML 1.0
+title: API with Examples
+
+types:
+  User:
+    type: object
+    properties:
+      name: string
+      lastname: string
+    example:
+      name: Bob
+      lastname: Marley
+  Org:
+    type: object
+    properties:
+      name: string
+      address?: string
+      value? : string
+/organisation:
+  post:
+    headers:
+      UserID:
+        description: the identifier for the user that posts a new organisation
+        type: string
+        example: SWED-123 # single scalar example
+    body:
+      application/json:
+        type: Org
+        example: # single request body example
+          value: # needs to be declared since type contains 'value' property
+            name: Doe Enterprise
+            value: Silver
+  get:
+    description: Returns an organisation entity.
+    responses:
+      201:
+        body:
+          application/json:
+            type: Org
+            examples:
+              acme:
+                name: Acme
+              softwareCorp:
+                value: # validate against the available facets for the map value of an example
+                  name: Software Corp
+                  address: 35 Central Street
+                  value: Gold # validate against instance of the `value` property

@@ -10,8 +10,8 @@ class DefinitionsFormats(Enum):
     SWAGGER = 3
 
 
-@dataclass(frozen=True)
-class APIDefinitionsConfig(CommonModel):
+@dataclass
+class RunningConfig(CommonModel):
     FORMAT_CHOICES = (
         (DefinitionsFormats.RAML.name, "RAML"),
         (DefinitionsFormats.OPENAPI_3.name, "OpenAPI 3"),
@@ -20,5 +20,9 @@ class APIDefinitionsConfig(CommonModel):
 
     format: str
     file_path: str
+    api_name: str = None
     api_version: str = None
     append_to_metadata: str = None
+
+
+

@@ -1,4 +1,4 @@
-def cli_args_proxy(parser):
+def cli(parser):
 
     proxy_args = parser.add_parser('proxy', help='start a HTTP(s) proxy')
     proxy_args.add_argument('domain',

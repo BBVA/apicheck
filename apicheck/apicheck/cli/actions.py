@@ -23,7 +23,7 @@ def cli():
     #
     # Add subparsers
     #
-    plugins = load_plugins("sources")
+    plugins = load_plugins("actions")
 
     already_loaded = set(subparsers.choices.keys())
     actions = {}

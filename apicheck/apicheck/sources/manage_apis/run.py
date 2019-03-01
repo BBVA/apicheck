@@ -7,16 +7,16 @@ import asyncio
 
 from terminaltables import AsciiTable, DoubleTable, SingleTable
 
-from apicheck.db import get_engine, APIDefinitions, setup_db_engine, \
-    APIMetadata
+from apicheck.db import get_engine, setup_db_engine, APIMetadata
+from apicheck.exceptions import APICheckException
 
-from .model import APIManageConfig
+from .model import RunningConfig
 
 
 # -------------------------------------------------------------------------
 # Main saving methods
 # -------------------------------------------------------------------------
-async def list_apis(running_config: APIManageConfig):
+async def list_apis(running_config: RunningConfig) -> APICheckException:
     """Save definition into database"""
 
     try:
@@ -26,7 +26,7 @@ async def list_apis(running_config: APIManageConfig):
         apis: list = await results.fetchall()
 
     except Exception as e:
-        print("!" * 20, "ERROR SAVING LOG: ", e)
+        raise APICheckException(f"Error accessing to database: {e}")
 
     #
     # Adding Title
@@ -46,7 +46,7 @@ async def list_apis(running_config: APIManageConfig):
     print()
 
 
-def run_manage_apis(running_config: APIManageConfig):
+def run(running_config: RunningConfig):
 
     # -------------------------------------------------------------------------
     # Setup database

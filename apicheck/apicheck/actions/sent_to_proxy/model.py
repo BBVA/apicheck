@@ -5,4 +5,4 @@ from apicheck.model import CommonModel
 
 @dataclass
 class RunningConfig(CommonModel):
-    api_action: str
+    api_id: str

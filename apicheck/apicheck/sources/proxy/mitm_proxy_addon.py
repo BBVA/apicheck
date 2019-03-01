@@ -2,12 +2,16 @@ import re
 import json
 import uuid
 import asyncio
+import logging
 
 from urllib.parse import urlparse
 
-from apicheck.sources.proxy import ProxyConfig
+from apicheck.sources.proxy.model import RunningConfig
 from apicheck.db import get_engine, ProxyLogs, APIRequests, APIResponses, \
     APIMetadata
+
+logger = logging.getLogger("apicheck")
+
 
 VALID_CONTENT_TYPES = (
     "text/html", "application/json", "application/javascript",
@@ -24,7 +28,7 @@ class APICheckProxyMode:
         self._connection = None
         self._metadata_id = None
         self._loop = asyncio.get_event_loop()
-        self.proxy_config = ProxyConfig()
+        self.proxy_config = RunningConfig()
         self.proxy_session_id = str(uuid.uuid4())
 
     def response(self, flow):
@@ -38,7 +42,6 @@ class APICheckProxyMode:
         #
         # If not 'learning mode' is set, only stores the log
         #
-
         if self.proxy_config.promiscuous is False \
                 and flow.request.host not in self.proxy_config.domain:
             return
@@ -54,7 +57,8 @@ class APICheckProxyMode:
     async def db_connection(self):
         """This coroutine returns a valid database connection"""
         if not self._connection:
-            print("[*] Connecting to database")
+            logger.debug("Connecting to database")
+
             self._connection = await get_engine().connect()
         return self._connection
 
@@ -81,7 +85,7 @@ class APICheckProxyMode:
             else:
                 api_version = "v1"
 
-            print("[*] Building metadata")
+            logger.debug("Building metadata")
             try:
                 ret = await connection.execute(
                     APIMetadata.insert().values(
@@ -103,7 +107,7 @@ class APICheckProxyMode:
                     # results = await ret.fetchone()
                     self._metadata_id, *_ = await ret.fetchone()
                 else:
-                    print("ERROR BUILDING METADATA: ", e)
+                    logger.error("ERROR BUILDING METADATA: ", e)
 
         return self._metadata_id
 
@@ -168,7 +172,7 @@ class APICheckProxyMode:
                 response=plain_response,
                 request_id=request_id))
         except Exception as e:
-            print("!" * 20, "ERROR SAVING LOG: ", e)
+            logger.error(f"error saving proxy logs: {e}")
 
     async def save_definition(self, flow):
         # -------------------------------------------------------------------------
@@ -220,7 +224,7 @@ class APICheckProxyMode:
                 requests_id=inserted_request_id
             ))
         except Exception as e:
-            print("!" * 20, "ERROR SAVING DEFINITION: ", e)
+            logger.debug(f"error saving proxy definition: {e}")
 
         # ---------------------------------------------------------------------
         # Now start the flow to store query into ProxyLog
