@@ -196,7 +196,8 @@ def main():
 
     res.sort(key=_by_host)
     by_host = groupby(res, key=_by_host)
-    print(list(map(lambda x: x, by_host)))
+    only_path = map(lambda x: (x[0], [y.request["path"] for y in x[1]]), by_host)
+    print(list(map(lambda x: (x[0], list(x[1])), only_path)))
 
 
 if __name__ == "__main__":
