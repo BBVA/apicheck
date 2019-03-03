@@ -132,3 +132,8 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Vagrant
+Vagrantfile
+.vagrant/
+flow/data.json
