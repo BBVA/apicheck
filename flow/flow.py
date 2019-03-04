@@ -184,6 +184,25 @@ def _get_nodes(steps: Iterable[Step]) -> Set[str]:
     return reduce(_add_to_set, steps, set())
 
 
+def headers_top(headers :List[Tuple[str, str]]) -> dict:
+    def _by_key(x :Tuple[str, str])->str:
+        return x[0]
+    def _by_count(x :Tuple[str, int])->int:
+        return x[1]
+    def _max_counter(headers: List[str])->Tuple[str, int]:
+        c = Counter(headers)
+        limited = [(k, v) for k, v in c.items()]
+        limited.sort(key=_by_count, reverse=True)
+        return dict(limited[:6])
+
+    headers.sort(key=_by_key)
+    by_head = {
+        h: _max_counter([x[1] for x in l]) 
+        for h, l in groupby(headers, key=_by_key)
+    }
+    return by_head
+
+
 def main():
     def _by_session(elm: ReqRes) -> str:
         return elm.session_id
@@ -220,10 +239,16 @@ def main():
     resources = [(host, [x.request["path"] for x in reqres]) for host, reqres in by_host]
     info["resources"] = resources
 
-    # Headers
-    info["headers"] = {
+    # Headers Count
+    info["headers_count"] = {
         "request": Counter([h for r in res for h in r.request["headers"]]),
         "response": Counter([h for r in res for h in r.response["headers"]])
+    }
+
+    # Headers top
+    info["headers_top"] = {
+        "request":  headers_top([h for r in res for h in r.request["headers"].items()]),
+        "response":  headers_top([h for r in res for h in r.response["headers"].items()])
     }
 
     with open("data.json", "w") as out:
