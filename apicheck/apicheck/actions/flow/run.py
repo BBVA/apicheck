@@ -1,32 +1,24 @@
-import dataclasses
-from itertools import tee, groupby, chain
-from collections import Counter
-from typing import Iterable, Optional, Tuple, Callable, Set, List, Any
-from functools import partial, reduce
-import json
+"""
+This file contains python3.6+ syntax!
+Feel free to import and use whatever new package you deem necessary.
+"""
 import sys
+import json
+import logging
+import asyncio
+import dataclasses
 
-from sqlalchemy import Column, ForeignKey, Integer, String, BigInteger, Text
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, sessionmaker
-from sqlalchemy import create_engine
+from collections import Counter
+from functools import reduce, partial
+from itertools import groupby, chain
+from typing import Optional, List, Any, Iterable, Tuple, Set
 
-Base = declarative_base()
+from apicheck.db import ProxyLogs, get_engine, setup_db_engine
+from apicheck.exceptions import APICheckException
 
+from .model import RunningConfig
 
-class Log(Base):  # type: ignore
-    __tablename__ = 'proxy_logs'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    proxy_session_id = Column(Text, nullable=False)
-    request = Column(Text, nullable=False)
-    response = Column(Text, nullable=False)
-
-
-class DataClassJSONEncoder(json.JSONEncoder):
-    def default(self, o):
-        if dataclasses.is_dataclass(o):
-            return dataclasses.asdict(o)
-        return super().default(o)
+logger = logging.getLogger("apicheck")
 
 
 @dataclasses.dataclass
@@ -35,23 +27,6 @@ class ReqRes:
     session_id: str
     request: dict
     response: dict
-
-
-def parse_to_dataclass(log: Log) -> Optional[ReqRes]:
-    try:
-        return ReqRes(
-            key=log.id,
-            session_id=log.proxy_session_id,
-            request=json.loads(log.request),
-            response=json.loads(log.response)
-        )
-    except Exception as exc:
-        if log:
-            print("----------------------------------")
-            print(exc)
-            print(log.request)
-            print(log.response)
-    return None
 
 
 @dataclasses.dataclass
@@ -73,14 +48,28 @@ class RequestStats:
     max_size: int = -sys.maxsize - 1
 
 
-def try_to_extract_keys(target: dict, keys :List[str]) -> Any:
+@dataclasses.dataclass
+class Step:
+    session: str
+    origin: str
+    destination: str
+
+
+class DataClassJSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if dataclasses.is_dataclass(o):
+            return dataclasses.asdict(o)
+        return super().default(o)
+
+
+def try_to_extract_keys(target: dict, keys: List[str]) -> Any:
     for k in keys:
         if k in target:
             return target[k]
     return None
 
 
-def collect_request_info(requests: List[ReqRes]) -> None:
+def collect_request_info(requests: List[ReqRes]) -> List[RequestStats]:
     def _map_to_RequestInfo(reqres: ReqRes) -> RequestInfo:
         content_length_fields = ["content-length", "Content-Length"]
         if reqres.request["method"] == "POST":
@@ -125,18 +114,28 @@ def collect_request_info(requests: List[ReqRes]) -> None:
         stats.min_size = min(stats.min_size, info.size)
         stats.max_size = max(stats.max_size, info.size)
         return stats
-    
+
     request_info = [_map_to_RequestInfo(x) for x in requests]
     request_info.sort(key=_by_key)
     by_endpoint = groupby(request_info, key=_by_key)
     return [_collect_stats(x) for x in by_endpoint]
 
 
-@dataclasses.dataclass
-class Step:
-    session: str
-    origin: str
-    destination: str
+def parse_to_dataclass(log: ProxyLogs) -> Optional[ReqRes]:
+    try:
+        return ReqRes(
+            key=log.id,
+            session_id=log.proxy_session_id,
+            request=json.loads(log.request),
+            response=json.loads(log.response)
+        )
+    except Exception as exc:
+        if log:
+            print("----------------------------------")
+            print(exc)
+            print(log.request)
+            print(log.response)
+    return None
 
 
 def response_content_type_filter(expected: str, reqres: ReqRes) -> bool:
@@ -168,7 +167,8 @@ def content_type_flow(
             if target_content_filter(x)
         ]
 
-        return [Step(session_id, origin, dest) for origin, dest in zip(just_path, just_path[1:])]
+        return [Step(session_id, origin, dest) for origin, dest in
+                zip(just_path, just_path[1:])]
 
     by_session = [_proc_by_session(x) for x in logs]
     return list(reduce(chain, by_session, iter([])))
@@ -184,12 +184,14 @@ def _get_nodes(steps: Iterable[Step]) -> Set[str]:
     return reduce(_add_to_set, steps, set())
 
 
-def headers_top(headers :List[Tuple[str, str]]) -> dict:
-    def _by_key(x :Tuple[str, str])->str:
+def headers_top(headers: List[Tuple[str, str]]) -> dict:
+    def _by_key(x: Tuple[str, str]) -> str:
         return x[0]
-    def _by_count(x :Tuple[str, int])->int:
+
+    def _by_count(x: Tuple[str, int]) -> int:
         return x[1]
-    def _max_counter(headers: List[str])->Tuple[str, int]:
+
+    def _max_counter(headers: List[str]) -> Tuple[str, int]:
         c = Counter(headers)
         limited = [(k, v) for k, v in c.items()]
         limited.sort(key=_by_count, reverse=True)
@@ -197,23 +199,41 @@ def headers_top(headers :List[Tuple[str, str]]) -> dict:
 
     headers.sort(key=_by_key)
     by_head = {
-        h: _max_counter([x[1] for x in l]) 
+        h: _max_counter([x[1] for x in l])
         for h, l in groupby(headers, key=_by_key)
     }
     return by_head
 
 
-def main():
+async def get_proxy_entries() -> List or APICheckException:
+
+    try:
+        connection = await get_engine().connect()
+
+        con_done = await connection.execute(ProxyLogs.select())
+        results: list = await con_done.fetchall()
+
+        return results
+    except Exception as e:
+        raise APICheckException(f"Error accessing to database: {e}")
+
+
+def run(running_config: RunningConfig):
     def _by_session(elm: ReqRes) -> str:
         return elm.session_id
 
-    engine = create_engine('sqlite:///apicheck.db')
-    Base.metadata.create_all(engine)
+    # -------------------------------------------------------------------------
+    # Setup database
+    # -------------------------------------------------------------------------
+    setup_db_engine(running_config.db_connection_string)
 
-    DBSession = sessionmaker(bind=engine)
-    session = DBSession()
+    # -------------------------------------------------------------------------
+    # Getting Logs from database
+    # -------------------------------------------------------------------------
+    loop = asyncio.get_event_loop()
+    logs = loop.run_until_complete(get_proxy_entries())
 
-    res = [parse_to_dataclass(x) for x in session.query(Log).all()]
+    res = [parse_to_dataclass(x) for x in logs]
 
     info = {}
     # response metrics
@@ -236,7 +256,8 @@ def main():
 
     res.sort(key=_by_host)
     by_host = groupby(res, key=_by_host)
-    resources = [(host, [x.request["path"] for x in reqres]) for host, reqres in by_host]
+    resources = [(host, [x.request["path"] for x in reqres]) for host, reqres
+                 in by_host]
     info["resources"] = resources
 
     # Headers Count
@@ -247,13 +268,11 @@ def main():
 
     # Headers top
     info["headers_top"] = {
-        "request":  headers_top([h for r in res for h in r.request["headers"].items()]),
-        "response":  headers_top([h for r in res for h in r.response["headers"].items()])
+        "request": headers_top(
+            [h for r in res for h in r.request["headers"].items()]),
+        "response": headers_top(
+            [h for r in res for h in r.response["headers"].items()])
     }
 
-    with open("data.json", "w") as out:
+    with open(running_config.fout, "w") as out:
         json.dump(info, out, cls=DataClassJSONEncoder)
-
-
-if __name__ == "__main__":
-    main()
