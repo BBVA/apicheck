@@ -1,6 +1,7 @@
 import dataclasses
 from itertools import tee, groupby, chain
-from typing import Iterable, Optional, Tuple, Callable, Set, List
+from collections import Counter
+from typing import Iterable, Optional, Tuple, Callable, Set, List, Any
 from functools import partial, reduce
 import json
 import sys
@@ -72,11 +73,30 @@ class RequestStats:
     max_size: int = -sys.maxsize - 1
 
 
+def try_to_extract_keys(target: dict, keys :List[str]) -> Any:
+    for k in keys:
+        if k in target:
+            return target[k]
+    return None
+
+
 def collect_request_info(requests: List[ReqRes]) -> None:
     def _map_to_RequestInfo(reqres: ReqRes) -> RequestInfo:
-        try:
-            size = int(reqres.response["headers"]["Content-Length"])
-        except:
+        content_length_fields = ["content-length", "Content-Length"]
+        if reqres.request["method"] == "POST":
+            size_field = try_to_extract_keys(
+                reqres.request["headers"],
+                content_length_fields
+            )
+        else:
+            size_field = try_to_extract_keys(
+                reqres.response["headers"],
+                content_length_fields
+            )
+
+        if size_field:
+            size = int(size_field)
+        else:
             size = 0
         start = reqres.request["timestamp_start"]
         end = reqres.response["timestamp_end"]
@@ -119,16 +139,12 @@ class Step:
     destination: str
 
 
-def content_type(headers: dict) -> Optional[str]:
-    if "Content-Type" in headers:
-        return headers["Content-Type"]
-    if "content-type" in headers:
-        return headers["content-type"]
-    return None
-
-
 def response_content_type_filter(expected: str, reqres: ReqRes) -> bool:
-    content = content_type(reqres.response["headers"])
+    content_type_fields = ["Content-Type", "content-type"]
+    content = try_to_extract_keys(
+        reqres.response["headers"],
+        content_type_fields
+    )
     if content:
         return expected in content
     return False
@@ -203,6 +219,13 @@ def main():
     by_host = groupby(res, key=_by_host)
     resources = [(host, [x.request["path"] for x in reqres]) for host, reqres in by_host]
     info["resources"] = resources
+
+    # Headers
+    info["headers"] = {
+        "request": Counter([h for r in res for h in r.request["headers"]]),
+        "response": Counter([h for r in res for h in r.response["headers"]])
+    }
+
     with open("data.json", "w") as out:
         json.dump(info, out, cls=DataClassJSONEncoder)
 
