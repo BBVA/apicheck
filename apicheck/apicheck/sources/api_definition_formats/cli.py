@@ -1,4 +1,4 @@
-from .model import RunningConfig
+from .config import RunningConfig
 
 
 def cli(parser):

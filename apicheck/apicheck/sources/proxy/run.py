@@ -18,7 +18,7 @@ from mitmproxy import proxy  # noqa
 from mitmproxy.utils import debug, arg_check  # noqa
 
 from apicheck.db import setup_db_engine
-from apicheck.sources.proxy.model import RunningConfig
+from apicheck.sources.proxy.config import RunningConfig
 
 OPTIONS_FILE_NAME = "config.yaml"
 

@@ -15,7 +15,7 @@ from apicheck.db import get_engine, APIDefinitions, setup_db_engine, \
     APIMetadata
 from apicheck.exceptions import APICheckFormatException, APICheckException
 
-from .model import RunningConfig, DefinitionsFormats
+from .config import RunningConfig, DefinitionsFormats
 
 logger = logging.getLogger("apicheck")
 

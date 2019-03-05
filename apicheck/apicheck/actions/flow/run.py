@@ -16,7 +16,7 @@ from typing import Optional, List, Any, Iterable, Tuple, Set
 from apicheck.db import ProxyLogs, get_engine, setup_db_engine
 from apicheck.exceptions import APICheckException
 
-from .model import RunningConfig
+from .config import RunningConfig
 
 logger = logging.getLogger("apicheck")
 

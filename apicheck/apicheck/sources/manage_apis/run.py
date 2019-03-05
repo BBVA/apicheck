@@ -10,7 +10,7 @@ from terminaltables import AsciiTable, DoubleTable, SingleTable
 from apicheck.db import get_engine, setup_db_engine, APIMetadata
 from apicheck.exceptions import APICheckException
 
-from .model import RunningConfig
+from .config import RunningConfig
 
 
 # -------------------------------------------------------------------------

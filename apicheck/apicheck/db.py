@@ -26,7 +26,8 @@ def setup_db_engine(db_query_string: str = None):
     engine = builtins.apicheck_db_engine
 
     tables_to_create = [
-        ProxyLogs, APIMetadata, APIRequests, APIResponses, APIDefinitions
+        # ProxyLogs, APIMetadata, APIRequests, APIResponses, APIDefinitions
+        ProxyLogs, APIMetadata, APIDefinitions
     ]
 
     for table in tables_to_create:
@@ -71,25 +72,25 @@ APIMetadata = Table(
 
 )
 
-APIRequests = Table(
-    'requests', metadata,
-    Column("id", Integer, primary_key=True, autoincrement=True),
-    Column("uri", Text, index=True),
-    Column("http_version", Text),
-    Column("headers", Text),
-    Column("body", Text),
-    Column("metadata_id", Integer, ForeignKey("metadata.id"), nullable=False),
-)
-
-APIResponses = Table(
-    'responses', metadata,
-    Column("id", Integer, primary_key=True, autoincrement=True),
-    Column("http_code", Text),
-    Column("http_message", Text),
-    Column("headers", Text),
-    Column("body", Text),
-    Column("requests_id", Integer, ForeignKey("requests.id"), nullable=False),
-)
+# APIRequests = Table(
+#     'requests', metadata,
+#     Column("id", Integer, primary_key=True, autoincrement=True),
+#     Column("uri", Text, index=True),
+#     Column("http_version", Text),
+#     Column("headers", Text),
+#     Column("body", Text),
+#     Column("metadata_id", Integer, ForeignKey("metadata.id"), nullable=False),
+# )
+#
+# APIResponses = Table(
+#     'responses', metadata,
+#     Column("id", Integer, primary_key=True, autoincrement=True),
+#     Column("http_code", Text),
+#     Column("http_message", Text),
+#     Column("headers", Text),
+#     Column("body", Text),
+#     Column("requests_id", Integer, ForeignKey("requests.id"), nullable=False),
+# )
 
 APIDefinitions = Table(
     'definitions', metadata,

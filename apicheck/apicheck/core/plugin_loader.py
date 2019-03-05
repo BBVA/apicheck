@@ -7,7 +7,7 @@ from apicheck.exceptions import APICheckException
 
 MODULES_FN = (
     ("cli", "cli"),
-    ("model", "RunningConfig"),
+    ("config", "RunningConfig"),
     ("run", "run"),
 )
 
@@ -30,7 +30,9 @@ def load_plugins(plugin_type: str) \
     if plugin_type not in ("actions", "sources"):
         raise APICheckException("Invalid plugin name")
 
-    p_path = os.path.join(os.path.dirname(__file__), plugin_type)
+    p_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", plugin_type)
+    )
 
     plugins_load_path = []
 
@@ -38,7 +40,7 @@ def load_plugins(plugin_type: str) \
     # Locate each plugin dir path
     #
     for root, dirs, files in os.walk(p_path, topdown=False):
-        if all(f"{x}.py" in files for x in ("cli", "run", "model")):
+        if all(f"{x}.py" in files for x in ("cli", "run", "config")):
             plugins_load_path.append(root.split("/")[-1])
 
     ret = {}

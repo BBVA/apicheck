@@ -5,7 +5,7 @@ Feel free to import and use whatever new package you deem necessary.
 
 import logging
 
-from .model import RunningConfig
+from .config import RunningConfig
 
 logger = logging.getLogger("apicheck")
 

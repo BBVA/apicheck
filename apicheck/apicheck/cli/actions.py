@@ -1,9 +1,9 @@
 import logging
 import argparse
 
-from apicheck.helpers import load_plugins
 from apicheck.core.cli import cli_global_args
 from apicheck.core.logging import setup_console_log
+from apicheck.core.plugin_loader import load_plugins
 
 logger = logging.getLogger("apicheck")
 
