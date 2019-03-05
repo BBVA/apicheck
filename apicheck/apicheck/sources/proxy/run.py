@@ -17,7 +17,6 @@ from mitmproxy import optmanager  # noqa
 from mitmproxy import proxy  # noqa
 from mitmproxy.utils import debug, arg_check  # noqa
 
-from apicheck.db import setup_db_engine
 from apicheck.sources.proxy.config import RunningConfig
 
 OPTIONS_FILE_NAME = "config.yaml"
@@ -206,11 +205,6 @@ def run(running_config: RunningConfig):
             "--listen-port",
             running_config.listen_port
         ])
-
-    # -------------------------------------------------------------------------
-    # Setup database
-    # -------------------------------------------------------------------------
-    setup_db_engine(running_config.db_connection_string)
 
     mitmdump(args)
 

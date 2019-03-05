@@ -13,7 +13,7 @@ from functools import reduce, partial
 from itertools import groupby, chain
 from typing import Optional, List, Any, Iterable, Tuple, Set
 
-from apicheck.db import ProxyLogs, get_engine, setup_db_engine
+from apicheck.db import ProxyLogs, get_engine
 from apicheck.exceptions import APICheckException
 
 from .config import RunningConfig
@@ -221,11 +221,6 @@ async def get_proxy_entries() -> List or APICheckException:
 def run(running_config: RunningConfig):
     def _by_session(elm: ReqRes) -> str:
         return elm.session_id
-
-    # -------------------------------------------------------------------------
-    # Setup database
-    # -------------------------------------------------------------------------
-    setup_db_engine(running_config.db_connection_string)
 
     # -------------------------------------------------------------------------
     # Getting Logs from database

@@ -7,7 +7,7 @@ import asyncio
 
 from terminaltables import AsciiTable, DoubleTable, SingleTable
 
-from apicheck.db import get_engine, setup_db_engine, APIMetadata
+from apicheck.db import get_engine, APIMetadata
 from apicheck.exceptions import APICheckException
 
 from .config import RunningConfig
@@ -47,11 +47,6 @@ async def list_apis(running_config: RunningConfig) -> APICheckException:
 
 
 def run(running_config: RunningConfig):
-
-    # -------------------------------------------------------------------------
-    # Setup database
-    # -------------------------------------------------------------------------
-    setup_db_engine(running_config.db_connection_string)
 
     # -------------------------------------------------------------------------
     # Select action

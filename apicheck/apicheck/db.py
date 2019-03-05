@@ -12,9 +12,10 @@ def setup_db_engine(db_query_string: str = None):
 
     if not hasattr(builtins, "apicheck_db_engine"):
         builtins.apicheck_db_engine = create_engine(
-            # In-memory sqlite database cannot be accessed from different
-            # threads, use file.
             db_query_string, strategy=ASYNCIO_STRATEGY
+        )
+        builtins.apicheck_db_engine_sync = create_engine(
+            db_query_string
         )
 
     #
@@ -23,7 +24,7 @@ def setup_db_engine(db_query_string: str = None):
     loop = asyncio.get_event_loop()
 
     print("[*] Creating database...", end='')
-    engine = builtins.apicheck_db_engine
+    engine = builtins.apicheck_db_engine_sync
 
     tables_to_create = [
         # ProxyLogs, APIMetadata, APIRequests, APIResponses, APIDefinitions
@@ -32,7 +33,7 @@ def setup_db_engine(db_query_string: str = None):
 
     for table in tables_to_create:
         try:
-            loop.run_until_complete(engine.execute(CreateTable(table)))
+            engine.execute(CreateTable(table))
         except Exception as e:
 
             #
@@ -60,8 +61,7 @@ ProxyLogs = Table(
     Column("id", Integer, primary_key=True, autoincrement=True),
     Column("proxy_session_id", String(40)),
     Column("request", Text, nullable=False),
-    Column("response", Text, nullable=False),
-    Column("request_id", Integer, ForeignKey("requests.id"), nullable=True),
+    Column("response", Text, nullable=False)
 )
 
 APIMetadata = Table(
@@ -71,26 +71,6 @@ APIMetadata = Table(
     Column("api_version", String(200), unique=True),
 
 )
-
-# APIRequests = Table(
-#     'requests', metadata,
-#     Column("id", Integer, primary_key=True, autoincrement=True),
-#     Column("uri", Text, index=True),
-#     Column("http_version", Text),
-#     Column("headers", Text),
-#     Column("body", Text),
-#     Column("metadata_id", Integer, ForeignKey("metadata.id"), nullable=False),
-# )
-#
-# APIResponses = Table(
-#     'responses', metadata,
-#     Column("id", Integer, primary_key=True, autoincrement=True),
-#     Column("http_code", Text),
-#     Column("http_message", Text),
-#     Column("headers", Text),
-#     Column("body", Text),
-#     Column("requests_id", Integer, ForeignKey("requests.id"), nullable=False),
-# )
 
 APIDefinitions = Table(
     'definitions', metadata,

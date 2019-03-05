@@ -1,6 +1,7 @@
 import logging
 import argparse
 
+from apicheck.db import setup_db_engine
 from apicheck.core.cli import cli_global_args
 from apicheck.core.logging import setup_console_log
 from apicheck.core.plugin_loader import load_plugins
@@ -67,6 +68,20 @@ def cli():
     #
     setup_console_log(logger, log_level=args.log_level)
 
+    #
+    # Build config
+    #
+    config = importer_config(**running_config)
+
+    #
+    # Setup db
+    #
+    setup_db_engine(config.db_connection_string)
+
+    #
+    # Launch API Check
+    #
+    importer_function(config)
     #
     # Launch API Check
     #

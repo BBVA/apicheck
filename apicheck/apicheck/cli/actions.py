@@ -1,6 +1,7 @@
 import logging
 import argparse
 
+from apicheck.db import setup_db_engine
 from apicheck.core.cli import cli_global_args
 from apicheck.core.logging import setup_console_log
 from apicheck.core.plugin_loader import load_plugins
@@ -51,7 +52,7 @@ def cli():
     #
     # Choice correct config object
     try:
-        importer_config, importer_function = actions[args.importer_type]
+        action_config, action_function = actions[args.importer_type]
     except KeyError as e:
         print(f"[!] Invalid importer: '{e}'")
         exit(1)
@@ -68,9 +69,19 @@ def cli():
     setup_console_log(logger, log_level=args.log_level)
 
     #
+    # Build config
+    #
+    config = action_config(**running_config)
+
+    #
+    # Setup db
+    #
+    setup_db_engine(config.db_connection_string)
+
+    #
     # Launch API Check
     #
-    importer_function(importer_config(**running_config))
+    action_function(config)
 
 
 if __name__ == '__main__':

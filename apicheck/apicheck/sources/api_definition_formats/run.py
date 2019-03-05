@@ -11,8 +11,7 @@ from typing import Tuple
 from urllib.parse import urlparse
 from sqlalchemy import and_
 
-from apicheck.db import get_engine, APIDefinitions, setup_db_engine, \
-    APIMetadata
+from apicheck.db import get_engine, APIDefinitions, APIMetadata
 from apicheck.exceptions import APICheckFormatException, APICheckException
 
 from .config import RunningConfig, DefinitionsFormats
@@ -241,11 +240,6 @@ def run(running_config: RunningConfig):
 
     with open(running_config.file_path, "r") as f:
         definition_file_content = f.read()
-
-    # -------------------------------------------------------------------------
-    # Setup database
-    # -------------------------------------------------------------------------
-    setup_db_engine(running_config.db_connection_string)
 
     # -------------------------------------------------------------------------
     # Store process
