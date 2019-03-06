@@ -1,6 +1,7 @@
 import asyncio
 import builtins
 
+from sqlalchemy.engine import Engine
 from sqlalchemy.schema import CreateTable
 from sqlalchemy_aio import ASYNCIO_STRATEGY
 
@@ -11,10 +12,10 @@ from sqlalchemy import (
 def setup_db_engine(db_query_string: str = None):
 
     if not hasattr(builtins, "apicheck_db_engine"):
-        builtins.apicheck_db_engine = create_engine(
+        builtins.apicheck_db_engine: Engine = create_engine(
             db_query_string, strategy=ASYNCIO_STRATEGY
         )
-        builtins.apicheck_db_engine_sync = create_engine(
+        builtins.apicheck_db_engine_sync: Engine = create_engine(
             db_query_string
         )
 
@@ -47,7 +48,7 @@ def setup_db_engine(db_query_string: str = None):
     print("done")
 
 
-def get_engine():
+def get_engine() -> Engine:
     return builtins.apicheck_db_engine
 
 
