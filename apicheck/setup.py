@@ -12,37 +12,46 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import re
-import os
 import sys
-import codecs
-
-from os.path import dirname, join
 
 from setuptools import setup, find_packages
-from setuptools.command.test import test as TestCommand
 
 if sys.version_info < (3, 7,):
-    raise RuntimeError("Apitest requires Python 3.7.0+")
+    raise RuntimeError("APICheck requires Python 3.7.0+")
 
-with open(join(dirname(__file__), '../README.rst')) as f:
-    long_description = f.read()
+VERSION = "1.0.0"
 
 setup(
     name='apicheck',
-    version="2.0.0",
+    version=VERSION,
     install_requires=[
-        'openapi3', 'sqlalchemy'
+        "aiohttp",
+        "mitmproxy",
+        'sqlalchemy',
+        "sqlalchemy-aio",
+        "terminaltables"
     ],
+    extras_require={
+        'mysql': ['pg8000'],
+        'postgres': ['PyMySQL'],
+    },
     url='https://github.com/bbva/apicheck',
     license='MIT',
-    author='cr0hn (@ggdaniel)',  # TODO
-    author_email='cr0hn@cr0hn.com',  # TODO
+    author='BBVA-Labs Team',
     packages=find_packages(),
     include_package_data=True,
-    entry_points={},
+    entry_points={
+        'console_scripts': [
+            # Importers. Long name and alias
+            'apicheck-importer = apicheck.cli.importers:cli',
+            'aci = apicheck.cli.importers:cli',
+
+            # Actions. Long name and alias
+            'apicheck-actions = apicheck.cli.actions:cli',
+            'aca = apicheck.cli.actions:cli',
+        ],
+    },
     description='Testing your API for security',
-    long_description=long_description,
     classifiers=[
         'Programming Language :: Python :: 3.7',
         'Topic :: Security',
