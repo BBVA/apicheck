@@ -14,6 +14,8 @@ sqlalchemy-aio = "*"
 pg8000 = "*"
 pymysql = "*"
 aiohttp = "*"
+brotli = "*"
+terminaltables = "*"
 
 [requires]
 python_version = "3.7"
