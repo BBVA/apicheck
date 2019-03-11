@@ -82,10 +82,6 @@ def cli():
     # Launch API Check
     #
     importer_function(config)
-    #
-    # Launch API Check
-    #
-    importer_function(importer_config(**running_config))
 
 
 if __name__ == '__main__':

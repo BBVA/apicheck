@@ -68,7 +68,7 @@ ProxyLogs = Table(
 APIMetadata = Table(
     'metadata', metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
-    Column("api_name", String(200), unique=True),
+    Column("api_name", String(200)),
     Column("api_version", String(200), unique=True),
 
 )
