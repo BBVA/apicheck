@@ -256,7 +256,7 @@ def run(running_config: RunningConfig):
     info = {}
     # response metrics
     metrics = list(collect_request_info(res))
-    #info["metrics"] = metrics
+    info["metrics"] = metrics
 
     # Flows
     res.sort(key=_by_session)
@@ -276,8 +276,8 @@ def run(running_config: RunningConfig):
     by_host = groupby(res, key=_by_host)
     resources = [(host, [x.request["path"] for x in reqres]) for host, reqres
                  in by_host]
-    #info["resources"] = resources
-    """
+    info["resources"] = resources
+
     # Headers Count
     info["headers_count"] = {
         "request": Counter([h for r in res for h in r.request["headers"]]),
@@ -291,6 +291,6 @@ def run(running_config: RunningConfig):
         "response": headers_top(
             [h for r in res for h in r.response["headers"].items()])
     }
-    """
+
     with open(running_config.fout, "w") as out:
         json.dump(info, out, cls=DataClassJSONEncoder)
