@@ -27,7 +27,7 @@ def load_plugins(plugin_type: str) \
 
     """
 
-    if plugin_type not in ("actions", "sources"):
+    if plugin_type not in ("actions", "sources", "manage"):
         raise APICheckException("Invalid plugin name")
 
     p_path = os.path.abspath(

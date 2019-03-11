@@ -49,6 +49,10 @@ setup(
             # Actions. Long name and alias
             'apicheck-actions = apicheck.cli.actions:cli',
             'aca = apicheck.cli.actions:cli',
+
+            # manage. Long name and alias
+            'apicheck-manage = apicheck.cli.manage:cli',
+            'acm = apicheck.cli.manage:cli',
         ],
     },
     description='Testing your API for security',

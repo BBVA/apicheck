@@ -5,7 +5,7 @@ RUN apt-get update \
     && apt-get install --no-install-recommends -y gosu curl
 
 FROM BASE as COMPILER
-RUN apt-get install --no-install-recommends -y build-essential gcc python3-dev libffi-dev
+RUN apt-get install --no-install-recommends -y build-essential gcc python3-dev libffi-dev libyaml-0-2
 
 COPY ./ /tmp
 
