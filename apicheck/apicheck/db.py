@@ -28,8 +28,7 @@ def setup_db_engine(db_query_string: str = None):
     engine = builtins.apicheck_db_engine_sync
 
     tables_to_create = [
-        # ProxyLogs, APIMetadata, APIRequests, APIResponses, APIDefinitions
-        ProxyLogs, APIMetadata, APIDefinitions
+        ProxyLogs, APIMetadata, APIDefinitions, APIDefinitionsCache
     ]
 
     for table in tables_to_create:
@@ -83,4 +82,11 @@ APIDefinitions = Table(
            Integer,
            ForeignKey("metadata.id"),
            nullable=False)
+)
+
+APIDefinitionsCache = Table(
+    'definitions_cache', metadata,
+    Column("api_id", Integer, primary_key=True),
+    Column("format", String(50)),
+    Column("content", Text),
 )
