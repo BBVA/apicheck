@@ -50,9 +50,9 @@ class RequestStats:
 
 @dataclasses.dataclass
 class Step:
-    session: str
     origin: str
     destination: str
+    hits :int
 
 
 class DataClassJSONEncoder(json.JSONEncoder):
@@ -158,20 +158,43 @@ def content_type_flow(
     def _by_time(elm: ReqRes) -> int:
         return elm.request["timestamp_start"]
 
-    def _proc_by_session(sess_log: Tuple[str, Iterable[ReqRes]]):
-        session_id, log = sess_log
-        log.sort(key=_by_time)
-        just_path = [
-            x.request["path"]
-            for x in log
+    def _no_query(path :str) -> str:
+        if "?" not in path:
+            return path
+        parts = path.split("?")
+        return parts[0]
+
+    def _only_paths(l :Iterable[ReqRes])->Iterable[str]:
+        return [
+            _no_query(x.request["path"])
+            for x in l
             if target_content_filter(x)
         ]
 
-        return [Step(session_id, origin, dest) for origin, dest in
-                zip(just_path, just_path[1:])]
+    def _make_steps(paths :Iterable[str])->Iterable[Step]:
+        return [Step(origin, dest, 1) for origin, dest in
+                zip(paths, paths[1:])]
+
+    def _proc_by_session(sess_log: Tuple[str, Iterable[ReqRes]]):
+        session_id, log = sess_log
+        log.sort(key=_by_time)
+        paths = _only_paths(log)
+        steps = _make_steps(paths)
+        
+        return steps
+
+    def _by_od(s :Step)->Tuple[str, str]:
+        return s.origin, s.destination
+
+    def _step_sum(s1 :Step, s2 :Step) -> Step:
+        return Step(s1.origin, s1.destination, s1.hits+s2.hits)
 
     by_session = [_proc_by_session(x) for x in logs]
-    return list(reduce(chain, by_session, iter([])))
+    all_paths = list(reduce(chain, by_session, iter([])))
+    all_paths.sort(key=_by_od)
+    if all_paths:
+        return [reduce(_step_sum, x[1]) for x in groupby(all_paths, key=_by_od)]
+    return all_paths
 
 
 # not in use
