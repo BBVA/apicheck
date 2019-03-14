@@ -18,6 +18,7 @@ class RunningConfig(CommonModel):
     source: str = "definition"
     proxy_ip: str = None
     proxy_port: str = None
+    api_url: str = None
 
     def __post_init__(self):
         if self.source not in self.OPERATION_MODES:
