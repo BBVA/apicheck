@@ -3,7 +3,7 @@ import json
 import pytest
 
 from dataclasses import dataclass
-from typing import Any, Callable, List, Tuple
+from typing import Any, Callable, List, Tuple, Set
 
 
 @pytest.fixture()
@@ -26,19 +26,21 @@ def childs(tree: dict, parent: str, parser: Callable = unit) -> dict:
 
 
 def childs_in_lineage(tree: dict,
-                      ancestor: str,
                       target: str,
+                      ancestors: Set[str] = set([]),
                       parser: Callable = unit) -> dict:
     def recurse(current_tree: dict or list, path: Tuple[str]) -> List[dict]:
         ret = []
         if isinstance(current_tree, list):
             for x in current_tree:
-                r = recurse(x, (*path, x))
+                r = recurse(x, path)
                 if r:
                     ret.extend(r)
 
         elif isinstance(current_tree, dict):
-            if target in current_tree and ancestor in path:
+            subset = set(ancestors)
+            superset = set(path)
+            if target in current_tree and subset <= superset:
                 return [(path, current_tree[target])]
 
             for x, y in current_tree.items():
@@ -51,24 +53,22 @@ def childs_in_lineage(tree: dict,
     return recurse(tree, tuple())
 
 
-def test_query_get_paths(openapi3_content):
-    result = childs(openapi3_content,
-                    "paths",
-                    lambda x: list(x.values()))
-
-    assert isinstance(result, list)
+def test_query_without_lineage(openapi3_content):
+    res = childs_in_lineage(openapi3_content,
+        "title"
+    )
+    assert isinstance(res, list)
+    assert len(res) > 1
+    _, title = res[0]
+    assert title == "Linode API"
 
 
 def test_query_get_paths_responses(openapi3_content):
-    # result = childs_in_lineage(
-    #     openapi3_content,
-    #     "get",
-    #     "responses")
-
     result = childs_in_lineage(
         openapi3_content,
-        "PaginationEnvelope",
-        "results")
+        "description",
+        set(["post", "requestBody"]))
+
     print(result)
     assert True
 
