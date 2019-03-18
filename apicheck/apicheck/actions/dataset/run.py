@@ -37,11 +37,15 @@ def run(running_config: RunningConfig):
     request_headers = request['headers'].apply(pd.Series)
     response_headers = response['headers'].apply(pd.Series)
     request = request.drop("headers", 1)
-    request_headers_norm = pd.melt(request_headers.reset_index(), id_vars=["id"], var_name="header")
+    request_headers_norm = pd.melt(
+        request_headers.reset_index(), id_vars=["id"], var_name="header"
+    )
     request_headers_norm = request_headers_norm.dropna()
     request_headers_norm["type"] = "request"
     response = response.drop("headers", 1)
-    response_headers_norm = pd.melt(response_headers.reset_index(), id_vars=["id"], var_name="header")
+    response_headers_norm = pd.melt(
+        response_headers.reset_index(), id_vars=["id"], var_name="header"
+    )
     response_headers_norm = response_headers_norm.dropna()
     response_headers_norm["type"] = "response"
     headers_norm = pd.concat([request_headers_norm, response_headers_norm])
@@ -49,4 +53,3 @@ def run(running_config: RunningConfig):
     target.put("response", response, format="table", data_columns=True)
     target.put("headers", headers_norm, format="table", data_columns=True)
     target.close()
-

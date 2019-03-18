@@ -89,6 +89,7 @@ nosetests.xml
 coverage.xml
 *,cover
 .hypothesis/
+.pytest_cache
 
 # Translations
 *.mo
@@ -136,4 +137,6 @@ ENV/
 # Vagrant
 Vagrantfile
 .vagrant/
-flow/data.json
+
+# VSCode
+.vscode
