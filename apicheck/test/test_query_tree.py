@@ -17,69 +17,103 @@ def openapi3_content() -> dict:
         yield json.load(f)
 
 
-unit = lambda x: x
+def _resolver(current, transformer):
+  if isinstance(current, dict):
+    if "$ref" in current:
+      
+    else:
+      return {k: resolver(v, transformer) for k,v in current.items()}
+  elif isinstance(current, list):
+    return [resolver(v, transformer) for v in current]
+  else:
+    return current
 
 
-def childs(tree: dict, parent: str, parser: Callable = unit) -> dict:
-    if parent in tree:
-        return parser(tree[parent])
+def _search(current, target, path) -> Tuple[str, object]:
+  if isinstance(current, dict):
+      if target in current:
+          yield (*path, target), current[target]
+      
+      for x, y in current.items():
+          for res in _search(y, target, (*path, x)):
+              yield res
+  elif isinstance(current, list):
+      for item in current:
+          for res in _search(item, target, path):
+              yield res
 
 
-def childs_in_lineage(tree: dict,
-                      target: str,
-                      ancestors: Set[str] = set([]),
-                      parser: Callable = unit) -> dict:
-    def recurse(current_tree: dict or list, path: Tuple[str]) -> List[dict]:
-        ret = []
-        if isinstance(current_tree, list):
-            for x in current_tree:
-                r = recurse(x, path)
-                if r:
-                    ret.extend(r)
-
-        elif isinstance(current_tree, dict):
-            subset = set(ancestors)
-            superset = set(path)
-            if target in current_tree and subset <= superset:
-                return [(path, current_tree[target])]
-
-            for x, y in current_tree.items():
-                r = recurse(y, (*path, x))
-                if r:
-                    ret.extend(r)
-
-        return ret
-
-    return recurse(tree, tuple())
+def search(tree: dict,
+           target: str,
+           ancestors: Set[str] = set([])) -> list:
+  for (path, element) in _search(tree, target, tuple()):
+      if ancestors <= set(path):
+          return element
 
 
-def test_query_without_lineage(openapi3_content):
-    res = childs_in_lineage(openapi3_content,
-        "title"
-    )
+def search_all(tree: dict,
+           target: str,
+           ancestors: Set[str] = set([])) -> list:
+    res = list()
+    for (path, element) in _search(tree, target, tuple()):
+        if ancestors <= set(path):
+            res.append(element)
+
+    return res
+
+
+def test_listing_endpoints(openapi3_content):
+    res = list(search(openapi3_content, "paths").keys())
+
     assert isinstance(res, list)
-    assert len(res) > 1
-    _, title = res[0]
-    assert title == "Linode API"
+    assert len(res) > 0
+    assert isinstance(res[0], str)
 
 
-def test_query_get_paths_responses(openapi3_content):
-    result = childs_in_lineage(
-        openapi3_content,
-        "description",
-        set(["post", "requestBody"]))
+def test_get_specific_field(openapi3_content):
+    res = search_all(openapi3_content, "version")
 
-    print(result)
-    assert True
+    assert isinstance(res, list)
+    assert len(res) > 0
+    assert isinstance(res[0], str)
+    assert res[0] == "4.0.17"
 
 
-# def test_query_get_paths_ref(openapi3_content):
-#     result = childs_in_lineage(
-#         openapi3_content,
-#         "get",
-#         "responses")
-#
-#     for path, content in result:
-#         print(path)
-#         print(content)
-#     assert isinstance(result, dict)
+def test_resolve_reference(openapi3_content):
+    expected = {
+        "description": "Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                        "type": "object",
+                        "description": "An object for describing a single error that occurred during the processing of a request.\n",
+                        "properties": {
+                            "reason": {
+                                "type": "string",
+                                "description": "What happened to cause this error. In most cases, this can be fixed immediately by changing the data you sent in the request, but in some cases you will be instructed to [open a Support Ticket](#operation/createTicket) or perform some other action before you can complete the request successfully.\n",
+                                "example": "fieldname must be a valid value"
+                            },
+                            "field": {
+                                "type": "string",
+                                "description": "The field in the request that caused this error. This may be a path, separated by periods in the case of nested fields. In some cases this may come back as \"null\" if the error is not specific to any single element of the request.\n",
+                                "example": "fieldname"
+                            }
+                        }
+                    }
+                }
+              }
+            }
+          }
+        }
+      }
+    res = search_all(openapi3_content, "default", ancestors=set(["/account", "responses"]))
+
+    assert isinstance(res, list)
+    assert len(res) > 0
+    assert isinstance(res[0], dict)
+    assert res == expected
