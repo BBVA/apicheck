@@ -31,11 +31,13 @@ def run(running_config: RunningConfig):
     )
 
     request = json_to_columns(df, 'request')
+    request["session"] = df["proxy_session_id"]
     response = json_to_columns(df, 'response')
+    response["session"] = df["proxy_session_id"]
     request_headers = request['headers'].apply(pd.Series)
     response_headers = response['headers'].apply(pd.Series)
     request = request.drop("headers", 1)
-    request_headers_norm = pd.melt(response_headers.reset_index(), id_vars=["id"], var_name="header")
+    request_headers_norm = pd.melt(request_headers.reset_index(), id_vars=["id"], var_name="header")
     request_headers_norm = request_headers_norm.dropna()
     request_headers_norm["type"] = "request"
     response = response.drop("headers", 1)
