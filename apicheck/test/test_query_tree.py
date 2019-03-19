@@ -139,3 +139,11 @@ def test_list_http_methods(openapi3_content):
 
   assert isinstance(res, dict)
   assert set(list(res.keys())) <= set(methods)
+
+
+def test_resolve_all_tree(openapi3_content):
+  resolved = transform_tree(openapi3_content, ref_resolver(openapi3_content))
+
+  ref = search(resolved, "$ref")
+  assert ref is None
+
