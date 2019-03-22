@@ -13,10 +13,10 @@ import logging
 from sqlalchemy import and_
 from urllib.parse import urlparse
 
-from apicheck.exceptions import APICheckException
 from apicheck.db import ProxyLogs, get_engine
-from apicheck.core.formaters.loader import load_from_db
-from core.formaters.model import OpenAPI3
+from apicheck.core.model import API
+from apicheck.exceptions import APICheckException
+from apicheck.core.openapi3 import openapi3_from_db
 
 from .config import RunningConfig
 
@@ -103,8 +103,9 @@ async def send_to_proxy_from_proxy(running_config: RunningConfig):
 
 
 async def send_to_proxy_from_definition(running_config: RunningConfig):
-    api: OpenAPI3 = await load_from_db(running_config.api_id)
+    api: API = await openapi3_from_db(running_config.api_id)
 
+    print(api)
     async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(
             verify_ssl=False)) as session:
 

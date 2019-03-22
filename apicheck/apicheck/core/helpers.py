@@ -1,4 +1,5 @@
 import yaml
+import inspect
 
 from yaml import load
 
@@ -7,6 +8,17 @@ try:
         CSafeLoader as SafeLoader
 except ImportError as e:
     from yaml import Loader, Dumper, SafeLoader
+
+
+def slug(text: str) -> str:
+    return text.lower().replace(" ", "-")
+
+
+def debugging() -> bool:
+    for frame in inspect.stack():
+        if frame[1].endswith("pydevd.py"):
+            return True
+    return False
 
 
 def yaml_loader(content: str) -> dict:

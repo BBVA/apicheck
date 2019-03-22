@@ -17,6 +17,12 @@ pymysql = "*"
 aiohttp = "*"
 brotli = "*"
 terminaltables = "*"
+sqlalchemy-stubs = "*"
+libyaml = "*"
+pyyaml = "*"
+pandas = "*"
+python-slugify = {extras = ["unidecode"],version = "*"}
+text-unidecode = "*"
 
 [requires]
 python_version = "3.7"
