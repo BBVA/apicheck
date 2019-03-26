@@ -7,10 +7,10 @@ import random
 from faker import Faker
 
 
-faker = Faker()
+fake = Faker()
 
 
-def generator(field: dict) -> Callable[[None], Any]:
+def open_api_str(field: dict, strategies) -> Callable[[None], str]:
     def _str():
         minimum = 10
         maximum = 200
@@ -18,19 +18,25 @@ def generator(field: dict) -> Callable[[None], Any]:
             maximum = field["maxLength"]
         if "minLength" in field:
             minimum = field["minLength"]
-        r = faker.text()
+        r = fake.text()
         while len(r) < minimum:
             r = r + r
         if len(r) > maximum:
             r = r[:maximum-1]
         return r
+    return _str
 
+
+def open_api_object(field: dict, strategies) -> Callable[[None], Any]:
     def _obj():
         return {
-            k: generator(v)()
+            k: generator(v, strategies)()
             for k, v in field["properties"].items()
         }
+    return _obj
 
+
+def open_api_int(field: dict, strategies) -> Callable[[None], int]:
     def _int():
         minimum = -sys.maxsize-1
         maximum = sys.maxsize
@@ -47,7 +53,10 @@ def generator(field: dict) -> Callable[[None], Any]:
             rem = r % field["multipleOf"]
             r = r - rem
         return r
+    return _int
 
+
+def open_api_list(field: dict, strategies) -> Callable[[None], List]:
     def _list():
         minimum = 1
         if "minItems" in field:
@@ -57,7 +66,7 @@ def generator(field: dict) -> Callable[[None], Any]:
             maximum = field["maxItems"]
         size = random.randint(minimum, maximum)
         item_type = field["items"]
-        gen = generator(item_type)
+        gen = generator(item_type, open_api_strategies)
         if "uniqueItems" in field and field["uniqueItems"]:
             for _ in range(1000):
                 res = [gen() for _ in range(size)]
@@ -65,24 +74,30 @@ def generator(field: dict) -> Callable[[None], Any]:
                     return res
             raise ValueError("Cannot generate unique list with this parameters")
         return [gen() for _ in range(size)]
-    
+    return _list
+
+
+def open_api_bool(field: dict, strategies) -> Callable[[None], bool]:
     def _bool():
         n = random.randint(1, 10)
         return n % 2 == 0
+    return _bool
 
-    field_type = field["type"]
-    if field_type == "string":
-        return _str
-    elif field_type == "integer":
-        return _int
-    elif field_type == "object":
-        return _obj
-    elif field_type == "array":
-        return _list
-    elif field_type == "boolean":
-        return _bool
-    else:
-        return lambda: None
+
+open_api_strategies = [
+    (lambda x: x["type"] == "string", open_api_str),
+    (lambda x: x["type"] == "integer", open_api_int),
+    (lambda x: x["type"] == "object", open_api_object),
+    (lambda x: x["type"] == "array", open_api_list),
+    (lambda x: x["type"] == "boolean", open_api_bool)
+]
+
+
+def generator(field: dict, strategies) -> Callable[[None], Any]:
+    for matcher, fun in strategies:
+        if matcher(field):
+            return fun(field, strategies)
+    return lambda: None
 
 
 def test_string_field():
@@ -91,7 +106,7 @@ def test_string_field():
         "example": "fieldname"
     }
 
-    gen = generator(field)
+    gen = generator(field, open_api_strategies)
 
     assert isinstance(gen, Callable)
 
@@ -116,11 +131,10 @@ def test_string_boundaries():
         "example": "fieldname"
     }
 
-    gen = generator(field)
+    gen = generator(field, open_api_strategies)
 
     assert isinstance(gen, Callable)
 
-    gen = generator(field)
     for _ in range(1000):
         res = gen()
         assert len(res) >= 2
@@ -134,7 +148,7 @@ def test_integer_field():
         "example": 123
     }
 
-    gen = generator(field)
+    gen = generator(field, open_api_strategies)
 
     assert isinstance(gen, Callable)
 
@@ -158,7 +172,7 @@ def test_integer_boundaries():
         "example": 123
     }
 
-    gen = generator(field)
+    gen = generator(field, open_api_strategies)
     for _ in range(1000):
         res = gen()
         assert res >= 0
@@ -176,7 +190,7 @@ def test_integer_exclusive_boundaries():
         "example": 123
     }
 
-    gen = generator(field)
+    gen = generator(field, open_api_strategies)
     for _ in range(1000):
         res = gen()
         assert res > 0
@@ -191,7 +205,7 @@ def test_integer_multiple_of():
         "example": 123
     }
 
-    gen = generator(field)
+    gen = generator(field, open_api_strategies)
     for _ in range(1000):
         res = gen()
         assert res % 10 == 0
@@ -206,7 +220,7 @@ def test_array_field():
         }
     }
 
-    gen = generator(field)
+    gen = generator(field, open_api_strategies)
 
     assert isinstance(gen, Callable)
 
@@ -234,7 +248,7 @@ def test_array_boundaries():
         }
     }
 
-    gen = generator(field)
+    gen = generator(field, open_api_strategies)
 
     assert isinstance(gen, Callable)
 
@@ -258,14 +272,18 @@ def test_array_unique():
         }
     }
 
-    gen = generator(field)
+    gen = generator(field, open_api_strategies)
 
     assert isinstance(gen, Callable)
 
     for _ in range(1000):
-        res = gen()
-        assert isinstance(res, List)
-        len(res) == len(set(res))
+        try:
+            res = gen()
+            assert isinstance(res, List)
+            len(res) == len(set(res))
+            break
+        except:
+            pass
 
 
 def test_object_field():
@@ -295,7 +313,7 @@ def test_object_field():
         }
     }
 
-    gen = generator(field)
+    gen = generator(field, open_api_strategies)
 
     assert isinstance(gen, Callable)
 
@@ -362,7 +380,7 @@ def test_compund_item():
         }
     }
 
-    gen = generator(compound_item)
+    gen = generator(compound_item, open_api_strategies)
 
     assert isinstance(gen, Callable)
 
@@ -387,7 +405,7 @@ def test_boolean_field():
         "type": "boolean"
     }
 
-    gen = generator(field)
+    gen = generator(field, open_api_strategies)
 
     assert isinstance(gen, Callable)
 

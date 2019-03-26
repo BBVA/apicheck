@@ -11,5 +11,5 @@ OpenAPI Data Generator
 
 [ ] Include dataclass hierarchy for OpenAPI Types
 [ ] Link these dataclasses into Response dataclass
-[ ] For each OpenAPI type dataclass, build a data generator with 3 working modes: regular data, random data (for fuzzing), from wordlist (for attacks)
+[x] For each OpenAPI type dataclass, build a data generator with 3 working modes: regular data, random data (for fuzzing), from wordlist (for attacks)
 [ ] Build a rules file for which you can define the data generator for each end-point and parameter. 
