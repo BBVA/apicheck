@@ -5,6 +5,8 @@ import pytest
 from dataclasses import dataclass
 from typing import Any, Callable, List, Tuple, Set
 
+from apicheck.core.dict_helpers import search, search_all, transform_tree, ref_resolver
+
 
 @pytest.fixture()
 def openapi3_content() -> dict:
@@ -15,63 +17,6 @@ def openapi3_content() -> dict:
 
     with open(f, "r") as f:
         yield json.load(f)
-
-
-def ref_resolver(tree):
-    def _resolve(element):
-        if isinstance(element, dict) and "$ref" in element:
-            parts = element["$ref"][2:].split("/")
-            target = parts[-1]
-            ancestors = set(parts[0:-1])
-            ref = search(tree, target, ancestors=ancestors)
-            return ref
-
-    return _resolve
-
-
-def transform_tree(current, transformer):
-    change = transformer(current)
-    if change:
-        return transform_tree(change, transformer)
-    elif isinstance(current, dict):
-        return {k: transform_tree(v, transformer) for k, v in current.items()}
-    elif isinstance(current, list):
-        return [transform_tree(v, transformer) for v in current]
-    else:
-        return current
-
-
-def _search(current, target, path) -> Tuple[str, object]:
-    if isinstance(current, dict):
-        if target in current:
-            yield (*path, target), current[target]
-
-        for x, y in current.items():
-            for res in _search(y, target, (*path, x)):
-                yield res
-    elif isinstance(current, list):
-        for item in current:
-            for res in _search(item, target, path):
-                yield res
-
-
-def search(tree: dict,
-           target: str,
-           ancestors: Set[str] = set([])) -> list:
-    for (path, element) in _search(tree, target, tuple()):
-        if ancestors <= set(path):
-            return element
-
-
-def search_all(tree: dict,
-               target: str,
-               ancestors: Set[str] = set([])) -> list:
-    res = list()
-    for (path, element) in _search(tree, target, tuple()):
-        if ancestors <= set(path):
-            res.append(element)
-
-    return res
 
 
 def test_listing_endpoints(openapi3_content):
@@ -169,8 +114,3 @@ def test_list_http_methods(openapi3_content):
     assert set(list(res.keys())) <= set(methods)
 
 
-def test_resolve_all_tree(openapi3_content):
-    resolved = transform_tree(openapi3_content, ref_resolver(openapi3_content))
-
-    ref = search(resolved, "$ref")
-    assert ref is None

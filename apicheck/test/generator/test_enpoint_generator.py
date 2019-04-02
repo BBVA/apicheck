@@ -7,6 +7,22 @@ from typing import Callable, Generator, Tuple, Set
 
 import pytest
 
+from apicheck.core.dict_helpers import search, ref_resolver, transform_tree
+from apicheck.core.generator import generator
+from apicheck.core.generator.open_api_strategy import strategy as open_api_strategies
+
+
+@pytest.fixture()
+def openapi3_content() -> dict:
+    f = os.path.abspath(
+        os.path.join(os.path.dirname(__file__),
+                     "..",
+                     "openapi3-linode.json")
+    )
+
+    with open(f, "r") as f:
+        yield json.load(f)
+
 
 def _param_resolver(path, parameters):
     url = path
@@ -242,202 +258,4 @@ def tost_all_in(openapi3_content):
             print("cannot generate data", ve, url)
         except Exception as ex:
             assert False, f"uncontrolled exception in {url}, {endpoint}, {ex}"
-
-
-
-"""
-Do not touch: trash code
-"""
-@pytest.fixture()
-def openapi3_content() -> dict:
-    f = os.path.abspath(
-        os.path.join(os.path.dirname(__file__),
-                     "openapi3-linode.json")
-    )
-
-    with open(f, "r") as f:
-        yield json.load(f)
-
-def _search(current, target, path) -> Tuple[str, object]:
-    if isinstance(current, dict):
-        if target in current:
-            yield (*path, target), current[target]
-
-        for x, y in current.items():
-            for res in _search(y, target, (*path, x)):
-                yield res
-    elif isinstance(current, list):
-        for item in current:
-            for res in _search(item, target, path):
-                yield res
-
-
-def search(tree: dict,
-           target: str,
-           ancestors: Set[str] = set([])) -> list:
-    for (path, element) in _search(tree, target, tuple()):
-        if ancestors <= set(path):
-            return element
-    return None
-
-
-def ref_resolver(tree):
-    def _resolve(element):
-        if isinstance(element, dict) and "$ref" in element:
-            parts = element["$ref"][2:].split("/")
-            target = parts[-1]
-            ancestors = set(parts[0:-1])
-            ref = search(tree, target, ancestors=ancestors)
-            return ref
-
-    return _resolve
-
-
-def transform_tree(current, transformer):
-    change = transformer(current)
-    if change:
-        return transform_tree(change, transformer)
-    elif isinstance(current, dict):
-        return {k: transform_tree(v, transformer) for k, v in current.items()}
-    elif isinstance(current, list):
-        return [transform_tree(v, transformer) for v in current]
-    else:
-        return current
-
-
-from faker import Faker
-
-
-fake = Faker()
-
-
-def open_api_str(field: dict, strategies):
-    minimum = 10
-    maximum = 200
-    if "maxLength" in field:
-        maximum = field["maxLength"]
-    if "minLength" in field:
-        minimum = field["minLength"]
-    while True:
-        r = fake.text()
-        while len(r) < minimum:
-            r = r + r
-        if len(r) > maximum:
-            r = r[:maximum-1]
-        yield r
-
-
-def open_api_object(field: dict, strategies):
-    def _make_gen(v):
-        return generator(v, strategies)
-    if not "properties" in field:
-        raise ValueError("properties is mandatory to object generation")
-    properties = field["properties"]
-    keys = properties.keys()
-    generators = list(map(_make_gen, properties.values()))
-    prop_builder = list(zip(keys, generators))
-    while True:
-        yield {
-            k: next(g)
-            for k, g in prop_builder
-        }
-
-
-def open_api_int(field: dict, strategies):
-    minimum = -sys.maxsize-1
-    maximum = sys.maxsize
-    if "minimum" in field:
-        minimum = field["minimum"]
-    if "maximum" in field:
-        maximum = field["maximum"]
-    if "exclusiveMinimum" in field:
-        minimum = minimum+1
-    if "exclusiveMaximum" in field:
-        maximum = maximum-1
-    while True:
-        r = random.randint(minimum, maximum)
-        if "multipleOf" in field:
-            rem = r % field["multipleOf"]
-            r = r - rem
-        yield r
-
-
-def open_api_list(field: dict, strategies):
-    def _must_unique(gen):
-        for _ in range(1000):
-            res = gen()
-            if len(res) == len(set(res)):
-                return res
-        raise ValueError("Cannot generate unique list with this parameters")
-    minimum = 1
-    if "minItems" in field:
-        minimum = field["minItems"]
-    maximum = minimum + 9
-    if "maxItems" in field:
-        maximum = field["maxItems"]
-    item_type = field["items"]
-    item_gen = generator(item_type, open_api_strategies)
-    size = random.randint(minimum, maximum)
-    gen = lambda: [next(item_gen) for _ in range(size)]
-    while True:
-        if "uniqueItems" in field and field["uniqueItems"]:
-            yield _must_unique(gen())
-        yield gen()
-
-
-def open_api_bool(field: dict, strategies):
-    while True:
-        n = random.randint(1, 10)
-        yield n % 2 == 0
-
-
-def open_api_all_of(field: dict, strategies):
-    schemas = field["allOf"]
-    generators = [generator(schema, strategies) for schema in schemas]
-    while True:
-        res = {}
-        for g in generators:
-            r = next(g)
-            res.update(r)
-        yield res
-
-
-
-def dict_generator(words_dict):
-    def _generator(field: dict, strategies):
-        for n in words_dict:
-            yield n
-    return _generator
-
-
-def type_matcher(expected):
-    def _match(x):
-        if "type" in x:
-            return x["type"] == expected
-    return _match
-
-
-def property_matcher(expected):
-    def _match(x):
-        return expected in x
-    return _match
-
-
-open_api_strategies = [
-    (property_matcher("allOf"), open_api_all_of),
-    (type_matcher("string"), open_api_str),
-    (type_matcher("integer"), open_api_int),
-    (type_matcher("number"), open_api_int),
-    (type_matcher("object"), open_api_object),
-    (type_matcher("array"), open_api_list),
-    (type_matcher("boolean"), open_api_bool),
-    (property_matcher("properties"), open_api_object)
-]
-
-
-def generator(field: dict, strategies):
-    for matcher, fun in strategies:
-        if matcher(field):
-            return fun(field, strategies)
-    raise NotImplementedError(f"strategy for field not found, {field}")
 
