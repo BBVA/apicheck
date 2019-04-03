@@ -28,6 +28,8 @@ def _open_api_str(field: dict, strategies):
 def _open_api_object(field: dict, strategies):
     def _make_gen(v):
         return generator(v, strategies)
+    if not "properties" in field:
+        raise ValueError("Cannot generate a property-less object whiout policy")
     properties = field["properties"]
     keys = properties.keys()
     generators = list(map(_make_gen, properties.values()))

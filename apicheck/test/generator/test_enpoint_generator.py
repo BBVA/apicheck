@@ -39,10 +39,10 @@ def _param_resolver(path, parameters):
     return url
 
 
-def _get_gen(query, item):
+def _get_gen(query, item, params=None):
     path = query
-    if "parametrs" in item:
-        raise NotImplementedError("Nope")
+    if params:
+        path = _param_resolver(path, params)
     yield {
         "method": "get",
         "path": path,
@@ -50,8 +50,10 @@ def _get_gen(query, item):
     }
 
 
-def _put_gen(query, item):
+def _put_gen(query, item, params=None):
     path = query
+    if params:
+        path = _param_resolver(path, params)
     current = item["put"]
     body = current["requestBody"]["content"]
     content_type, schema = [(x, y["schema"]) for x, y in body.items()][0]
@@ -66,14 +68,14 @@ def _put_gen(query, item):
     }
 
 
-def _post_gen(query, item):
+def _post_gen(query, item, params=None):
     res = {
         "method": "post",
         "headers": {}
     }
     path = query
-    if "parameters" in item:
-        path = _param_resolver(path, item["parameters"])
+    if params:
+        path = _param_resolver(path, params)
     res["path"] = path
     current = item["post"]
     if "requestBody" in current:
@@ -95,16 +97,24 @@ def request_generator(open_api_data:dict, defautl_strategy:list=None, extended_s
         if not query:
             raise ValueError("Invalid query")
         item = search(open_api_data, query, ancestors=ancestors)
-        if not item or not method in item:
-            return None
+        if not item:
+            raise ValueError("Item not found")
+        if not method in item:
+            raise ValueError("Method not found on item")
+        if "parameters" in item:
+            parameters = item["parameters"]
+        else:
+            parameters = None
         resolved = transform_tree(item, transformer)
         if method == "get":
-            return _get_gen(query, resolved)
+            res = _get_gen(query, resolved, parameters)
         elif method == "put":
-            return _put_gen(query, resolved)
+            res = _put_gen(query, resolved, parameters)
         elif method == "post":
-            return _post_gen(query, resolved)
-        raise NotImplementedError("Nope")
+            res = _post_gen(query, resolved, parameters)
+        else:
+            raise NotImplementedError("No way man")
+        return res
     return _enpoint_generator
 
 
@@ -162,9 +172,12 @@ def test_request_generator_must_return_a_generator(openapi3_content):
 def test_request_generator_must_return_none_if_query_not_found(openapi3_content):
     query = request_generator(openapi3_content)
 
-    res = query("/cuck_norris")
-
-    assert res is None, "Must be none if query not found"
+    try:
+        res = query("/cuck_norris")
+    except ValueError as ve:
+        assert True
+    else:
+        assert False, "exception expected"
 
 
 VALID_PATH = r"/[a-zA-Z0-9/]+"
@@ -230,13 +243,48 @@ def test_request_generator_must_return_valid_post_request(openapi3_content):
 
 
 def test_no_struct_schema(openapi3_content):
-    endpoint = search(openapi3_content, "/linode/instances")
-    #TODO: research about this fucking thing
-
-
-def tost_all_in(openapi3_content):
-    endpoints = search(openapi3_content, "paths")
+    current = search(openapi3_content, "/linode/instances")
     query = request_generator(openapi3_content)
+    try:
+        if "get" in current:
+            gen = query("/linode/instances")
+            res = next(gen)
+            assert res is not None
+        if "post" in current:
+            gen = query("/linode/instances", method="post")
+            res = next(gen)
+            assert res is not None
+    except ValueError as ve:
+        print("cannot generate data", ve)
+    except Exception as ex:
+        assert False, f"uncontrolled exception in, {ex}"
+
+
+def test_strange_parameters(openapi3_content):
+    url = "/linode/instances/{linodeId}/disks"
+    current = search(openapi3_content, url)
+    query = request_generator(openapi3_content)
+    try:
+        if "get" in current:
+            gen = query(url)
+            res = next(gen)
+            assert res is not None
+        if "post" in current:
+            gen = query(url, method="post")
+            res = next(gen)
+            assert res is not None
+    except ValueError as ve:
+        print("cannot generate data", ve)
+    except Exception as ex:
+        assert False, f"uncontrolled exception in, {ex}"
+
+
+def test_all_in(openapi3_content):
+    raw_endpoints = search(openapi3_content, "paths")
+    query = request_generator(openapi3_content)
+    resolver = ref_resolver(openapi3_content)
+    endpoints = transform_tree(raw_endpoints, resolver)
+
     for url, endpoint in endpoints.items():
         try:
             if "get" in endpoint:
