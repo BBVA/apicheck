@@ -3,7 +3,7 @@ def generator(field: dict, strategies):
     for matcher, fun in strategies:
         if matcher(field):
             return fun(field, strategies)
-    #TODO: use own error
+    # TODO: use own error
     raise ValueError(f"No strategy found for {field}")
 
 

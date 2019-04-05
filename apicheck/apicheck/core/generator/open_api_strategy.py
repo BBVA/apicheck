@@ -28,8 +28,8 @@ def _open_api_str(field: dict, strategies):
 def _open_api_object(field: dict, strategies):
     def _make_gen(v):
         return generator(v, strategies)
-    if not "properties" in field:
-        raise ValueError("Cannot generate a property-less object whiout policy")
+    if "properties" not in field:
+        raise ValueError("Can't gen a property-less object whiout policy")
     properties = field["properties"]
     keys = properties.keys()
     generators = list(map(_make_gen, properties.values()))
@@ -77,7 +77,10 @@ def _open_api_list(field: dict, strategies):
     item_type = field["items"]
     item_gen = generator(item_type, strategies)
     size = random.randint(minimum, maximum)
-    gen = lambda: [next(item_gen) for _ in range(size)]
+
+    def gen():
+        return [next(item_gen) for _ in range(size)]
+
     while True:
         if "uniqueItems" in field and field["uniqueItems"]:
             yield _must_unique(gen())
@@ -98,5 +101,3 @@ strategy = [
     (_type_matcher("array"), _open_api_list),
     (_type_matcher("boolean"), _open_api_bool)
 ]
-
-

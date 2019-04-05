@@ -32,7 +32,7 @@ def extract_endpoints(parsed_data) -> List[str]:
 def extract_methods(end_point: dict) -> Dict[str, dict]:
     methods = ["get", "put", "post", "patch", "delete"]
 
-    for k,v in end_point.items():
+    for k, v in end_point.items():
         if k in methods:
             yield k, v
 
@@ -178,5 +178,3 @@ async def openapi3_from_db(api_id: str) -> API:
 
     except KeyError:
         raise APICheckException(f"Format '{api_format}' not supported")
-
-
