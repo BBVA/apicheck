@@ -34,6 +34,8 @@ def _param_resolver(path, parameters):
         if "in" in p:
             if p["in"] == "path":
                 url = re.sub(r"\{"+p["name"]+"\}", str(res), url)
+            else:
+                raise NotImplementedError("query params")
         else:
             raise NotImplementedError("Nope")
     return url
