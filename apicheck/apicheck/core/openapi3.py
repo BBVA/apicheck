@@ -204,5 +204,3 @@ async def openapi3_from_db(api_id: str) -> API:
 
     except KeyError:
         raise APICheckException(f"Format '{api_format}' not supported")
-
-

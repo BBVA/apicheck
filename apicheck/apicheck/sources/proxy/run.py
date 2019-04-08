@@ -207,4 +207,3 @@ def run(running_config: RunningConfig):
         ])
 
     mitmdump(args)
-

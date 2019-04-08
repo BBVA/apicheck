@@ -140,3 +140,6 @@ Vagrantfile
 
 # VSCode
 .vscode
+apicheck/mydatabase.sqlite3
+apicheck/salida.h5
+apicheck/salida.json
