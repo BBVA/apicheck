@@ -1,25 +1,34 @@
 from typing import List
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+
+class ContentTypes:
+    STRING = 1
+    JSON = 2
+    RAW = 3
 
 
 @dataclass
 class Response:
     http_code: str
-    http_message: str
-    body: str
-    headers: dict
+    http_message: str = "OK"
+    content: str or dict or bytes = None
+    content_type: int = ContentTypes.JSON
+    headers: dict = field(default_factory=dict)
 
 
 @dataclass
-class Request:
+class EndPointRequest:
     uri: str
     method: str
-    headers: dict
     responses: List[Response]
+    content: str or dict or bytes = None
+    content_type: int = ContentTypes.JSON
+    headers: dict = field(default_factory=dict)
 
 
 @dataclass
 class API:
     name: str
     version: str
-    end_points: List[Request]
+    end_points: List[EndPointRequest]
