@@ -63,7 +63,7 @@ def test_request_generator_function_valid_endpoint(openapi3_content):
     except ValueError as ex:
         assert isinstance(ex, ValueError)
     else:
-        assert False, "Value Error expected if empty string is supplied as query"
+        assert False, "Value Error expected if empty query"
 
 
 def test_request_generator_must_return_a_generator(openapi3_content):
@@ -74,12 +74,12 @@ def test_request_generator_must_return_a_generator(openapi3_content):
     assert isinstance(res, Generator)
 
 
-def test_request_generator_must_return_none_if_query_not_found(openapi3_content):
+def test_request_generator_none_if_query_not_found(openapi3_content):
     query = request_generator(openapi3_content)
 
     try:
-        res = query("/cuck_norris")
-    except ValueError as ve:
+        query("/cuck_norris")
+    except:
         assert True
     else:
         assert False, "exception expected"
@@ -105,7 +105,7 @@ def test_request_generator_must_return_valid_request(openapi3_content):
     the_path = res["path"]
     assert re.match(VALID_PATH, the_path), "must be a valid path"
 
-    assert "headers" in res, "Response must have headers, even if they are empty"
+    assert "headers" in res, "Response must have headers, even empty"
     the_headers = res["headers"]
     assert len(the_headers) == 0, "Headers are empty now"
 
@@ -170,10 +170,6 @@ def test_strange_parameters(openapi3_content):
     current = search(openapi3_content, url)
     query = request_generator(openapi3_content)
     try:
-        if "get" in current:
-            gen = query(url)
-            res = next(gen)
-            assert res is not None
         if "post" in current:
             gen = query(url, method="post")
             res = next(gen)
@@ -205,10 +201,28 @@ def test_all_in(openapi3_content):
                 res = next(gen)
                 assert res is not None
             if "delete" in endpoint:
-                #TODO: delete generator
+                # TODO: delete generator
                 pass
         except ValueError as ve:
             print("cannot generate data", ve, url)
         except Exception as ex:
             assert False, f"uncontrolled exception in {url}, {endpoint}, {ex}"
 
+
+def test_custom_policy(openapi3_content):
+    def allways_a(item, strategy):
+        while True:
+            yield "a"
+
+    url = "/linode/instances/{linodeId}/disks"
+    rules = [
+        (lambda x, y: x == "stackscript_data", allways_a)
+    ]
+    query = request_generator(openapi3_content, extended_strategy=rules)
+    try:
+        gen = query(url, method="post")
+        res = next(gen)
+    except ValueError as ve:
+        assert False, f"can't raise value error due new rules, {ve}"
+    except Exception as ex:
+        assert False, f"uncontrolled exception in, {ex}"
