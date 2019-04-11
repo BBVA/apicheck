@@ -13,3 +13,11 @@ def _type_matcher(expected):
             return item["type"] == expected
         return False
     return _match
+
+
+def _key_matcher(expected_key):
+    def _match(key, item):
+        if key:
+            return key == expected_key
+        return False
+    return _match

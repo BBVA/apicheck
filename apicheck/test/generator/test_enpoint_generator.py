@@ -210,15 +210,23 @@ def test_all_in(openapi3_content):
 
 
 def test_custom_policy(openapi3_content):
-    def allways_a(item, strategy):
-        while True:
-            yield "a"
-
     url = "/linode/instances/{linodeId}/disks"
-    rules = [
-        (lambda x, y: x == "stackscript_data", allways_a)
-    ]
-    query = request_generator(openapi3_content, extended_strategy=rules)
+    rules = {
+        "/linode/instances/{linodeId}/disks": {
+            "methods": [
+                "post"
+            ],
+            "body": {
+                "stackscript_data": {
+                    "type": "dictionary",
+                    "values": [
+                        "A"
+                    ]
+                }
+            }
+        }
+    }
+    query = request_generator(openapi3_content, rules=rules)
     try:
         gen = query(url, method="post")
         res = next(gen)
