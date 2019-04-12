@@ -13,7 +13,10 @@ def test_wordlist_generator():
         "A", "B", "C"
     ]
 
-    gen = generator(field, [(lambda _: True, dict_generator(words))])
+    def allways_true(k, v):
+        return True
+
+    gen = generator(field, [(allways_true, dict_generator(words))])
 
     res = list(gen)
 

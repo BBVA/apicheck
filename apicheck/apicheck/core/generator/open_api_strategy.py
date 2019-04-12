@@ -31,9 +31,10 @@ def _open_api_object(field: dict, strategies):
     if "properties" not in field:
         raise ValueError("Can't gen a property-less object whiout policy")
     properties = field["properties"]
-    keys = properties.keys()
-    generators = list(map(_make_gen, properties.values()))
-    prop_builder = list(zip(keys, generators))
+    prop_builder = []
+    for k, v in properties.items():
+        g = generator(v, strategies, key=k)
+        prop_builder.append((k, g))
     while True:
         res = {}
         for k, g in prop_builder:

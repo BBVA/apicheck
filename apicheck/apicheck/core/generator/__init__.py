@@ -1,15 +1,23 @@
 
-def generator(field: dict, strategies):
+def generator(field: dict, strategies, key=None):
     for matcher, fun in strategies:
-        if matcher(field):
+        if matcher(key, field):
             return fun(field, strategies)
     # TODO: use own error
     raise ValueError(f"No strategy found for {field}")
 
 
 def _type_matcher(expected):
-    def _match(x):
-        if "type" in x:
-            return x["type"] == expected
+    def _match(key, item):
+        if "type" in item:
+            return item["type"] == expected
+        return False
+    return _match
+
+
+def _key_matcher(expected_key):
+    def _match(key, item):
+        if key:
+            return key == expected_key
         return False
     return _match
