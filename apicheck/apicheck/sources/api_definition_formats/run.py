@@ -251,6 +251,4 @@ def run(running_config: RunningConfig):
             running_config
         ))
     except Exception as e:
-        print()
-        print("[!] ", e)
-        print()
+        logger.error(e)

@@ -40,7 +40,8 @@ def load_plugins(plugin_type: str) \
     # Locate each plugin dir path
     #
     for root, dirs, files in os.walk(p_path, topdown=False):
-        if all(f"{x}.py" in files for x in ("cli", "run", "config")):
+        if all(f"{x}.py" in files for x in ("cli", "run", "config",
+                                            "__init__")):
             plugins_load_path.append(root.split("/")[-1])
 
     ret = {}

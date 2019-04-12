@@ -133,7 +133,7 @@ def build_api_model(str_data: str) -> API:
     )
 
 
-async def openapi3_from_db(api_id: str) -> API:
+async def openapi3_from_db(api_id: str) -> dict:
     """
     This function get an API Id, detect the stored definition format and call
     the specific format loaded.
@@ -184,7 +184,7 @@ async def openapi3_from_db(api_id: str) -> API:
         logger.info("Parsing OpenAPI information")
 
         if bool(cached):
-            parsed = json_content = content
+            parsed = json_content = json.loads(cached)
         else:
             parsed = yaml_loader(content)
             json_content = json.dumps(parsed)
@@ -200,7 +200,7 @@ async def openapi3_from_db(api_id: str) -> API:
                     content=json_content
                 ))
 
-        return build_api_model(parsed)
+        return json_content
 
     except KeyError:
         raise APICheckException(f"Format '{api_format}' not supported")

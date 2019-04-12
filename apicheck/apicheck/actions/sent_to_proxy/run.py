@@ -4,19 +4,21 @@ Feel free to import and use whatever new package you deem necessary.
 """
 
 import json
-from typing import Tuple
-
 import aiohttp
 import asyncio
 import logging
 
+from typing import Tuple
 from sqlalchemy import and_
 from urllib.parse import urlparse
 
+from user_agent import generate_user_agent
+
 from apicheck.db import ProxyLogs, get_engine
-from apicheck.core.model import API
 from apicheck.exceptions import APICheckException
 from apicheck.core.openapi3 import openapi3_from_db
+from apicheck.core.endpoint import request_generator
+from apicheck.core.dict_helpers import search, ref_resolver, transform_tree
 
 from .config import RunningConfig
 
@@ -104,48 +106,66 @@ async def send_to_proxy_from_proxy(running_config: RunningConfig):
                     logger.info(f"Sending query to: '{url}'")
                     resp = await response.text()
                 except Exception as e:
-                    print(e)
+                    logger.error(e)
 
 
 async def send_to_proxy_from_definition(running_config: RunningConfig):
-    api: API = await openapi3_from_db(running_config.api_id)
+    openapi3_content: dict = await openapi3_from_db(running_config.api_id)
+
+    session_user_agent = generate_user_agent()
 
     async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(
             verify_ssl=False)) as session:
 
-        # Recover all end-points
-        for end_point in api.end_points:
+        raw_endpoints = search(openapi3_content, "paths")
+        query = request_generator(openapi3_content)
+        resolver = ref_resolver(openapi3_content)
+        endpoints = transform_tree(raw_endpoints, resolver)
 
-            # -----------------------------------------------------------------
-            # Getting API connection parameters
-            # -----------------------------------------------------------------
-            if not running_config.api_url:
-                raise APICheckException("API Base URL not provided")
+        http_scheme, netloc, path, *_ = urlparse(
+            running_config.api_url
+        )
 
-            http_scheme, netloc, path, *_ = urlparse(
-                running_config.api_url
-            )
+        host, port = split_netloc(netloc, http_scheme)
 
-            host, port = split_netloc(netloc, http_scheme)
+        for url, endpoint in endpoints.items():
 
-            url = f"{http_scheme}://{host}:{port}{path}{end_point.uri}"
+            logger.info(f"Generating data for End Point: {url}")
 
-            # If method is different form "get", has http_content:
+            try:
+                for method in ("get", "put", "post", "delete"):
+                    if method in endpoint:
+                        gen = query(url, method=method)
+                        req: dict = next(gen)
+                        break
+                else:
+                    raise APICheckException("Unknown method in url: ", url)
+
+            except ValueError as ve:
+                logger.error(f"cannot generate data: {ve} - {url}")
+
+            url = f"{http_scheme}://{host}:{port}{path}{req['path']}"
+
+            custom_headers = req["headers"]
+            custom_headers["user-agent"] = session_user_agent
+
             fn_params = dict(
                 url=url,
-                headers=end_point.headers,
-                proxy=f"http://{running_config.proxy_ip}:{running_config.proxy_port}"
+                headers=custom_headers,
+                proxy=f"http://{running_config.proxy_ip}:"
+                      f"{running_config.proxy_port}",
+                skip_auto_headers=("content-type", "user-agent")
             )
-            if end_point.content:
-                fn_params["data"] = end_point.content
 
-            fn_method = getattr(session, end_point.method)
             try:
-                async with fn_method(**fn_params) as response:
-                    logger.info(f"Sending query to: '{url}'")
-                    resp = await response.text()
-            except Exception as e:
-                print(e)
+                fn_params["data"] = req["body"]
+            except KeyError:
+                fn_params["data"] = None
+
+            fn_method = getattr(session, req["method"])
+
+            async with fn_method(**fn_params) as response:
+                resp = await response.text()
 
 
 async def _run(running_config: RunningConfig):

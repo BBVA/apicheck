@@ -76,12 +76,9 @@ def cli():
     #
     # Setup db
     #
-    setup_db_engine(obj_config.db_connection_string)
+    if ":" in obj_config.db_connection_string:
+        setup_db_engine(obj_config.db_connection_string)
 
-    #
-    # Launch API Check
-    #
-    function(obj_config)
     #
     # Launch API Check
     #
