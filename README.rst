@@ -6,7 +6,7 @@ API-Check - The DevSecOp toolset for REST APIs
    :target: https://github.com/BBVA/apicheck/blob/master/LICENSE
    :alt: License
 .. image:: https://readthedocs.org/projects/apicheck/badge/?version=latest
-   :target: https://apicheck.readthedocs.io/en/latest/?badge=latest
+   :target: https://apicheck.readthedocs.io
    :alt: Documentation Status
 
 ``API-Check`` is a complete toolset created and designed for testing the REST API.
@@ -26,7 +26,7 @@ Contributions are very welcome, see CONTRIBUTING.md or skim existing tickets to 
 Documentation
 -------------
 
-You can find the complete documentation at: `Documentation <https://apicheck.readthedocs.io/en/latest/>`_
+You can find the complete documentation at: `Documentation <https://apicheck.readthedocs.io>`_
 
 License
 -------
