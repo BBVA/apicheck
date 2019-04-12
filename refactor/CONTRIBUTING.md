@@ -25,5 +25,5 @@ test suite on your branch before submitting a pull request.
 Make sure you include relevant updates or additions to documentation
 when creating or modifying features.
 
-## Before Pull Request
+## Before Pull EndPointRequest
 Please, run tox :)

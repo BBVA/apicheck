@@ -21,14 +21,14 @@ def make_requests(make_request, request_good, request_bad):
                   build_fuzzed_response: bool = True, build_good_response: bool = True):
 
         # --------------------------------------------------------------------------
-        # Generate and cache a GOOD response from original END-POINT API Request
+        # Generate and cache a GOOD response from original END-POINT API EndPointRequest
         # --------------------------------------------------------------------------
         resp_ok = None
         if build_good_response:
             resp_ok = request_good(url, method=method, headers=headers, body=body)
 
         # --------------------------------------------------------------------------
-        # Generate and cache a BAD response from original END-POINT API Request
+        # Generate and cache a BAD response from original END-POINT API EndPointRequest
         # --------------------------------------------------------------------------
         resp_bad = None
         if build_fuzzed_response:

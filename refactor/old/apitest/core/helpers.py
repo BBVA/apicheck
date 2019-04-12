@@ -251,7 +251,7 @@ def display_apitest_object_summary(data, *, display_function: object = None, pre
         > Hawk Auth            -     3 endpoints
         > Get Cookies          -     3 endpoints
         > Response Headers     -     2 endpoints
-        > DELETE Request       -     5 endpoints
+        > DELETE EndPointRequest       -     5 endpoints
         > Deflate Compressed Response -     6 endpoints
 
     :param data: APITest object instance

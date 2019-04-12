@@ -48,8 +48,10 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = "sphinx_rtd_theme"
-html_logo = "_static/apicheck_logo_150x150.png"
+html_show_sourcelink = True
+html_logo = "_static/apicheck-logo-150x150.png"
 html_theme_options = {
+    'collapse_navigation': False,
     'logo_only': False,
     'display_version': True,
     'style_nav_header_background': 'white',

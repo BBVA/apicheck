@@ -73,7 +73,7 @@ This action could be invoked as:
           > Hawk Auth            -     3 endpoints
           > Get Cookies          -     3 endpoints
           > Response Headers     -     2 endpoints
-          > DELETE Request       -     5 endpoints
+          > DELETE EndPointRequest       -     5 endpoints
           > Deflate Compressed Response -     6 endpoints
 
 Parse

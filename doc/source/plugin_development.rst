@@ -1,6 +1,0 @@
-Plugin development
-==================
-
-
-
-

@@ -69,7 +69,7 @@ Contributing
 
 Any collaboration is welcome!
 
-There're many tasks to do.You can check the `Issues <https://github.com/bbva/apitest/issues/>`_ and send us a Pull Request.
+There're many tasks to do.You can check the `Issues <https://github.com/bbva/apitest/issues/>`_ and send us a Pull EndPointRequest.
 
 Also you can read the `TODO <https://github.com/bbva/apitest/blob/master/TODO.rst>`_ file.
 

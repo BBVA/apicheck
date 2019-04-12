@@ -19,12 +19,12 @@ def make_requests(make_request, request_good, request_bad):
     def _make_req(url, *, method="GET", headers=None, body=None):
 
         # --------------------------------------------------------------------------
-        # Generate and cache a GOOD response from original END-POINT API Request
+        # Generate and cache a GOOD response from original END-POINT API EndPointRequest
         # --------------------------------------------------------------------------
         resp_ok = request_good(url, method=method, headers=headers, body=body)
 
         # --------------------------------------------------------------------------
-        # Generate and cache a BAD response from original END-POINT API Request
+        # Generate and cache a BAD response from original END-POINT API EndPointRequest
         # --------------------------------------------------------------------------
         resp_bad = request_bad(url, method=method, headers=headers, body=body)
 
