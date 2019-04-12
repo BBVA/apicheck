@@ -8,6 +8,7 @@ pylint = "*"
 pep8 = "*"
 
 [packages]
+pyyaml = "*"
 pytest = "*"
 pycodestyle = "*"
 cython = "*"
