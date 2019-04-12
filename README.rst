@@ -5,7 +5,9 @@ API-Check - The DevSecOp toolset for REST APIs
 .. image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
    :target: https://github.com/BBVA/apicheck/blob/master/LICENSE
    :alt: License
-
+.. image:: https://readthedocs.org/projects/apicheck/badge/?version=latest
+   :target: https://apicheck.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
 
 ``API-Check`` is a complete toolset created and designed for testing the REST API.
 
