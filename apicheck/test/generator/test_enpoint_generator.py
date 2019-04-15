@@ -234,3 +234,27 @@ def test_custom_policy(openapi3_content):
         assert False, f"can't raise value error due new rules, {ve}"
     except Exception as ex:
         assert False, f"uncontrolled exception in, {ex}"
+
+
+def test_custom_policy_complete(openapi3_content):
+    url = "/linode/instances/{linodeId}/disks"
+
+    # TODO: methods could be: a list or a string
+    rules = {
+        "/linode/instances/{linodeId}/disks": {
+            "methods": "get",
+            "pathParams": {},
+            "headers": {},
+            "queryParams": {},
+            "body": {
+                "stackscript_data": {
+                    "type": "dictionary",
+                    "values": [
+                        "A"
+                    ]
+                }
+            }
+        }
+    }
+    # TODO
+    assert True
