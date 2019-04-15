@@ -1,5 +1,5 @@
-Tutorial
-========
+Core Concepts
+=============
 
 
 Command types
@@ -7,13 +7,13 @@ Command types
 
 ``API-Check`` has 2 kind of commands:
 
-- Mini commands
+- Commands
 - Super commands
 
-Mini Commands
+Commands
 +++++++++++++
 
-Mini commands are a small executables that have more specific things. These commands follow the \*NIX philosophy: a lot os small pieces, but that can be connected between them.
+Commands are a small executables that have more specific things. These commands follow the \*NIX philosophy: a lot os small pieces, but that can be connected between them.
 
 You can imagine this commands as a ``awk`` or ``grep`` commands. Small, but powerful.
 

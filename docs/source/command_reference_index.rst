@@ -6,7 +6,7 @@ This document contains a index reference for ``API-Check`` supported commands.
 Command are grouped in the two types supported by ``API-Check``:
 
 - :doc:`Super Commands </home/tutorial>`
-- :doc:`Mini Commands </home/tutorial>`
+- :doc:`Commands </home/tutorial>`
 
 apicheck-importer
 -----------------

@@ -11,7 +11,7 @@ Contents
    home/overview_project
    home/installation
    home/quickstart
-   home/tutorial
+   home/core_concepts
 
 
 .. toctree::
@@ -25,12 +25,17 @@ Contents
 
 .. toctree::
    :maxdepth: 2
-   :caption: Plugins types
+   :caption: Tools
 
-   plugins/plugins_overview
-   plugins/information_gathering
-   plugins/actions
-   plugins/management
+   tools/tools_overview
+   tools/information_gathering
+   tools/actions
+   tools/management
+.. toctree::
+   :maxdepth: 2
+   :caption: Commands
+
+   commands/commands
 
 .. toctree::
    :maxdepth: 2

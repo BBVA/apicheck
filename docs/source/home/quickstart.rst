@@ -65,7 +65,6 @@ For helping the usage, you can list all ``API-Check`` actions using the command 
 
     asdfasdf
 
-
 .. note::
 
     ``ap-help`` command is the shorted version of ``apicheck-help`` command

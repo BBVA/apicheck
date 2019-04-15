@@ -1,5 +1,5 @@
-Plugins overview
-================
+Overview
+========
 
 
 What's a plugin
