@@ -12,13 +12,13 @@ API-Check has structured with 3 user profiles in mind:
 - Developers
 - System OPs (AKA Ops)
 
-What API-Check an do?
----------------------
+Why another tool for REST APIs?
+-------------------------------
 
-With API-Check can extract API definition from a standard definition file, or run as a proxy and extract the API.
+There's a lot of tools for testing REST API:
 
+- `TNT Fuzzer <https://github.com/Teebytes/TnT-Fuzzer>`_
+- `API Fuzzer <https://github.com/KissPeter/APIFuzzer>`_
+- `Tavern <https://github.com/taverntesting/tavern>`_
 
-.. image:: ../_static/apicheck_diagram.png
-
-section 2
----------
+The main different with other tools is that ``API-Check`` is not a fuzzer or a hacking tool. There's a complete toolset of tools for testing, manage, hacking or checking a REST API.

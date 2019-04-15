@@ -41,6 +41,13 @@ Contents
    plugin_development/building
 
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Commands Reference
+
+   command_reference_index
+
+
 Indices and tables
 ==================
 
