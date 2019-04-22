@@ -12,6 +12,7 @@ Contents
    home/installation
    home/quickstart
    home/core_concepts
+   home/data_generation
 
 
 .. toctree::
