@@ -14,7 +14,7 @@ Tools
 Dataset
 +++++++
 
-- Description:
+- Description: Builds a dataset, analise it and create behavior graphs from user navigations stored in database.
 - Examples:
 - Usage:
 
@@ -26,8 +26,11 @@ Dataset
 Proxy
 +++++
 
-- Description:
+- Description: Launches a local proxy and tracks navigation through it into a database.
 - Examples:
+
+    - :doc:`/home/quickstart`
+
 - Usage:
 
 .. code-block:: console
@@ -37,8 +40,11 @@ Proxy
 Send-Proxy
 +++++++++++++
 
-- Description:
+- Description: Sends proxy information, from previous navigation data or from OpenAPI definition, to output proxy.
 - Examples:
+
+    - :doc:`/home/quickstart`
+
 - Usage:
 
 .. code-block:: console
@@ -50,7 +56,6 @@ apicheck-help
 +++++++++++++
 
 - Description:
-- Examples:
 - Usage:
 
 .. code-block:: console
@@ -72,4 +77,4 @@ ac-wc
 
 .. code-block:: console
 
-    > ac-fuzz
+    > ac-wc

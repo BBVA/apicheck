@@ -1,10 +1,19 @@
-Management
-==========
+Management tools
+================
 
+Management tool for APICheck internals.
 
-plugin 1
---------
+API Definition
+--------------
 
+Load API Definition to database
 
-as
+Manage stored APIs
+------------------
 
+Manage stored APIs
+
+Create Tool
+-----------
+
+Create structure for a new tool

@@ -19,11 +19,7 @@ To start the proxy mode we must execute the following command:
 
 .. code-block:: console
 
-    > aci proxy
-
-.. note::
-
-    ``aci`` command is the shorted version of ``apicheck-importer`` command
+    > at-proxy
 
 2 - Configuring proxy and browsing
 +++++++++++++++++++++++++++++++++++
@@ -47,12 +43,8 @@ The most simple action is to replay API endpoint to hacking tools that works as 
 
 .. code-block::
 
-    > aca send-proxy 127.0.0.1:8080
+    > at-sendproxy 127.0.0.1:8080
 
-
-.. note::
-
-    ``aca`` command is the shorted version of ``apicheck-actions`` command
 
 Listing actions
 ---------------
@@ -61,10 +53,4 @@ For helping the usage, you can list all ``API-Check`` actions using the command 
 
 .. code-block:: console
 
-    > ap-help
-
-    asdfasdf
-
-.. note::
-
-    ``ap-help`` command is the shorted version of ``apicheck-help`` command
+    > at-help

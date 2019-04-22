@@ -39,11 +39,3 @@ This example command could grouped in an *Super Command*
     > ac-banner
 
 
-What API-Check an do?
----------------------
-
-With API-Check can extract API definition from a standard definition file, or run as a proxy and extract the API.
-
-
-.. image:: ../_static/apicheck_diagram.png
-

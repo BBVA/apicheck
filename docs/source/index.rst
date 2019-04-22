@@ -28,10 +28,9 @@ Contents
    :maxdepth: 2
    :caption: Tools
 
-   tools/tools_overview
-   tools/information_gathering
-   tools/actions
+   tools/send_proxy
    tools/management
+
 .. toctree::
    :maxdepth: 2
    :caption: Commands
