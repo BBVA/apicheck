@@ -113,9 +113,6 @@ def request_generator(open_api_data: dict,
         item = search(open_api_data, query, ancestors=ancestors)
         if not item:
             raise ValueError("Item not found")
-        # TODO: raise invalid query and item not found inside search
-        if method not in item:
-            raise ValueError("Method not found on item")
         # TODO: retrieve parameters
         if "parameters" in item:
             parameters = item["parameters"]

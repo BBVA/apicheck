@@ -7,7 +7,7 @@ def rule_finder(rules: dict):
         # TODO: * wildcard
         # TODO: ** wildcard
         for url, rule in rules.items():
-            if url == path and method in rule["methods"]:
+            if url == path:
                 return rule
         return None
     return finder
@@ -29,4 +29,6 @@ def make_strategy(rule: dict):
             _rule_strategy(body_r)
         )
         strategies.append(curr_strategy)
+    # TODO: path strategy
+    # TODO: param strategy
     return strategies
