@@ -10,12 +10,16 @@ Command types
 - Commands
 - Tools
 
+.. _commands_reference:
+
 Commands
 +++++++++++++
 
 Commands are a small executables that have more specific things. These commands follow the \*NIX philosophy: a lot os small pieces, but that can be connected between them.
 
 You can imagine this commands as a ``awk`` or ``grep`` commands. Small, but powerful.
+
+.. _tools_reference:
 
 Tools
 +++++

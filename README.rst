@@ -17,16 +17,23 @@ Why API-Check
 API-Check focus not only in the security testing and hacking uses cases. The goal of project is to be a complete toolset for ``DevSecOPs`` cycles and different users profiles:
 
 - Developers
-- Systems OPs
+- Systems SysAdmins
 - Security & penteters
 
-Contributions
-Contributions are very welcome, see CONTRIBUTING.md or skim existing tickets to see where you could help out.
+Contributions are welcome, see CONTRIBUTING.md or skim existing tickets to see where you could help out.
 
 Documentation
 -------------
 
 You can find the complete documentation at: `Documentation <https://apicheck.readthedocs.io>`_
+
+Authors
+-------
+
+APICheck was made by Security BBVA-Labs Team members:
+
+- `Cesar Gallego <https://github.com/CesarGallego>`_
+- `Daniel García (cr0hn) <https://github.com/cr0hn>`_
 
 License
 -------

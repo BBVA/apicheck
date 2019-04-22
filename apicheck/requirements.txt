@@ -8,7 +8,6 @@ mitmproxy==4.0.4
 numpy==1.16.2
 pandas==0.24.2
 pg8000==1.13.1
-PyMySQL==0.9.3
 pytest==4.3.1
 python-slugify==3.0.1
 requests==2.21.0

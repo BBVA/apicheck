@@ -17,7 +17,7 @@ from mitmproxy import optmanager  # noqa
 from mitmproxy import proxy  # noqa
 from mitmproxy.utils import debug, arg_check  # noqa
 
-from apicheck.sources.proxy.config import RunningConfig
+from .config import RunningConfig
 
 OPTIONS_FILE_NAME = "config.yaml"
 
