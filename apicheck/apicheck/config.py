@@ -12,7 +12,7 @@ class Singleton(type):
 
 
 @dataclass
-class CommonModel(object, metaclass=Singleton):
+class CommonConfig(object, metaclass=Singleton):
     db_connection_string: str
     log_level: str
 

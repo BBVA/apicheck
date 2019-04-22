@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from apicheck.model import CommonModel
+from apicheck.config import CommonConfig
 
 
 @dataclass
-class RunningConfig(CommonModel):
+class RunningConfig(CommonConfig):
     api_action: str

@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
-from apicheck.model import CommonModel
+from apicheck.config import CommonConfig
 
 
 @dataclass
-class RunningConfig(CommonModel):
+class RunningConfig(CommonConfig):
     domain: str
     listen_addr: str = "127.0.0.1"
     listen_port: int = 8080

@@ -1,7 +1,7 @@
 from enum import Enum
 from dataclasses import dataclass
 
-from apicheck.model import CommonModel
+from apicheck.config import CommonConfig
 
 
 class DefinitionsFormats(Enum):
@@ -11,7 +11,7 @@ class DefinitionsFormats(Enum):
 
 
 @dataclass
-class RunningConfig(CommonModel):
+class RunningConfig(CommonConfig):
     FORMAT_CHOICES = (
         (DefinitionsFormats.RAML.name, "RAML"),
         (DefinitionsFormats.OPENAPI_3.name, "OpenAPI 3"),

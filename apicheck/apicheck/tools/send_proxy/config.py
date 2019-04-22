@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
-from apicheck.model import CommonModel
+from apicheck.config import CommonConfig
 from apicheck.exceptions import APICheckException
 
 
 @dataclass
-class RunningConfig(CommonModel):
+class RunningConfig(CommonConfig):
     """
     api_id: Unique ID for the API
     source: origin of data: proxy or definition. Allowed values:
