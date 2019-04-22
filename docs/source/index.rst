@@ -21,7 +21,7 @@ Contents
    uses_cases/uses_cases_overview
    uses_cases/developers
    uses_cases/pentesters
-   uses_cases/ops
+   uses_cases/sysadmins
 
 .. toctree::
    :maxdepth: 2

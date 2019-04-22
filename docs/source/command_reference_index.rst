@@ -5,14 +5,16 @@ This document contains a index reference for ``API-Check`` supported commands.
 
 Command are grouped in the two types supported by ``API-Check``:
 
-- :doc:`Super Commands </home/tutorial>`
-- :doc:`Commands </home/tutorial>`
+- :doc:`Tools </home/core_concepts>`
+- :doc:`Commands </home/core_concepts>`
 
-apicheck-importer
------------------
+Tools
+-----
 
-- Short command: ``aci``
-- Command type: **super Command**
+Dataset
++++++++
+
+- Short command: ``at-dataset``
 - Description:
 - Examples:
 - Usage:
@@ -26,11 +28,10 @@ apicheck-importer
     > aci -h
 
 
-apicheck-actions
-----------------
+Proxy
++++++
 
-- Short command: ``aca``
-- Command type: **super Command**
+- Short command: ``at-proxy``
 - Description:
 - Examples:
 - Usage:
@@ -43,11 +44,10 @@ apicheck-actions
 
     > aca -h
 
-apicheck-manage
----------------
+Send-to-Proxy
++++++++++++++
 
-- Short command: ``acm``
-- Command type: **super Command**
+- Short command: ``at-send-to-proxy``
 - Description:
 - Examples:
 - Usage:
@@ -62,10 +62,9 @@ apicheck-manage
 
 
 apicheck-help
--------------
++++++++++++++
 
-- Short command: ``ac-help``
-- Command type: **super Command**
+- Short command: ``at-help``
 - Description:
 - Examples:
 - Usage:
@@ -79,10 +78,14 @@ apicheck-help
     > ac-help
 
 
-ac-fuzz
--------
+Commands
+--------
 
-- Command type: **mini command**
+Commands are small specific purpose commands. They follow the \*NIX philosophy.
+
+ac-wc
++++++
+
 - Description:
 - Examples:
 - Usage:

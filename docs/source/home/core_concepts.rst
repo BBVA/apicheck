@@ -8,7 +8,7 @@ Command types
 ``API-Check`` has 2 kind of commands:
 
 - Commands
-- Super commands
+- Tools
 
 Commands
 +++++++++++++
@@ -17,10 +17,10 @@ Commands are a small executables that have more specific things. These commands 
 
 You can imagine this commands as a ``awk`` or ``grep`` commands. Small, but powerful.
 
-Super Commands
-++++++++++++++
+Tools
++++++
 
-Super commands are high level commands that join some small functionality in more *complete* command.
+Tools are high level commands that join some small functionality in more *complete* command.
 
 You can think of that as a chain of some \*NIX calls, grouped in an unique high level command. I.e:
 

@@ -1,6 +1,6 @@
-**********************************************
-API-Check - The DevSecOp toolset for REST APIs
-**********************************************
+***********************************************
+API-Check - The DevSecOps toolset for REST APIs
+***********************************************
 
 .. image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
    :target: https://github.com/BBVA/apicheck/blob/master/LICENSE
