@@ -1,6 +1,7 @@
 from typing import Tuple, Set
 
 
+# TODO: rename to openapi_ref_resolver
 def ref_resolver(tree):
     def _resolve(element):
         if isinstance(element, dict) and "$ref" in element:

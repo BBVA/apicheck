@@ -32,11 +32,13 @@ def _open_api_object(field: dict, strategies):
         raise ValueError("Can't gen a property-less object whiout policy")
     properties = field["properties"]
     prop_builder = []
+    # TODO: v my ass, it's a Field!
     for k, v in properties.items():
         g = generator(v, strategies)
         prop_builder.append((k, g))
     while True:
         res = {}
+        # TODO: human names
         for k, g in prop_builder:
             next_value = next(g)
             res[k] = next_value
@@ -85,6 +87,7 @@ def _open_api_list(field: dict, strategies):
     while True:
         if "uniqueItems" in field and field["uniqueItems"]:
             yield _must_unique(gen())
+        # TODO: constant size?
         yield gen()
 
 

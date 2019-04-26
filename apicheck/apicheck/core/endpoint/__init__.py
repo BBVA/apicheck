@@ -94,6 +94,7 @@ def _post_gen(query, item, strategy, params=None):
         yield res
 
 
+# TODO: typo: rename defautl -> default
 def request_generator(open_api_data: dict,
                       defautl_strategy: list = []):
     if not open_api_data or not isinstance(open_api_data, dict):
