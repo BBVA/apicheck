@@ -103,7 +103,7 @@ def request_generator(open_api_data: dict,
         default_strategy = strategy
     transformer = ref_resolver(open_api_data)
 
-    def _enpoint_generator(query, ancestors=set([]), method="get"):
+    def _endpoint_generator(query, ancestors=set([]), method="get"):
         # TODO: raise invalid query and item not found inside search
         if not query:
             raise ValueError("Invalid query")
@@ -131,4 +131,4 @@ def request_generator(open_api_data: dict,
         else:
             raise NotImplementedError("No way man")
         return res
-    return _enpoint_generator
+    return _endpoint_generator
