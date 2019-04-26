@@ -79,16 +79,15 @@ def _open_api_list(field: dict, strategies):
         maximum = field["maxItems"]
     item_type = field["items"]
     item_gen = generator(item_type, strategies)
-    size = random.randint(minimum, maximum)
 
-    def gen():
+    def gen(size: int):
         return [next(item_gen) for _ in range(size)]
 
     while True:
+        size = random.randint(minimum, maximum)
         if "uniqueItems" in field and field["uniqueItems"]:
-            yield _must_unique(gen())
-        # TODO: constant size?
-        yield gen()
+            yield _must_unique(gen(size))
+        yield gen(size)
 
 
 def _open_api_bool(field: dict, strategies):
