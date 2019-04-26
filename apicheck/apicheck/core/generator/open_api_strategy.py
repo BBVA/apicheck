@@ -33,7 +33,7 @@ def _open_api_object(field: dict, strategies):
     properties = field["properties"]
     prop_builder = []
     for k, v in properties.items():
-        g = generator(v, strategies, key=k)
+        g = generator(v, strategies)
         prop_builder.append((k, g))
     while True:
         res = {}
