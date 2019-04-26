@@ -29,7 +29,7 @@ def _open_api_object(field: dict, strategies):
     def _make_gen(v):
         return generator(v, strategies)
     if "properties" not in field:
-        raise ValueError("Can't gen a property-less object whiout policy")
+        raise ValueError("Can't gen a property-less object without policy")
     properties = field["properties"]
     prop_builder = []
     # TODO: v my ass, it's a Field!
