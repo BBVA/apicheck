@@ -94,14 +94,13 @@ def _post_gen(query, item, strategy, params=None):
         yield res
 
 
-# TODO: typo: rename defautl -> default
 def request_generator(open_api_data: dict,
-                      defautl_strategy: list = []):
+                      default_strategy: list = []):
     if not open_api_data or not isinstance(open_api_data, dict):
         raise ValueError("Not data supplied")
-    if not defautl_strategy:
+    if not default_strategy:
         from apicheck.core.generator.open_api_strategy import strategy
-        defautl_strategy = strategy
+        default_strategy = strategy
     transformer = ref_resolver(open_api_data)
 
     def _enpoint_generator(query, ancestors=set([]), method="get"):
@@ -124,11 +123,11 @@ def request_generator(open_api_data: dict,
             parameters = None
         resolved = transform_tree(item, transformer)
         if method == "get":
-            res = _get_gen(query, resolved, defautl_strategy, parameters)
+            res = _get_gen(query, resolved, default_strategy, parameters)
         elif method == "put":
-            res = _put_gen(query, resolved, defautl_strategy, parameters)
+            res = _put_gen(query, resolved, default_strategy, parameters)
         elif method == "post":
-            res = _post_gen(query, resolved, defautl_strategy, parameters)
+            res = _post_gen(query, resolved, default_strategy, parameters)
         else:
             raise NotImplementedError("No way man")
         return res
