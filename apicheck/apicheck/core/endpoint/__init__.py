@@ -14,7 +14,7 @@ def _param_generator(strategy, path, parameters):
             res = next(gen)
             if "in" in p:
                 if p["in"] == "path":
-                    url = re.sub(r"\{"+p["name"]+"\}", str(res), url)
+                    url = re.sub(r"\{"+p["name"]+r"\}", str(res), url)
                 else:
                     raise NotImplementedError("query params")
             else:
