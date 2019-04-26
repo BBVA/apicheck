@@ -37,12 +37,12 @@ def _open_api_object(field: dict, strategies):
         g = generator(v, strategies)
         prop_builder.append((k, g))
     while True:
-        res = {}
+        r = {}
         # TODO: human names
         for k, g in prop_builder:
             next_value = next(g)
-            res[k] = next_value
-        yield res
+            r[k] = next_value
+        yield r
 
 
 def _open_api_int(field: dict, strategies):
@@ -67,9 +67,9 @@ def _open_api_int(field: dict, strategies):
 def _open_api_list(field: dict, strategies):
     def _must_unique(gen):
         for _ in range(1000):
-            res = gen()
-            if len(res) == len(set(res)):
-                return res
+            r = gen()
+            if len(r) == len(set(r)):
+                return r
         raise ValueError("Cannot generate unique list with this parameters")
     minimum = 1
     if "minItems" in field:
