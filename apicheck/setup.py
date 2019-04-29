@@ -73,15 +73,12 @@ if sys.version_info < (3, 7,):
 with open("requirements.txt", "r") as f:
     REQUIREMENTS = f.read().splitlines()
 
-with open("README.rst", "r") as f:
-    LONG_DESCRIPTION = f.read()
-
 VERSION = "1.0.0"
 
 ENTRY_POINTS = []
 ENTRY_POINTS.extend(find_tools())
 ENTRY_POINTS.extend(find_commands())
-print(ENTRY_POINTS)
+
 setup(
     name='apicheck',
     version=VERSION,
@@ -98,7 +95,6 @@ setup(
         'console_scripts': ENTRY_POINTS
     },
     description='The DevSecOps toolset for REST APIs',
-    long_description=LONG_DESCRIPTION,
     classifiers=[
         'Topic :: Security',
         'Environment :: Console',

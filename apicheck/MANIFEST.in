@@ -1,4 +1,4 @@
-include requirements.txt ../README.rst
+include requirements.txt
 
 recursive-exclude * __pycache__
 recursive-exclude * *.pyc
