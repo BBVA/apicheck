@@ -10,7 +10,7 @@ def main():
     )
     parser.add_argument('JSON_FILE',
                         nargs="?",
-                        help="Domain to inspect using proxy")
+                        help="JSON File")
 
     parsed = parser.parse_args()
 
