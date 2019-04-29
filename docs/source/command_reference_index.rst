@@ -1,5 +1,5 @@
-Command Reference Index
-=======================
+Overview
+========
 
 This document contains a index reference for ``API-Check`` supported commands.
 
@@ -9,7 +9,7 @@ Command are grouped in the two types supported by ``API-Check``:
 - :ref:`Commands <commands_reference>`
 
 Tools
------
+=====
 
 Dataset
 +++++++
@@ -52,29 +52,20 @@ Send-Proxy
     > at-sendproxy -h
 
 
-apicheck-help
-+++++++++++++
-
-- Description:
-- Usage:
-
-.. code-block:: console
-
-    > at-help
-
-
 Commands
---------
+========
 
 Commands are small specific purpose commands. They follow the \*NIX philosophy.
 
-ac-wc
-+++++
+ac-j2y
+++++++
 
-- Description:
-- Examples:
-- Usage:
+- Description: JSON to YAML converter
+- Command documentation: :ref:`J2Y <ac_j2y>`
 
-.. code-block:: console
 
-    > ac-wc
+ac-y2j
+++++++
+
+- Description: YAML to JSON with indent option
+- Command documentation: :ref:`J2Y <ac_y2j>`

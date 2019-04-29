@@ -4,7 +4,9 @@ Overview
 What's API-Check
 ----------------
 
-``API-Check`` is a **toolset** with lot of features to perform with REST API.
+``API-Check`` is a **toolset** to perform actions to REST API.
+
+``ÀPI-Check`` has divided in two type of actions: **comands** and **tools**. Check the :ref:`Core Concepts Page for more information <apicheck_structure>`
 
 API-Check has structured with 3 user profiles in mind:
 
@@ -12,6 +14,7 @@ API-Check has structured with 3 user profiles in mind:
 - :doc:`Developers </uses_cases/developers>`
 - :doc:`System Admins </uses_cases/sysadmins>`
 
+<IMAGE HERE>
 
 Why another tool for REST APIs?
 -------------------------------
@@ -24,13 +27,13 @@ There's a lot of tools for testing REST API:
 
 The main different with other tools is that ``API-Check`` is not a fuzzer or a hacking tool. There's a complete toolset of tools for testing, manage, hacking or checking a REST API.
 
-
 APICheck replaces all other tools?
 ----------------------------------
 
 Absolutely no! ``API-Check`` aims to be a tools that joins any other tools.
 
- -> image <-
+<IMAGE HERE>
+
 
 
 

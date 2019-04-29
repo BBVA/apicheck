@@ -10,6 +10,15 @@ Using Pip
 
     > pip install apicheck
 
+MySQL Support
++++++++++++++
+
+If you want to install ``API-Check`` with Mysql Support you must install as follows:
+
+.. code-block:: console
+
+    > pip install apicheck[mysql]
+
 Using Docker CLI
 ----------------
 

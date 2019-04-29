@@ -11,7 +11,7 @@ Contents
    home/overview_project
    home/installation
    home/quickstart
-   home/core_concepts
+   home/internals
    home/data_generation
 
 
@@ -33,22 +33,22 @@ Contents
 
 .. toctree::
    :maxdepth: 2
+   :titlesonly:
    :caption: Commands
 
    commands/commands
 
 .. toctree::
    :maxdepth: 2
-   :caption: Plugin development
+   :caption: Development
 
-   plugin_development/development_overview
-   plugin_development/prepare_env
-   plugin_development/building
+   development/creating_commands
+   development/creating_tools
 
 
 .. toctree::
    :maxdepth: 2
-   :caption: Commands Reference
+   :caption: Reference Index
 
    command_reference_index
 
