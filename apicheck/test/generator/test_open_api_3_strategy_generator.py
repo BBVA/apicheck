@@ -37,8 +37,8 @@ def test_string_boundaries():
 
     for _ in range(1000):
         res = next(gen)
-        assert len(res) >= 2
-        assert len(res) <= 10
+        assert len(res) >= field["minLength"]
+        assert len(res) <= field["maxLength"]
 
 
 def test_integer_field():

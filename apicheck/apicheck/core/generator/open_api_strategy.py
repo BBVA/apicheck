@@ -29,18 +29,20 @@ def _open_api_object(field: dict, strategies):
     def _make_gen(v):
         return generator(v, strategies)
     if "properties" not in field:
-        raise ValueError("Can't gen a property-less object whiout policy")
+        raise ValueError("Can't gen a property-less object without policy")
     properties = field["properties"]
     prop_builder = []
+    # TODO: v my ass, it's a Field!
     for k, v in properties.items():
-        g = generator(v, strategies, key=k)
+        g = generator(v, strategies)
         prop_builder.append((k, g))
     while True:
-        res = {}
+        r = {}
+        # TODO: human names
         for k, g in prop_builder:
             next_value = next(g)
-            res[k] = next_value
-        yield res
+            r[k] = next_value
+        yield r
 
 
 def _open_api_int(field: dict, strategies):
@@ -65,9 +67,9 @@ def _open_api_int(field: dict, strategies):
 def _open_api_list(field: dict, strategies):
     def _must_unique(gen):
         for _ in range(1000):
-            res = gen()
-            if len(res) == len(set(res)):
-                return res
+            r = gen()
+            if len(r) == len(set(r)):
+                return r
         raise ValueError("Cannot generate unique list with this parameters")
     minimum = 1
     if "minItems" in field:
@@ -77,15 +79,15 @@ def _open_api_list(field: dict, strategies):
         maximum = field["maxItems"]
     item_type = field["items"]
     item_gen = generator(item_type, strategies)
-    size = random.randint(minimum, maximum)
 
-    def gen():
+    def gen(size: int):
         return [next(item_gen) for _ in range(size)]
 
     while True:
+        size = random.randint(minimum, maximum)
         if "uniqueItems" in field and field["uniqueItems"]:
-            yield _must_unique(gen())
-        yield gen()
+            yield _must_unique(gen(size))
+        yield gen(size)
 
 
 def _open_api_bool(field: dict, strategies):

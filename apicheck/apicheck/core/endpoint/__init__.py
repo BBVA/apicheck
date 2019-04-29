@@ -2,7 +2,6 @@ import re
 
 from apicheck.core.dict_helpers import search, ref_resolver, transform_tree
 from apicheck.core.generator import generator
-from apicheck.core.endpoint.rules import rule_finder, make_strategy
 
 
 def _param_generator(strategy, path, parameters):
@@ -15,7 +14,7 @@ def _param_generator(strategy, path, parameters):
             res = next(gen)
             if "in" in p:
                 if p["in"] == "path":
-                    url = re.sub(r"\{"+p["name"]+"\}", str(res), url)
+                    url = re.sub(r"\{"+p["name"]+r"\}", str(res), url)
                 else:
                     raise NotImplementedError("query params")
             else:
@@ -96,45 +95,40 @@ def _post_gen(query, item, strategy, params=None):
 
 
 def request_generator(open_api_data: dict,
-                      defautl_strategy: list = [],
-                      rules: dict = {}):
+                      default_strategy: list = []):
     if not open_api_data or not isinstance(open_api_data, dict):
         raise ValueError("Not data supplied")
-    if not defautl_strategy:
+    if not default_strategy:
         from apicheck.core.generator.open_api_strategy import strategy
-        defautl_strategy = strategy
+        default_strategy = strategy
     transformer = ref_resolver(open_api_data)
-    api_rule_finder = rule_finder(rules)
 
-    def _enpoint_generator(query, ancestors=set([]), method="get"):
+    def _endpoint_generator(query, ancestors=set([]), method="get"):
         # TODO: raise invalid query and item not found inside search
         if not query:
             raise ValueError("Invalid query")
         item = search(open_api_data, query, ancestors=ancestors)
-        if not item:
+        if not item or method not in item:
             raise ValueError("Item not found")
-        # TODO: raise invalid query and item not found inside search
-        if method not in item:
-            raise ValueError("Method not found on item")
+        # empty request to fill
+        request = {
+            "method": method,
+            "path": query,
+            "headers": []
+        }
         # TODO: retrieve parameters
         if "parameters" in item:
             parameters = item["parameters"]
         else:
             parameters = None
         resolved = transform_tree(item, transformer)
-        # query rules
-        to_apply = api_rule_finder(query, method)
-        current_strategy = defautl_strategy[:]
-        if to_apply:
-            extended_strategy = make_strategy(to_apply)
-            current_strategy = extended_strategy + current_strategy
         if method == "get":
-            res = _get_gen(query, resolved, current_strategy, parameters)
+            res = _get_gen(query, resolved, default_strategy, parameters)
         elif method == "put":
-            res = _put_gen(query, resolved, current_strategy, parameters)
+            res = _put_gen(query, resolved, default_strategy, parameters)
         elif method == "post":
-            res = _post_gen(query, resolved, current_strategy, parameters)
+            res = _post_gen(query, resolved, default_strategy, parameters)
         else:
             raise NotImplementedError("No way man")
         return res
-    return _enpoint_generator
+    return _endpoint_generator
