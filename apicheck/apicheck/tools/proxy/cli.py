@@ -57,7 +57,7 @@ def cli():
     #
     # Build config from CLI args
     #
-    running_config = RunningConfig(args.__dict__)
+    running_config = RunningConfig(**args.__dict__)
 
     #
     # Setup log for console
@@ -73,3 +73,8 @@ def cli():
     # Launch
     #
     run(running_config)
+
+
+if __name__ == '__main__':
+    cli()
+

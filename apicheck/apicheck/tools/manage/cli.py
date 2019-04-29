@@ -6,22 +6,22 @@ from apicheck.core.cli import cli_db, cli_log_level
 from apicheck.core.logging import setup_console_log
 
 from .apis.cli import cli as cli_apis
-from .create_tools.cli import cli as cli_create_plugin
+from .create_tool.cli import cli as cli_create_plugin
 from .api_definition_formats.cli import cli as cli_definitions
 
 from .apis.run import run as run_apis
-from .create_tools.run import run as run_create_plugin
+from .create_tool.run import run as run_create_plugin
 from .api_definition_formats.run import run as run_definitions
 
 from .apis.config import RunningConfig as ConfigAPIs
-from .create_tools.config import RunningConfig as ConfigCreatePlugin
+from .create_tool.config import RunningConfig as ConfigCreatePlugin
 from .api_definition_formats.config import RunningConfig as ConfigDefinition
 
 logger = logging.getLogger("apicheck")
 
 ACTION_MAP = {
     'api': (run_apis, ConfigAPIs),
-    'create-plugin': (run_create_plugin, ConfigCreatePlugin),
+    'create-tool': (run_create_plugin, ConfigCreatePlugin),
     'definition': (run_definitions, ConfigDefinition)
 }
 

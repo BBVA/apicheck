@@ -3,7 +3,7 @@
 def cli(subparser):
 
     plugin_args = subparser.add_parser(
-        'create-plugin',
+        'create-tool',
         help='Manage stored APIs')
 
     plugin_args.add_argument('name',
