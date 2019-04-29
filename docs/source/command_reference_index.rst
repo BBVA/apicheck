@@ -15,41 +15,19 @@ Dataset
 +++++++
 
 - Description: Builds a dataset, analise it and create behavior graphs from user navigations stored in database.
-- Examples:
-- Usage:
-
-.. code-block:: console
-
-    > at-dataset -h
-
+- Command documentation: :ref:`Dataset tool <dataset>`
 
 Proxy
 +++++
 
 - Description: Launches a local proxy and tracks navigation through it into a database.
-- Examples:
+- Command documentation: :ref:`Proxy tool <proxy>`
 
-    - :doc:`/home/quickstart`
+Send-To
++++++++
 
-- Usage:
-
-.. code-block:: console
-
-    > at-proxy -h
-
-Send-Proxy
-+++++++++++++
-
-- Description: Sends proxy information, from previous navigation data or from OpenAPI definition, to output proxy.
-- Examples:
-
-    - :doc:`/home/quickstart`
-
-- Usage:
-
-.. code-block:: console
-
-    > at-sendproxy -h
+- Description: Send API Request to given host. Optionally can send the requests through a proxy.
+- Command documentation: :ref:`Send-to tool <send_to>`
 
 
 Commands
