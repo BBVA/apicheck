@@ -1,5 +1,5 @@
-send-to
--------
+Send-to
+=======
 
 .. _send_to:
 

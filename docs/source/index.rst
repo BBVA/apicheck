@@ -28,7 +28,9 @@ Contents
    :maxdepth: 2
    :caption: Tools
 
-   tools/send_proxy
+   tools/dataset
+   tools/proxy
+   tools/send_to
    tools/management
 
 .. toctree::
