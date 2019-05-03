@@ -5,11 +5,19 @@ from . import generator, _type_matcher
 
 from faker import Faker
 
+from typing import Iterator
+
 
 fake = Faker()
 
 
-def _open_api_str(field: dict, strategies):
+def _open_api_str(field: dict, strategies) -> Iterator[str]:
+    """
+    Yields a string of fake text with a length between 10 and 200, or between
+    field["minLength"] and field["maxLength"] if those are defined.
+
+    :param field: specification of a field
+    """
     minimum = 10
     maximum = 200
     if "maxLength" in field:
