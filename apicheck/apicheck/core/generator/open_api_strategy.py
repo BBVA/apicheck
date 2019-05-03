@@ -19,7 +19,7 @@ def _open_api_str(field: dict, strategies):
     while True:
         r = fake.text()
         while len(r) < minimum:
-            r = r + r
+            r += r
         if len(r) > maximum:
             r = r[:maximum-1]
         yield r
@@ -60,7 +60,7 @@ def _open_api_int(field: dict, strategies):
         r = random.randint(minimum, maximum)
         if "multipleOf" in field:
             rem = r % field["multipleOf"]
-            r = r - rem
+            r -= rem
         yield r
 
 
