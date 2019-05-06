@@ -125,6 +125,21 @@ def test_integer_boundaries():
         assert res <= 10
 
 
+def test_integer_incorrect_boundaries():
+    field = {
+        "type": "integer",
+        "description": "This authorization's ID, used for revoking access.\n",
+        "minimum": 10,
+        "maximum": 0,
+        "example": 123
+    }
+
+    gen = generator(field, open_api_strategies)
+    for _ in range(1000):
+        res = next(gen)
+        assert isinstance(res, AbsentValue)
+
+
 def test_integer_exclusive_boundaries():
     field = {
         "type": "integer",
@@ -155,6 +170,19 @@ def test_integer_multiple_of():
     for _ in range(1000):
         res = next(gen)
         assert res % 10 == 0
+
+
+def test_integer_multiple_of_1_10_7():
+    field = {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 10,
+        "multipleOf": 7,
+    }
+
+    gen = generator(field, open_api_strategies)
+    res = next(gen)
+    assert res == 7
 
 
 def test_array_field():
