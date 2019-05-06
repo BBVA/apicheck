@@ -1,7 +1,8 @@
 import random
 import sys
 
-from . import generator, _type_matcher
+from . import generator, _type_matcher, AbsentValue
+from itertools import repeat
 
 from faker import Faker
 
@@ -18,19 +19,29 @@ def _open_api_str(field: dict, strategies) -> Iterator[str]:
 
     :param field: specification of a field
     """
+    def _fail(element):
+        return lambda: element
+
+    def _generate():
+        r = fake.text()
+        while len(r) < minimum:
+            r = r + r
+        if len(r) > maximum:
+            r = r[:maximum-1]
+        return r
     minimum = 10
     maximum = 200
     if "maxLength" in field:
         maximum = field["maxLength"]
     if "minLength" in field:
         minimum = field["minLength"]
+
+    if maximum < minimum:
+        proc = _fail(AbsentValue("Incorrect maxLenght or minLenght"))
+    else:
+        proc = _generate
     while True:
-        r = fake.text()
-        while len(r) < minimum:
-            r += r
-        if len(r) > maximum:
-            r = r[:maximum-1]
-        yield r
+        yield proc()
 
 
 def _open_api_object(field: dict, strategies):

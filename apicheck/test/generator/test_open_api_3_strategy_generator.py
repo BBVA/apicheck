@@ -1,7 +1,40 @@
 from typing import List
 
-from apicheck.core.generator import generator
+from apicheck.core.generator import generator, AbsentValue
 from apicheck.core.generator.open_api_strategy import strategy as open_api_strategies
+
+
+def test_no_field():
+    gen = generator(None, open_api_strategies)
+
+    res = next(gen)
+
+    assert isinstance(res, AbsentValue)
+
+
+def test_no_strategies():
+    field = {
+        "type": "string",
+        "example": "fieldname"
+    }
+    gen = generator(field, None)
+
+    res = next(gen)
+
+    assert isinstance(res, AbsentValue)
+
+
+def test_no_strategy_found():
+    field = {
+        "type": "strong",
+        "example": "waka"
+    }
+    gen = generator(field, open_api_strategies)
+
+    res = next(gen)
+
+    assert isinstance(res, AbsentValue)
+
 
 
 def test_string_field():
@@ -39,6 +72,21 @@ def test_string_boundaries():
         res = next(gen)
         assert len(res) >= field["minLength"]
         assert len(res) <= field["maxLength"]
+
+
+def test_string_incorrect_boundaries():
+    field = {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 5,
+        "example": "fieldname"
+    }
+
+    gen = generator(field, open_api_strategies)
+
+    for _ in range(1000):
+        res = next(gen)
+        assert isinstance(res, AbsentValue)
 
 
 def test_integer_field():
