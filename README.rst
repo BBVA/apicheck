@@ -14,7 +14,7 @@ API-Check - The DevSecOps toolset for REST APIs
 Why API-Check
 -------------
 
-API-Check focus not only in the security testing and hacking uses cases. The goal of project is to be a complete toolset for ``DevSecOPs`` cycles and different users profiles:
+API-Check focus not only in the security testing and hacking uses cases. The goal of project is to be a complete toolset for ``DevSecOPs`` cycles and for different users profiles:
 
 - Developers
 - Systems SysAdmins

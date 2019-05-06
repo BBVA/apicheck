@@ -1,5 +1,5 @@
-Overview
-========
+Tools & commands index
+======================
 
 This document contains a index reference for ``API-Check`` supported commands.
 

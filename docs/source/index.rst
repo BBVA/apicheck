@@ -9,10 +9,8 @@ Contents
    :caption: The Project
 
    home/overview_project
-   home/installation
-   home/quickstart
+   home/installation_and_quickstart
    home/internals
-   home/data_generation
 
 
 .. toctree::
@@ -53,6 +51,12 @@ Contents
    :caption: Reference Index
 
    command_reference_index
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Third Party Tools
+
+   tools_reference
 
 
 Indices and tables

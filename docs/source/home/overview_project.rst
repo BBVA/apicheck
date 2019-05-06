@@ -4,35 +4,41 @@ Overview
 What's API-Check
 ----------------
 
-``API-Check`` is a **toolset** to perform actions to REST API.
+.. _apicheck_structure:
 
-``ÀPI-Check`` has divided in two type of actions: **comands** and **tools**. Check the :ref:`Core Concepts Page for more information <apicheck_structure>`
+``API-Check`` is a **toolset** to perform actions to REST APIs. This means the project is a set of grouped tools.
 
-API-Check has structured with 3 user profiles in mind:
+.. image:: /_static/apicheck_001_structure.png
+   :align: center
 
-- :doc:`Pentesters </uses_cases/pentesters>`
-- :doc:`Developers </uses_cases/developers>`
-- :doc:`System Admins </uses_cases/sysadmins>`
-
-<IMAGE HERE>
 
 Why another tool for REST APIs?
 -------------------------------
 
-There's a lot of tools for testing REST API:
+``API-Check`` aims to be, not only a generic toolset for REST APIs, it aims to be the tool that allow integrate with other tools.
 
-- `TNT Fuzzer <https://github.com/Teebytes/TnT-Fuzzer>`_
-- `API Fuzzer <https://github.com/KissPeter/APIFuzzer>`_
-- `Tavern <https://github.com/taverntesting/tavern>`_
+The idea of ``API-Check`` is to be useful for everybody that need to use REST APIs. Depending of the thinks you need to do we classified the user focused profiles in three groups:
 
-The main different with other tools is that ``API-Check`` is not a fuzzer or a hacking tool. There's a complete toolset of tools for testing, manage, hacking or checking a REST API.
+API-Check has structured with 3 user profiles in mind:
 
-APICheck replaces all other tools?
-----------------------------------
+- :doc:`Security Engineers / Pentesters </uses_cases/pentesters>`
+- :doc:`Developers </uses_cases/developers>`
+- :doc:`System Admins </uses_cases/sysadmins>`
 
-Absolutely no! ``API-Check`` aims to be a tools that joins any other tools.
+The ``API-Check`` toolset are useful for these three profiles of users.
 
-<IMAGE HERE>
+What's are exactly the tool set?
+--------------------------------
+
+``ÀPI-Check`` has divided in two type of actions: **commands** and **tools**. In short:
+
+- Tools: do more complex actions.
+- Commands: are small utilities.
+
+.. note::
+
+    You can check complete information bout :samp:`commands` and ::samp:`tools` into :ref:`Core Concepts Page for more information <apicheck_structure>`
+
 
 
 
