@@ -50,7 +50,7 @@ master_doc = "index"
 #
 html_theme = "sphinx_rtd_theme"
 html_show_sourcelink = True
-html_logo = "_static/apicheck-logo-150x150.png"
+html_logo = "_static/images/apicheck-logo-150x150.png"
 html_theme_options = {
     'collapse_navigation': False,
     'logo_only': False,

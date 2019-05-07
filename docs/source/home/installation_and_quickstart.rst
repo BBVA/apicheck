@@ -3,6 +3,8 @@ Installation & Quick start
 
 ``API-Check`` uses `MITM Proxy <https://mitmproxy.org>`_ then you must install all the dependencies inherited from them. It's easy to install them. You can `follow their documentation <https://docs.mitmproxy.org/stable/overview-installation/>`_.
 
+.. _installation:
+
 Installation
 ------------
 
@@ -41,7 +43,7 @@ If you want to open an interactive CLI for testing an API you can run:
 Quick Start
 -----------
 
-Use ``API-Check`` is very easy. After :doc:`install <installation>` you can type cli commands.
+Use ``API-Check`` is very easy. After :ref:`install <installation>` you can type cli commands.
 
 ``API-Check`` has a lot of commands. You can find the complete reference in :doc:`/command_reference_index` and you also can check grouped commands by the purpose of you want to use ``API-Check`` in the :doc:`/uses_cases/uses_cases_overview`.
 

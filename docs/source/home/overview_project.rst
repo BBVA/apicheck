@@ -8,7 +8,7 @@ What's API-Check
 
 ``API-Check`` is a **toolset** to perform actions to REST APIs. This means the project is a set of grouped tools.
 
-.. image:: /_static/apicheck_001_structure.png
+.. image:: /_static/images/apicheck_001_structure.png
    :align: center
 
 

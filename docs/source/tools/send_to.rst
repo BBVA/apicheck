@@ -5,7 +5,7 @@ Send-to
 
 Send API Request to given host. Optionally can send the requests through a proxy.
 
-.. image:: /_static/tool_send_proxy.png
+.. image:: /_static/images/tool_send_proxy.png
 
 
 .. code-block:: console

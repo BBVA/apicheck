@@ -9,22 +9,24 @@ Pipelines
 
 As \*NIX like you can chain :samp:`commands` and :samp:`tools`. Imagine this \*NIX *pipeline* execution:
 
-.. image:: /_static/apicheck_unix_pipeline.png
+.. image:: /_static/images/apicheck_unix_pipeline.png
    :align: center
 
 You can build the ``API-Check``-like *pipeline* doing:
 
-.. image:: /_static/apicheck_unix_pipeline.png
+.. image:: /_static/images/apicheck_unix_pipeline.png
    :align: center
 
-Data follow
+.. _data_format:
+
+Data format
 +++++++++++
 
 ::samp:`commands` and ::samp:`tools` receives from input and output information that allow to build pipelines (as we learnt in the previous section). To do that, they may share *speak* the same data format. The chosen data format for ``API-Check`` is ::samp:`JSON`.
 
 Commands and Tools
 
-.. image:: /_static/apicheck_002_json_flow.png
+.. image:: /_static/images/apicheck_002_json_flow.png
    :width: 300px
    :align: center
 
