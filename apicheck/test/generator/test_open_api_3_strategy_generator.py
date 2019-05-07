@@ -175,7 +175,7 @@ def test_integer_multiple_of():
 def test_integer_multiple_of_1_10_7():
     field = {
         "type": "integer",
-        "minimum": 0,
+        "minimum": 1,
         "maximum": 10,
         "multipleOf": 7,
     }
