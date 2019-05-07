@@ -1,6 +1,6 @@
 import random
 import sys
-from typing import Any, Callable, Dict, Iterator, List, Tuple, Union
+from typing import Any, Callable, Dict, Iterator, List, Tuple, TypeVar, Union
 
 from faker import Faker
 
@@ -12,18 +12,21 @@ fake = Faker()
 Strategy = Tuple[Callable[[Dict], bool], Callable[[Dict], Any]]
 Field = Dict[str, Any]
 
+X = TypeVar('X')
+MaybeValue = Union[X, AbsentValue]
 
-def _open_api_str(field: Field, _: List[Strategy]) -> Iterator[Union[str, AbsentValue]]:
+
+def _open_api_str(field: Field, _: List[Strategy]) -> Iterator[MaybeValue[str]]:
     """
     Yields a string of fake text with a length between 10 and 200, or between
     field["minLength"] and field["maxLength"] if those are defined.
 
     :param field: specification of a field
     """
-    def _fail(element: AbsentValue) -> Callable[[], AbsentValue]:
+    def _fail(element: AbsentValue) -> Callable[[], Union[str, AbsentValue]]:
         return lambda: element
 
-    def _generate() -> str:
+    def _generate() -> Union[str, AbsentValue]:
         r = fake.text()
         while len(r) < minimum:
             r = r + r
@@ -122,7 +125,7 @@ def _open_api_int(field: Field, strategies: List[Strategy]):
 
 
 def _open_api_list(field: Field, strategies: List[Strategy]):
-    def _must_unique(gen: Callable[[], List[Any]]) -> Union[List[Any], AbsentValue]:
+    def _must_unique(gen: Callable[[], List[Any]]) -> MaybeValue[List[Any]]:
         for _ in range(1000):
             r = gen()
             if len(r) == len(set(r)):
