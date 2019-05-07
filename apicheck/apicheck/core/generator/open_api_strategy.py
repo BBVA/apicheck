@@ -1,7 +1,8 @@
 import random
 import sys
 
-from . import generator, _type_matcher
+from . import generator, _type_matcher, AbsentValue
+from itertools import repeat
 
 from faker import Faker
 
@@ -18,19 +19,30 @@ def _open_api_str(field: dict, strategies) -> Iterator[str]:
 
     :param field: specification of a field
     """
+    def _fail(element):
+        return lambda: element
+
+    def _generate():
+        r = fake.text()
+        while len(r) < minimum:
+            r = r + r
+        if len(r) > maximum:
+            r = r[:maximum-1]
+        return r
     minimum = 10
     maximum = 200
     if "maxLength" in field:
         maximum = field["maxLength"]
     if "minLength" in field:
         minimum = field["minLength"]
+
+    if maximum < minimum:
+        proc = _fail(AbsentValue("Incorrect maxLenght or minLenght"))
+    else:
+        proc = _generate
+
     while True:
-        r = fake.text()
-        while len(r) < minimum:
-            r += r
-        if len(r) > maximum:
-            r = r[:maximum-1]
-        yield r
+        yield proc()
 
 
 def _open_api_object(field: dict, strategies):
@@ -54,6 +66,24 @@ def _open_api_object(field: dict, strategies):
 
 
 def _open_api_int(field: dict, strategies):
+    def _fail(element):
+        return lambda: element
+
+    def _generate_simple(min_val, max_val):
+        return lambda: random.randint(min_val, max_val)
+
+    def _generate_multiple_of(min_val, max_val, multiple):
+        def _gen():
+            r = random.randint(0, m-1)
+            return m_init + r * multiple
+        m_s = max_val // multiple
+        m_i = min_val // multiple
+        m = m_s - m_i
+        if m <= 0:
+            return AbsentValue("No multiple exists within the requested range")
+        m_init = multiple + ((m_s - m) * multiple)
+        return _gen
+
     minimum = -sys.maxsize-1
     maximum = sys.maxsize
     if "minimum" in field:
@@ -64,12 +94,16 @@ def _open_api_int(field: dict, strategies):
         minimum = minimum+1
     if "exclusiveMaximum" in field:
         maximum = maximum-1
+
+    if maximum < minimum:
+        proc = _fail(AbsentValue("Invalid Maximum or Minimum"))
+    elif "multipleOf" in field:
+        proc = _generate_multiple_of(minimum, maximum, field["multipleOf"])
+    else:
+        proc = _generate_simple(minimum, maximum)
+
     while True:
-        r = random.randint(minimum, maximum)
-        if "multipleOf" in field:
-            rem = r % field["multipleOf"]
-            r -= rem
-        yield r
+        yield proc()
 
 
 def _open_api_list(field: dict, strategies):
