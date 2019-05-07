@@ -1,13 +1,10 @@
 import random
 import sys
-
-from . import generator, _type_matcher, AbsentValue
-from itertools import repeat
+from typing import Iterator
 
 from faker import Faker
 
-from typing import Iterator
-
+from . import AbsentValue, _type_matcher, generator
 
 fake = Faker()
 
@@ -65,7 +62,7 @@ def _open_api_object(field: dict, strategies):
         yield r
 
 
-def _open_api_int(field: dict, strategies):
+def _get_int_processor(minimum: int, maximum: int, multiple_of: int) -> callable:
     def _fail(element):
         return lambda: element
 
@@ -76,31 +73,44 @@ def _open_api_int(field: dict, strategies):
         def _gen():
             r = random.randint(0, m-1)
             return m_init + r * multiple
+
         m_s = max_val // multiple
         m_i = min_val // multiple
         m = m_s - m_i
         if m <= 0:
-            return AbsentValue("No multiple exists within the requested range")
+            return _fail(AbsentValue("No multiple exists within the requested range"))
         m_init = multiple + ((m_s - m) * multiple)
         return _gen
 
-    minimum = -sys.maxsize-1
-    maximum = sys.maxsize
-    if "minimum" in field:
-        minimum = field["minimum"]
-    if "maximum" in field:
-        maximum = field["maximum"]
-    if "exclusiveMinimum" in field:
-        minimum = minimum+1
-    if "exclusiveMaximum" in field:
-        maximum = maximum-1
-
     if maximum < minimum:
-        proc = _fail(AbsentValue("Invalid Maximum or Minimum"))
-    elif "multipleOf" in field:
-        proc = _generate_multiple_of(minimum, maximum, field["multipleOf"])
+        return _fail(AbsentValue("Invalid Maximum or Minimum"))
+    elif multiple_of:
+        return _generate_multiple_of(minimum, maximum, multiple_of)
     else:
-        proc = _generate_simple(minimum, maximum)
+        return _generate_simple(minimum, maximum)
+
+
+def _open_api_int(field: dict, strategies):
+    def _get_params(field: dict) -> (int, int, int):
+        minimum = -sys.maxsize - 1
+        maximum = sys.maxsize
+        if "minimum" in field:
+            minimum = field["minimum"]
+        if "maximum" in field:
+            maximum = field["maximum"]
+        if "exclusiveMinimum" in field:
+            minimum = minimum + 1
+        if "exclusiveMaximum" in field:
+            maximum = maximum - 1
+
+        if "multipleOf" in field:
+            multiple_of = field["multipleOf"]
+        else:
+            multiple_of = None
+
+        return minimum, maximum, multiple_of
+
+    proc = _get_int_processor(*_get_params(field))
 
     while True:
         yield proc()
