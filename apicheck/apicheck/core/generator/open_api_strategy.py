@@ -1,6 +1,6 @@
 import random
 import sys
-from typing import Iterator
+from typing import Any, Callable, Dict, Iterator, List, Tuple, Union
 
 from faker import Faker
 
@@ -9,17 +9,21 @@ from . import AbsentValue, _type_matcher, generator
 fake = Faker()
 
 
-def _open_api_str(field: dict, strategies) -> Iterator[str]:
+Strategy = Tuple[Callable[[Dict], bool], Callable[[Dict], Any]]
+Field = Dict[str, Any]
+
+
+def _open_api_str(field: Field, _: List[Strategy]) -> Iterator[Union[str, AbsentValue]]:
     """
     Yields a string of fake text with a length between 10 and 200, or between
     field["minLength"] and field["maxLength"] if those are defined.
 
     :param field: specification of a field
     """
-    def _fail(element):
+    def _fail(element: AbsentValue) -> Callable[[], AbsentValue]:
         return lambda: element
 
-    def _generate():
+    def _generate() -> str:
         r = fake.text()
         while len(r) < minimum:
             r = r + r
@@ -42,10 +46,11 @@ def _open_api_str(field: dict, strategies) -> Iterator[str]:
         yield proc()
 
 
-def _open_api_object(field: dict, strategies):
-    def _make_gen(v):
+def _open_api_object(field: Field, strategies: List[Strategy]) -> Iterator[Union[Field, AbsentValue]]:
+    def _make_gen(v: Field) -> Iterator[Any]:
         return generator(v, strategies)
     if "properties" not in field:
+        # TODO: return iterator AbsentValue instead
         raise ValueError("Can't gen a property-less object without policy")
     properties = field["properties"]
     prop_builder = []
@@ -62,15 +67,15 @@ def _open_api_object(field: dict, strategies):
         yield r
 
 
-def _get_int_processor(minimum: int, maximum: int, multiple_of: int) -> callable:
-    def _fail(element):
+def _get_int_processor(minimum: int, maximum: int, multiple_of: int) -> Callable[[], Union[int, AbsentValue]]:
+    def _fail(element: AbsentValue) -> Callable[[], AbsentValue]:
         return lambda: element
 
-    def _generate_simple(min_val, max_val):
+    def _generate_simple(min_val: int, max_val: int) -> Callable[[], int]:
         return lambda: random.randint(min_val, max_val)
 
-    def _generate_multiple_of(min_val, max_val, multiple):
-        def _gen():
+    def _generate_multiple_of(min_val: int, max_val: int, multiple: int) -> Callable[[], int]:
+        def _gen() -> int:
             r = random.randint(0, m-1)
             return m_init + r * multiple
 
@@ -90,8 +95,8 @@ def _get_int_processor(minimum: int, maximum: int, multiple_of: int) -> callable
         return _generate_simple(minimum, maximum)
 
 
-def _open_api_int(field: dict, strategies):
-    def _get_params(field: dict) -> (int, int, int):
+def _open_api_int(field: Field, strategies: List[Strategy]):
+    def _get_params(field: Field) -> (int, int, int):
         minimum = -sys.maxsize - 1
         maximum = sys.maxsize
         if "minimum" in field:
@@ -116,12 +121,13 @@ def _open_api_int(field: dict, strategies):
         yield proc()
 
 
-def _open_api_list(field: dict, strategies):
-    def _must_unique(gen):
+def _open_api_list(field: Field, strategies: List[Strategy]):
+    def _must_unique(gen: Callable[[], List[Any]]) -> Union[List[Any], AbsentValue]:
         for _ in range(1000):
             r = gen()
             if len(r) == len(set(r)):
                 return r
+        # TODO: Should return an AbsentValue
         raise ValueError("Cannot generate unique list with this parameters")
     minimum = 1
     if "minItems" in field:
@@ -142,7 +148,7 @@ def _open_api_list(field: dict, strategies):
         yield gen(size)
 
 
-def _open_api_bool(field: dict, strategies):
+def _open_api_bool(field: Field, strategies: List[Strategy]):
     while True:
         n = random.randint(1, 10)
         yield n % 2 == 0
