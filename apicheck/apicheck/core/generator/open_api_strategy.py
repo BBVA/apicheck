@@ -15,10 +15,11 @@ Definition = Dict[str, Any]
 
 X = TypeVar('X')
 MaybeValue = Union[X, AbsentValue]
+MaybeCallable = Callable[[], MaybeValue[X]]
 AsDefined = Dict[str, Any]
 
 
-def _fail(element: AbsentValue) -> Callable[[], MaybeValue[X]]:
+def _fail(element: AbsentValue) -> MaybeCallable[X]:
     return lambda: element
 
 
@@ -75,23 +76,33 @@ def _object_processor(properties: Optional[Definition], strategies: List[Strateg
     return _object_gen_proc(properties)
 
 
-def _open_api_object(definition: Definition, strategies: List[Strategy]) -> Iterator[Union[AsDefined, AbsentValue]]:
+def _open_api_object(
+        definition: Definition,
+        strategies: List[Strategy]
+        ) -> Iterator[MaybeValue[AsDefined]]:
     def _get_properties(definition: Definition) -> Optional[Definition]:
-        if "properties" not in definition:
-            return None
-        else:
+        if "properties" in definition:
             return definition["properties"]
+        return None
 
     proc = _object_processor(_get_properties(definition), strategies)
     while True:
         yield proc()
 
 
-def _get_int_processor(minimum: int, maximum: int, multiple_of: int) -> Callable[[], Union[int, AbsentValue]]:
+def _get_int_processor(
+        minimum: int,
+        maximum: int,
+        multiple_of: int
+        ) -> MaybeCallable[int]:
     def _generate_simple(min_val: int, max_val: int) -> Callable[[], int]:
         return lambda: random.randint(min_val, max_val)
 
-    def _generate_multiple_of(min_val: int, max_val: int, multiple: int) -> Callable[[], Union[int, AbsentValue]]:
+    def _generate_multiple_of(
+            min_val: int,
+            max_val: int,
+            multiple: int
+            ) -> MaybeCallable[int]:
         def _gen() -> int:
             r = random.randint(0, m-1)
             return m_init + r * multiple
@@ -100,7 +111,9 @@ def _get_int_processor(minimum: int, maximum: int, multiple_of: int) -> Callable
         m_i = min_val // multiple
         m = m_s - m_i
         if m <= 0:
-            return _fail(AbsentValue("No multiple exists within the requested range"))
+            return _fail(
+                AbsentValue("No multiple exists within the requested range")
+            )
         m_init = multiple + ((m_s - m) * multiple)
         return _gen
 
@@ -112,7 +125,7 @@ def _get_int_processor(minimum: int, maximum: int, multiple_of: int) -> Callable
         return _generate_simple(minimum, maximum)
 
 
-def _open_api_int(definition: Definition, strategies: List[Strategy]):
+def _open_api_int(definition: Definition, _: List[Strategy]):
     def _get_params(definition: Definition) -> Tuple[int, int, int]:
         minimum = -sys.maxsize - 1
         maximum = sys.maxsize
@@ -156,11 +169,11 @@ def _open_api_list(definition: Definition, strategies: List[Strategy]):
     while True:
         size = random.randint(minimum, maximum)
         if "uniqueItems" in definition and definition["uniqueItems"]:
-            yield _must_unique(gen(size))
+            yield _must_be_unique(gen(size))
         yield gen(size)
 
 
-def _open_api_bool(definition: Definition, strategies: List[Strategy]):
+def _open_api_bool(_: Definition, __: List[Strategy]):
     while True:
         n = random.randint(1, 10)
         yield n % 2 == 0
