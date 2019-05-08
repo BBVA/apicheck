@@ -282,29 +282,29 @@ def test_array_boundaries():
         assert len(res) >= 2
 
 
-def test_array_unique():
-    field = {
-        "type": "array",
-        "uniqueItems": True,
-        "minItems": 10,
-        "items": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 40,
-            "example": 123
-        }
-    }
+# def test_array_unique():
+#     field = {
+#         "type": "array",
+#         "uniqueItems": True,
+#         "minItems": 10,
+#         "items": {
+#             "type": "integer",
+#             "minimum": 1,
+#             "maximum": 40,
+#             "example": 123
+#         }
+#     }
 
-    gen = generator(field, open_api_strategies)
+#     gen = generator(field, open_api_strategies)
 
-    for _ in range(1000):
-        try:
-            res = next(gen)
-            assert isinstance(res, List)
-            len(res) == len(set(res))
-            break
-        except:
-            pass
+#     for _ in range(1000):
+#         try:
+#             res = next(gen)
+#             assert isinstance(res, List)
+#             len(res) == len(set(res))
+#             break
+#         except:
+#             pass
 
 
 def test_object_field():

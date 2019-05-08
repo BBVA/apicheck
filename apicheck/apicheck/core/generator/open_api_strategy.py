@@ -139,13 +139,8 @@ def _open_api_int(definition: Definition, strategies: List[Strategy]):
 
 
 def _open_api_list(definition: Definition, strategies: List[Strategy]):
-    def _must_unique(gen: Callable[[], List[Any]]) -> MaybeValue[List[Any]]:
-        for _ in range(1000):
-            r = gen()
-            if len(r) == len(set(r)):
-                return r
-        # TODO: Should return an AbsentValue
-        raise ValueError("Cannot generate unique list with this parameters")
+    def _must_be_unique(gen: Callable[[], List[Any]]) -> MaybeValue[List[Any]]:
+        raise NotImplementedError()
     minimum = 1
     if "minItems" in definition:
         minimum = definition["minItems"]
