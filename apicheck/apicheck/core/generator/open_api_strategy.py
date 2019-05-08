@@ -55,18 +55,23 @@ def _open_api_str(
         yield proc()
 
 
-def _object_processor(properties: Optional[Definition], strategies: List[Strategy]) -> Callable[[], MaybeValue[AsDefined]]:
-    def _object_gen_proc(properties: Definition):
-        def _proc():
-            generated_object = {}
-            for property_name, property_generator in property_builder:
-                generated_object[property_name] = next(property_generator)
-            return generated_object
+def _object_processor(
+        properties: Optional[Definition],
+        strategies: List[Strategy]
+        ) -> MaybeCallable[AsDefined]:
+    def _object_gen_proc(properties: Definition) -> MaybeCallable[AsDefined]:
+        def _proc() -> AsDefined:
+            return {
+                name: next(generator)
+                for name, generator
+                in property_builder
+            }
 
-        property_builder = []
-        for property_name, property_def in properties.items():
-            property_generator = generator(property_def, strategies)
-            property_builder.append((property_name, property_generator))
+        property_builder = [
+            (name, generator(definition, strategies))
+            for name, definition
+            in properties.items()
+        ]
         return _proc
 
     if not properties:
