@@ -24,6 +24,20 @@ def _fail(element: AbsentValue) -> MaybeCallable[X]:
     return lambda: element
 
 
+def _str_processor(minimum: int, maximum: int) -> MaybeCallable[str]:
+    def _generate() -> MaybeValue[str]:
+        r = fake.text()
+        while len(r) < minimum:
+            r = r + r
+        if len(r) > maximum:
+            r = r[:maximum-1]
+        return r
+
+    if maximum < minimum:
+        return _fail(AbsentValue("Incorrect maxLength or minLength"))
+    return _generate
+
+
 def _open_api_str(
         definition: Definition,
         _: List[Strategy]
@@ -34,19 +48,6 @@ def _open_api_str(
 
     :param definition: specification of a definition
     """
-    def _str_processor(minimum: int, maximum: int) -> MaybeCallable[str]:
-        def _generate() -> MaybeValue[str]:
-            r = fake.text()
-            while len(r) < minimum:
-                r = r + r
-            if len(r) > maximum:
-                r = r[:maximum-1]
-            return r
-
-        if maximum < minimum:
-            return _fail(AbsentValue("Incorrect maxLength or minLength"))
-        return _generate
-
     proc = _str_processor(*m.str_extractor(definition))
 
     while True:
