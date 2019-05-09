@@ -1,7 +1,7 @@
-from typing import Tuple
+from typing import Optional, Tuple
 import sys
 
-from apicheck.core.generator import Definition
+from apicheck.core.generator import Definition, Properties
 
 
 def int_extractor(definition: Definition) -> Tuple[int, int, int]:
@@ -32,3 +32,9 @@ def str_extractor(definition: Definition) -> Tuple[int, int]:
     if "minLength" in definition:
         minimum = definition["minLength"]
     return minimum, maximum
+
+
+def properties_extractor(definition: Definition) -> Optional[Properties]:
+    if "properties" in definition:
+        return definition["properties"]
+    return None

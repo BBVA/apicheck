@@ -83,12 +83,7 @@ def _open_api_object(
         definition: Definition,
         strategies: List[Strategy]
         ) -> Iterator[MaybeValue[AsDefined]]:
-    def _get_properties(definition: Definition) -> Optional[Properties]:
-        if "properties" in definition:
-            return definition["properties"]
-        return None
-
-    proc = _object_processor(_get_properties(definition), strategies)
+    proc = _object_processor(m.properties_extractor(definition), strategies)
     while True:
         yield proc()
 
@@ -135,26 +130,43 @@ def _open_api_int(definition: Definition, _: List[Strategy]):
         yield proc()
 
 
-def _open_api_list(definition: Definition, strategies: List[Strategy]):
-    def _must_be_unique(gen: Callable[[], List[Any]]) -> MaybeValue[List[Any]]:
+def _get_list_processor(
+        strategies: List[Strategy],
+        element_definition: Definition,
+        minimum: int,
+        maximum: int,
+        must_be_unique: bool
+        ) -> MaybeCallable[List[Any]]:
+    def _must_be_unique() -> MaybeValue[List[Any]]:
         raise NotImplementedError()
-    minimum = 1
-    if "minItems" in definition:
-        minimum = definition["minItems"]
-    maximum = minimum + 9
-    if "maxItems" in definition:
-        maximum = definition["maxItems"]
-    item_type = definition["items"]
-    item_gen = generator(item_type, strategies)
 
-    def gen(size: int):
+    def gen() -> MaybeValue[List[Any]]:
+        size = random.randint(minimum, maximum)
+        item_gen = generator(element_definition, strategies)
         return [next(item_gen) for _ in range(size)]
 
+    if must_be_unique:
+        return _must_be_unique
+    else:
+        return gen
+
+
+def _open_api_list(definition: Definition, strategies: List[Strategy]):
+    def _extractor(
+            definition: Definition
+            ) -> Tuple[Definition, int, int, bool]:
+        minimum = 1
+        if "minItems" in definition:
+            minimum = definition["minItems"]
+        maximum = minimum + 9
+        if "maxItems" in definition:
+            maximum = definition["maxItems"]
+        items_must_be_unique = "uniqueItems" in definition and definition["uniqueItems"]
+        return definition["items"], minimum, maximum, items_must_be_unique
+
+    proc = _get_list_processor(strategies, *_extractor(definition))
     while True:
-        size = random.randint(minimum, maximum)
-        if "uniqueItems" in definition and definition["uniqueItems"]:
-            yield _must_be_unique(gen(size))
-        yield gen(size)
+        yield proc()
 
 
 def _open_api_bool(_: Definition, __: List[Strategy]):
