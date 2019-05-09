@@ -5,7 +5,7 @@ from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, TypeVar
 
 from faker import Faker
 
-from . import AbsentValue, Definition, _type_matcher, generator
+from . import AbsentValue, Definition, Properties, _type_matcher, generator
 
 import apicheck.core.generator.metadata.openapi3 as m
 
@@ -54,10 +54,10 @@ def _open_api_str(
 
 
 def _object_processor(
-        properties: Optional[Definition],
+        properties: Optional[Properties],
         strategies: List[Strategy]
         ) -> MaybeCallable[AsDefined]:
-    def _object_gen_proc(properties: Definition) -> MaybeCallable[AsDefined]:
+    def _object_gen_proc(properties: Properties) -> MaybeCallable[AsDefined]:
         def _proc() -> AsDefined:
             return {
                 name: next(generator)
@@ -83,7 +83,7 @@ def _open_api_object(
         definition: Definition,
         strategies: List[Strategy]
         ) -> Iterator[MaybeValue[AsDefined]]:
-    def _get_properties(definition: Definition) -> Optional[Definition]:
+    def _get_properties(definition: Definition) -> Optional[Properties]:
         if "properties" in definition:
             return definition["properties"]
         return None

@@ -3,6 +3,7 @@ from typing import Any, Dict
 
 
 Definition = Dict[str, Any]
+Properties = Dict[str, Any]
 
 
 class AbsentValue(object):
