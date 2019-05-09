@@ -47,16 +47,7 @@ def _open_api_str(
             return _fail(AbsentValue("Incorrect maxLength or minLength"))
         return _generate
 
-    def _str_metadata(definition: Definition) -> Tuple[int, int]:
-        minimum = 10
-        maximum = 200
-        if "maxLength" in definition:
-            maximum = definition["maxLength"]
-        if "minLength" in definition:
-            minimum = definition["minLength"]
-        return minimum, maximum
-
-    proc = _str_processor(*_str_metadata(definition))
+    proc = _str_processor(*m.str_extractor(definition))
 
     while True:
         yield proc()

@@ -22,3 +22,13 @@ def int_extractor(definition: Definition) -> Tuple[int, int, int]:
         multiple_of = None
 
     return minimum, maximum, multiple_of
+
+
+def str_extractor(definition: Definition) -> Tuple[int, int]:
+    minimum = 10
+    maximum = 200
+    if "maxLength" in definition:
+        maximum = definition["maxLength"]
+    if "minLength" in definition:
+        minimum = definition["minLength"]
+    return minimum, maximum
