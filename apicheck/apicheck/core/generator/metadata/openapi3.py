@@ -38,3 +38,16 @@ def properties_extractor(definition: Definition) -> Optional[Properties]:
     if "properties" in definition:
         return definition["properties"]
     return None
+
+
+def list_extractor(
+        definition: Definition
+        ) -> Tuple[Definition, int, int, bool]:
+    minimum = 1
+    if "minItems" in definition:
+        minimum = definition["minItems"]
+    maximum = minimum + 9
+    if "maxItems" in definition:
+        maximum = definition["maxItems"]
+    items_must_be_unique = "uniqueItems" in definition and definition["uniqueItems"]
+    return definition["items"], minimum, maximum, items_must_be_unique

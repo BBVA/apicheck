@@ -152,19 +152,7 @@ def _get_list_processor(
 
 
 def _open_api_list(definition: Definition, strategies: List[Strategy]):
-    def _extractor(
-            definition: Definition
-            ) -> Tuple[Definition, int, int, bool]:
-        minimum = 1
-        if "minItems" in definition:
-            minimum = definition["minItems"]
-        maximum = minimum + 9
-        if "maxItems" in definition:
-            maximum = definition["maxItems"]
-        items_must_be_unique = "uniqueItems" in definition and definition["uniqueItems"]
-        return definition["items"], minimum, maximum, items_must_be_unique
-
-    proc = _get_list_processor(strategies, *_extractor(definition))
+    proc = _get_list_processor(strategies, *m.list_extractor(definition))
     while True:
         yield proc()
 
