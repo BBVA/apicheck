@@ -1,4 +1,8 @@
 from itertools import repeat
+from typing import Any, Dict
+
+
+Definition = Dict[str, Any]
 
 
 class AbsentValue(object):

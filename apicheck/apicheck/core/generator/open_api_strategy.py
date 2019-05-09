@@ -5,13 +5,14 @@ from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, TypeVar
 
 from faker import Faker
 
-from . import AbsentValue, _type_matcher, generator
+from . import AbsentValue, Definition, _type_matcher, generator
+
+import apicheck.core.generator.metadata.openapi3 as m
 
 fake = Faker()
 
 
 Strategy = Tuple[Callable[[Dict], bool], Callable[[Dict], Any]]
-Definition = Dict[str, Any]
 
 X = TypeVar('X')
 MaybeValue = Union[X, AbsentValue]
@@ -131,26 +132,7 @@ def _get_int_processor(
 
 
 def _open_api_int(definition: Definition, _: List[Strategy]):
-    def _get_params(definition: Definition) -> Tuple[int, int, int]:
-        minimum = -sys.maxsize - 1
-        maximum = sys.maxsize
-        if "minimum" in definition:
-            minimum = definition["minimum"]
-        if "maximum" in definition:
-            maximum = definition["maximum"]
-        if "exclusiveMinimum" in definition:
-            minimum = minimum + 1
-        if "exclusiveMaximum" in definition:
-            maximum = maximum - 1
-
-        if "multipleOf" in definition:
-            multiple_of = definition["multipleOf"]
-        else:
-            multiple_of = None
-
-        return minimum, maximum, multiple_of
-
-    proc = _get_int_processor(*_get_params(definition))
+    proc = _get_int_processor(*m.int_extractor(definition))
 
     while True:
         yield proc()
