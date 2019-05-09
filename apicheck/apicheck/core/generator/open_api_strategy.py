@@ -34,23 +34,29 @@ def _open_api_str(
 
     :param definition: specification of a definition
     """
-    def _generate() -> MaybeValue[str]:
-        r = fake.text()
-        while len(r) < minimum:
-            r = r + r
-        if len(r) > maximum:
-            r = r[:maximum-1]
-        return r
-    minimum = 10
-    maximum = 200
-    if "maxLength" in definition:
-        maximum = definition["maxLength"]
-    if "minLength" in definition:
-        minimum = definition["minLength"]
+    def _str_processor(minimum: int, maximum: int) -> MaybeCallable[str]:
+        def _generate() -> MaybeValue[str]:
+            r = fake.text()
+            while len(r) < minimum:
+                r = r + r
+            if len(r) > maximum:
+                r = r[:maximum-1]
+            return r
 
-    proc = _generate
-    if maximum < minimum:
-        proc = _fail(AbsentValue("Incorrect maxLength or minLength"))
+        if maximum < minimum:
+            return _fail(AbsentValue("Incorrect maxLength or minLength"))
+        return _generate
+
+    def _str_metadata(definition: Definition) -> Tuple[int, int]:
+        minimum = 10
+        maximum = 200
+        if "maxLength" in definition:
+            maximum = definition["maxLength"]
+        if "minLength" in definition:
+            minimum = definition["minLength"]
+        return minimum, maximum
+
+    proc = _str_processor(*_str_metadata(definition))
 
     while True:
         yield proc()
