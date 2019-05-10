@@ -143,3 +143,4 @@ Vagrantfile
 apicheck/mydatabase.sqlite3
 apicheck/salida.h5
 apicheck/salida.json
+.mypy_cache/
