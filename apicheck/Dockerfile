@@ -13,3 +13,5 @@ RUN cd /tmp && python setup.py install \
     && rm -rf /var/cache/apt \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /root/.cache
+
+ENTRYPOINT ["/bin/bash"]

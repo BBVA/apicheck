@@ -4,10 +4,9 @@ import uuid
 import asyncio
 import logging
 
-from urllib.parse import urlparse
-
-from apicheck.sources.proxy.config import RunningConfig
 from apicheck.db import get_engine, ProxyLogs, APIMetadata
+
+from .config import RunningConfig
 
 logger = logging.getLogger("apicheck")
 
@@ -172,63 +171,6 @@ class APICheckProxyMode:
                 request_id=request_id))
         except Exception as e:
             logger.error(f"error saving proxy logs: {e}")
-
-    # async def save_definition(self, flow):
-    #     # -------------------------------------------------------------------------
-    #     # Extract request
-    #     # -------------------------------------------------------------------------
-    #     request_headers = json.dumps(self.bytes_dict_to_string(
-    #         flow.request.headers
-    #     ))
-    #     request_uri = urlparse(flow.request.pretty_url).path
-    #     request_http_version = flow.request.http_version
-    #     request_body = flow.request.content.decode("utf-8")
-    #
-    #     # -------------------------------------------------------------------------
-    #     # Extract response
-    #     # -------------------------------------------------------------------------
-    #     response = flow.request
-    #     response_headers = json.dumps(self.bytes_dict_to_string(
-    #         response.headers
-    #     ))
-    #     response_http_code = flow.response.status_code
-    #     response_http_message = flow.response.reason
-    #     response_body = flow.response.content.decode("utf-8")
-    #
-    #     inserted_request_id = None
-    #     try:
-    #         connection = await self.db_connection()
-    #         metadata_id = await self.metadata(flow)
-    #
-    #         #
-    #         # Store request
-    #         #
-    #         _req_query = await connection.execute(APIRequests.insert().values(
-    #             uri=request_uri,
-    #             http_version=request_http_version,
-    #             headers=request_headers,
-    #             body=request_body,
-    #             metadata_id=metadata_id
-    #         ))
-    #         inserted_request_id = _req_query.inserted_primary_key[0]
-    #
-    #         #
-    #         # Store response
-    #         #
-    #         await connection.execute(APIResponses.insert().values(
-    #             http_code=response_http_code,
-    #             http_message=response_http_message,
-    #             headers=response_headers,
-    #             body=response_body,
-    #             requests_id=inserted_request_id
-    #         ))
-    #     except Exception as e:
-    #         logger.debug(f"error saving proxy definition: {e}")
-    #
-    #     # ---------------------------------------------------------------------
-    #     # Now start the flow to store query into ProxyLog
-    #     # ---------------------------------------------------------------------
-    #     await self.save_into_log(flow, inserted_request_id)
 
 
 addons = [

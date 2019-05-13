@@ -24,7 +24,7 @@ You can see this actions typing:
 
 .. note::
 
-    You can find API-Test and APITest examples files at project home, in directory ::samp:`example/`
+    You can find API-Test and APITest examples files at project home, in directory :samp:`example/`
 
 .. note::
 

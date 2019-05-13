@@ -1,17 +1,17 @@
 Creating a new commands
 =======================
 
-Before start writing new command check the :ref:`Command & tools <commands_reference>` to be sure to understand the ::samp:`command` concept.
+Before start writing new command check the :ref:`Command & tools <commands_reference>` to be sure to understand the :samp:`command` concept.
 
 What's a command?
 -----------------
 
-Command is a small utility integrated into ``API-Check`` tools. Usually is a **simple .py script**.
+Command is a small utility integrated into ``API-Check`` suite. Usually is a **simple .py script**.
 
 Entry point
 +++++++++++
 
-To create a new command only you need to do is create a new ::samp:`.py` file with the function ::samp:`main()` inside. This function doesn't will receive any parameter.
+To create a new command only you need to do is create a new :samp:`.py` file with the function :samp:`main()` inside. This function doesn't will receive any parameter.
 
 This function will be used as entry point for ``API-Check``
 
@@ -37,10 +37,10 @@ This function will be used as entry point for ``API-Check``
 
 **Passing information**
 
-All of :samp:`commands` and ::samp:`tools` in ``API-Check`` must receive configuration by to ways:
+All of :samp:`commands` and :samp:`tools` in ``API-Check`` must receive configuration by to ways:
 
 - By cli parameter.
-- By standard input (::samp:`stdin`).
+- By standard input (:samp:`stdin`).
 
 This means that you command must be able to be executed in a pipeline.
 
@@ -70,7 +70,7 @@ This means that you command must be able to be executed in a pipeline.
 
 **Information format**
 
-As documented in section :ref:`Data format <data_format>` ``API-Check`` works internally with ::samp:`JSON`. So the format received will be so.
+As documented in section :ref:`Data format <data_format>` ``API-Check`` works internally with :samp:`JSON`. So the format received will be so.
 
 Following previous example, we add parsing JSON format:
 
@@ -109,5 +109,5 @@ Following previous example, we add parsing JSON format:
 Output information
 ++++++++++++++++++
 
-To be able to chain your command into a a compatible ``API-Check`` pipeline, you command must output the execution result in the standard output (::samp:`stdout`).
+To be able to chain your command into a a compatible ``API-Check`` pipeline, you command must output the execution result in the standard output (:samp:`stdout`).
 

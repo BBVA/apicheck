@@ -37,7 +37,7 @@ What's are exactly the tool set?
 
 .. note::
 
-    You can check complete information bout :samp:`commands` and ::samp:`tools` into :ref:`Core Concepts Page for more information <apicheck_structure>`
+    You can check complete information bout :samp:`commands` and :samp:`tools` into :ref:`Core Concepts Page for more information <apicheck_structure>`
 
 
 

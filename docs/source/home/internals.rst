@@ -22,7 +22,7 @@ You can build the ``API-Check``-like *pipeline* doing:
 Data format
 +++++++++++
 
-::samp:`commands` and ::samp:`tools` receives from input and output information that allow to build pipelines (as we learnt in the previous section). To do that, they may share *speak* the same data format. The chosen data format for ``API-Check`` is ::samp:`JSON`.
+:samp:`commands` and :samp:`tools` receives from input and output information that allow to build pipelines (as we learnt in the previous section). To do that, they may share *speak* the same data format. The chosen data format for ``API-Check`` is :samp:`JSON`.
 
 Commands and Tools
 
