@@ -8,6 +8,7 @@ from faker import Faker
 from . import AbsentValue, Definition, Properties, _type_matcher, generator
 
 import apicheck.core.generator.metadata.openapi3 as m
+import apicheck.core.generator.processor as p
 
 fake = Faker()
 
@@ -20,10 +21,6 @@ MaybeCallable = Callable[[], MaybeValue[X]]
 AsDefined = Dict[str, Any]
 
 
-def _fail(element: AbsentValue) -> MaybeCallable[X]:
-    return lambda: element
-
-
 def _str_processor(minimum: int, maximum: int) -> MaybeCallable[str]:
     def _generate() -> MaybeValue[str]:
         r = fake.text()
@@ -34,7 +31,7 @@ def _str_processor(minimum: int, maximum: int) -> MaybeCallable[str]:
         return r
 
     if maximum < minimum:
-        return _fail(AbsentValue("Incorrect maxLength or minLength"))
+        return p.fail(AbsentValue("Incorrect maxLength or minLength"))
     return _generate
 
 
@@ -74,7 +71,7 @@ def _object_processor(
         return _proc
 
     if not properties:
-        return _fail(
+        return p.fail(
             AbsentValue("Can't gen a property-less object without policy")
         )
     return _object_gen_proc(properties)
@@ -110,14 +107,14 @@ def _get_int_processor(
         m_i = min_val // multiple
         m = m_s - m_i
         if m <= 0:
-            return _fail(
+            return p.fail(
                 AbsentValue("No multiple exists within the requested range")
             )
         m_init = multiple + ((m_s - m) * multiple)
         return _gen
 
     if maximum < minimum:
-        return _fail(AbsentValue("Invalid Maximum or Minimum"))
+        return p.fail(AbsentValue("Invalid Maximum or Minimum"))
     elif multiple_of:
         return _generate_multiple_of(minimum, maximum, multiple_of)
     else:

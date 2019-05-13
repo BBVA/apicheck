@@ -1,7 +1,6 @@
 from itertools import repeat
 from typing import Any, Dict
 
-
 Definition = Dict[str, Any]
 Properties = Dict[str, Any]
 
