@@ -1,138 +1,161 @@
+from itertools import repeat
 import random
 import sys
-
-from . import generator, _type_matcher, AbsentValue
-from itertools import repeat
+from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, TypeVar, Union
 
 from faker import Faker
 
-from typing import Iterator
+from . import AbsentValue, Definition, Properties, _type_matcher, generator
 
+import apicheck.core.generator.metadata.openapi3 as m
+import apicheck.core.generator.processor as p
 
 fake = Faker()
 
 
-def _open_api_str(field: dict, strategies) -> Iterator[str]:
-    """
-    Yields a string of fake text with a length between 10 and 200, or between
-    field["minLength"] and field["maxLength"] if those are defined.
+Strategy = Tuple[Callable[[Dict], bool], Callable[[Dict], Any]]
 
-    :param field: specification of a field
-    """
-    def _fail(element):
-        return lambda: element
+X = TypeVar('X')
+MaybeValue = Union[X, AbsentValue]
+MaybeCallable = Callable[[], MaybeValue[X]]
+AsDefined = Dict[str, Any]
 
-    def _generate():
+
+def _str_processor(minimum: int, maximum: int) -> MaybeCallable[str]:
+    def _generate() -> MaybeValue[str]:
         r = fake.text()
         while len(r) < minimum:
             r = r + r
         if len(r) > maximum:
             r = r[:maximum-1]
         return r
-    minimum = 10
-    maximum = 200
-    if "maxLength" in field:
-        maximum = field["maxLength"]
-    if "minLength" in field:
-        minimum = field["minLength"]
 
     if maximum < minimum:
-        proc = _fail(AbsentValue("Incorrect maxLenght or minLenght"))
-    else:
-        proc = _generate
+        return p.fail(AbsentValue("Incorrect maxLength or minLength"))
+    return _generate
+
+
+def _open_api_str(
+        definition: Definition,
+        _: List[Strategy]
+        ) -> Iterator[MaybeValue[str]]:
+    """
+    Yields a string of fake text with a length between 10 and 200, or between
+    definition["minLength"] and definition["maxLength"] if those are defined.
+
+    :param definition: specification of a definition
+    """
+    proc = _str_processor(*m.str_extractor(definition))
 
     while True:
         yield proc()
 
 
-def _open_api_object(field: dict, strategies):
-    def _make_gen(v):
-        return generator(v, strategies)
-    if "properties" not in field:
-        raise ValueError("Can't gen a property-less object without policy")
-    properties = field["properties"]
-    prop_builder = []
-    # TODO: v my ass, it's a Field!
-    for k, v in properties.items():
-        g = generator(v, strategies)
-        prop_builder.append((k, g))
+def _object_processor(
+        properties: Optional[Properties],
+        strategies: List[Strategy]
+        ) -> MaybeCallable[AsDefined]:
+    def _object_gen_proc(properties: Properties) -> MaybeCallable[AsDefined]:
+        def _proc() -> AsDefined:
+            return {
+                name: next(generator)
+                for name, generator
+                in property_builder
+            }
+
+        property_builder = [
+            (name, generator(definition, strategies))
+            for name, definition
+            in properties.items()
+        ]
+        return _proc
+
+    if not properties:
+        return p.fail(
+            AbsentValue("Can't gen a property-less object without policy")
+        )
+    return _object_gen_proc(properties)
+
+
+def _open_api_object(
+        definition: Definition,
+        strategies: List[Strategy]
+        ) -> Iterator[MaybeValue[AsDefined]]:
+    proc = _object_processor(m.properties_extractor(definition), strategies)
     while True:
-        r = {}
-        # TODO: human names
-        for k, g in prop_builder:
-            next_value = next(g)
-            r[k] = next_value
-        yield r
+        yield proc()
 
 
-def _open_api_int(field: dict, strategies):
-    def _fail(element):
-        return lambda: element
-
-    def _generate_simple(min_val, max_val):
+def _get_int_processor(
+        minimum: int,
+        maximum: int,
+        multiple_of: int
+        ) -> MaybeCallable[int]:
+    def _generate_simple(min_val: int, max_val: int) -> Callable[[], int]:
         return lambda: random.randint(min_val, max_val)
 
-    def _generate_multiple_of(min_val, max_val, multiple):
-        def _gen():
+    def _generate_multiple_of(
+            min_val: int,
+            max_val: int,
+            multiple: int
+            ) -> MaybeCallable[int]:
+        def _gen() -> int:
             r = random.randint(0, m-1)
             return m_init + r * multiple
+
         m_s = max_val // multiple
         m_i = min_val // multiple
         m = m_s - m_i
         if m <= 0:
-            return AbsentValue("No multiple exists within the requested range")
+            return p.fail(
+                AbsentValue("No multiple exists within the requested range")
+            )
         m_init = multiple + ((m_s - m) * multiple)
         return _gen
 
-    minimum = -sys.maxsize-1
-    maximum = sys.maxsize
-    if "minimum" in field:
-        minimum = field["minimum"]
-    if "maximum" in field:
-        maximum = field["maximum"]
-    if "exclusiveMinimum" in field:
-        minimum = minimum+1
-    if "exclusiveMaximum" in field:
-        maximum = maximum-1
-
     if maximum < minimum:
-        proc = _fail(AbsentValue("Invalid Maximum or Minimum"))
-    elif "multipleOf" in field:
-        proc = _generate_multiple_of(minimum, maximum, field["multipleOf"])
+        return p.fail(AbsentValue("Invalid Maximum or Minimum"))
+    elif multiple_of:
+        return _generate_multiple_of(minimum, maximum, multiple_of)
     else:
-        proc = _generate_simple(minimum, maximum)
+        return _generate_simple(minimum, maximum)
+
+
+def _open_api_int(definition: Definition, _: List[Strategy]):
+    proc = _get_int_processor(*m.int_extractor(definition))
 
     while True:
         yield proc()
 
 
-def _open_api_list(field: dict, strategies):
-    def _must_unique(gen):
-        for _ in range(1000):
-            r = gen()
-            if len(r) == len(set(r)):
-                return r
-        raise ValueError("Cannot generate unique list with this parameters")
-    minimum = 1
-    if "minItems" in field:
-        minimum = field["minItems"]
-    maximum = minimum + 9
-    if "maxItems" in field:
-        maximum = field["maxItems"]
-    item_type = field["items"]
-    item_gen = generator(item_type, strategies)
+def _get_list_processor(
+        strategies: List[Strategy],
+        element_definition: Definition,
+        minimum: int,
+        maximum: int,
+        must_be_unique: bool
+        ) -> MaybeCallable[List[Any]]:
+    def _must_be_unique() -> MaybeValue[List[Any]]:
+        raise NotImplementedError()
 
-    def gen(size: int):
+    def gen() -> MaybeValue[List[Any]]:
+        size = random.randint(minimum, maximum)
+        item_gen = generator(element_definition, strategies)
         return [next(item_gen) for _ in range(size)]
 
+    if must_be_unique:
+        return _must_be_unique
+    else:
+        return gen
+
+
+def _open_api_list(definition: Definition, strategies: List[Strategy]):
+    proc = _get_list_processor(strategies, *m.list_extractor(definition))
     while True:
-        size = random.randint(minimum, maximum)
-        if "uniqueItems" in field and field["uniqueItems"]:
-            yield _must_unique(gen(size))
-        yield gen(size)
+        yield proc()
 
 
-def _open_api_bool(field: dict, strategies):
+def _open_api_bool(_: Definition, __: List[Strategy]):
     while True:
         n = random.randint(1, 10)
         yield n % 2 == 0

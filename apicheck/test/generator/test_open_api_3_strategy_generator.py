@@ -172,10 +172,23 @@ def test_integer_multiple_of():
         assert res % 10 == 0
 
 
+def test_integer_multiple_of_1_3_4():
+    field = {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 3,
+        "multipleOf": 4,
+    }
+
+    gen = generator(field, open_api_strategies)
+    res = next(gen)
+    assert isinstance(res, AbsentValue)
+
+
 def test_integer_multiple_of_1_10_7():
     field = {
         "type": "integer",
-        "minimum": 0,
+        "minimum": 1,
         "maximum": 10,
         "multipleOf": 7,
     }
@@ -183,6 +196,46 @@ def test_integer_multiple_of_1_10_7():
     gen = generator(field, open_api_strategies)
     res = next(gen)
     assert res == 7
+
+
+def test_integer_multiple_of_15_20_6():
+    field = {
+        "type": "integer",
+        "minimum": 15,
+        "maximum": 20,
+        "multipleOf": 6,
+    }
+
+    gen = generator(field, open_api_strategies)
+    res = next(gen)
+    assert res == 18
+
+
+def test_integer_multiple_of_15_25_6():
+    field = {
+        "type": "integer",
+        "minimum": 15,
+        "maximum": 25,
+        "multipleOf": 6,
+    }
+
+    gen = generator(field, open_api_strategies)
+    for _ in range(1000):
+        res = next(gen)
+        assert res in [18, 24]
+
+
+def test_integer_multiple_of_19_20_6():
+    field = {
+        "type": "integer",
+        "minimum": 19,
+        "maximum": 20,
+        "multipleOf": 6,
+    }
+
+    gen = generator(field, open_api_strategies)
+    res = next(gen)
+    assert isinstance(res, AbsentValue)
 
 
 def test_array_field():
@@ -229,29 +282,29 @@ def test_array_boundaries():
         assert len(res) >= 2
 
 
-def test_array_unique():
-    field = {
-        "type": "array",
-        "uniqueItems": True,
-        "minItems": 10,
-        "items": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 40,
-            "example": 123
-        }
-    }
+# def test_array_unique():
+#     field = {
+#         "type": "array",
+#         "uniqueItems": True,
+#         "minItems": 10,
+#         "items": {
+#             "type": "integer",
+#             "minimum": 1,
+#             "maximum": 40,
+#             "example": 123
+#         }
+#     }
 
-    gen = generator(field, open_api_strategies)
+#     gen = generator(field, open_api_strategies)
 
-    for _ in range(1000):
-        try:
-            res = next(gen)
-            assert isinstance(res, List)
-            len(res) == len(set(res))
-            break
-        except:
-            pass
+#     for _ in range(1000):
+#         try:
+#             res = next(gen)
+#             assert isinstance(res, List)
+#             len(res) == len(set(res))
+#             break
+#         except:
+#             pass
 
 
 def test_object_field():
