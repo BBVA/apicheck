@@ -3,7 +3,7 @@ import random
 
 from faker import Faker
 
-from apicheck.core.generator import AbsentValue, Properties, generator, Definition
+from apicheck.core.generator import *
 
 Strategy = Tuple[Callable[[Dict], bool], Callable[[Dict], Any]]
 
@@ -114,4 +114,3 @@ def list_processor(
         return _must_be_unique
     else:
         return gen
-

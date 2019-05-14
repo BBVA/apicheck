@@ -49,5 +49,6 @@ def list_extractor(
     maximum = minimum + 9
     if "maxItems" in definition:
         maximum = definition["maxItems"]
-    items_must_be_unique = "uniqueItems" in definition and definition["uniqueItems"]
+    items_must_be_unique = "uniqueItems" in definition
+    items_must_be_unique = items_must_be_unique and definition["uniqueItems"]
     return definition["items"], minimum, maximum, items_must_be_unique

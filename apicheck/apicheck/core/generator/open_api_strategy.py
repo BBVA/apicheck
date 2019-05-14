@@ -1,7 +1,7 @@
 from itertools import repeat
 import random
 import sys
-from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, TypeVar, Union
+from typing import Any, Callable, Dict, Iterator, List, Tuple, TypeVar, Union
 
 from . import AbsentValue, Definition, Properties, _type_matcher, generator
 
@@ -13,7 +13,6 @@ Strategy = Tuple[Callable[[Dict], bool], Callable[[Dict], Any]]
 
 X = TypeVar('X')
 MaybeValue = Union[X, AbsentValue]
-MaybeCallable = Callable[[], MaybeValue[X]]
 AsDefined = Dict[str, Any]
 
 
