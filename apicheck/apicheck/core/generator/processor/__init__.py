@@ -1,3 +1,3 @@
 from apicheck.core.generator.processor.basic import *
 
-__all__ = [fail, str_processor]
+__all__ = [fail, str_processor, object_processor]

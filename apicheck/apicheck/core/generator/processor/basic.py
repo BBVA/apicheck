@@ -2,7 +2,9 @@ from typing import *
 
 from faker import Faker
 
-from apicheck.core.generator import AbsentValue
+from apicheck.core.generator import AbsentValue, Properties, generator
+
+Strategy = Tuple[Callable[[Dict], bool], Callable[[Dict], Any]]
 
 X = TypeVar('X')
 MaybeValue = Union[X, AbsentValue]
@@ -29,3 +31,30 @@ def str_processor(minimum: int, maximum: int) -> MaybeCallable[str]:
     if maximum < minimum:
         return fail(AbsentValue("Incorrect maxLength or minLength"))
     return _generate
+
+
+def object_processor(
+        properties: Optional[Properties],
+        strategies: List[Strategy]
+        ) -> MaybeCallable[AsDefined]:
+    def _object_gen_proc(properties: Properties) -> MaybeCallable[AsDefined]:
+        def _proc() -> AsDefined:
+            return {
+                name: next(generator)
+                for name, generator
+                in property_builder
+            }
+
+        property_builder = [
+            (name, generator(definition, strategies))
+            for name, definition
+            in properties.items()
+        ]
+        return _proc
+
+    if not properties:
+        return fail(
+            AbsentValue("Can't gen a property-less object without policy")
+        )
+    return _object_gen_proc(properties)
+
