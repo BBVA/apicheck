@@ -1,4 +1,5 @@
 from typing import *
+import random
 
 from faker import Faker
 
@@ -57,4 +58,39 @@ def object_processor(
             AbsentValue("Can't gen a property-less object without policy")
         )
     return _object_gen_proc(properties)
+
+
+def int_processor(
+        minimum: int,
+        maximum: int,
+        multiple_of: int
+        ) -> MaybeCallable[int]:
+    def _generate_simple(min_val: int, max_val: int) -> Callable[[], int]:
+        return lambda: random.randint(min_val, max_val)
+
+    def _generate_multiple_of(
+            min_val: int,
+            max_val: int,
+            multiple: int
+            ) -> MaybeCallable[int]:
+        def _gen() -> int:
+            r = random.randint(0, m-1)
+            return m_init + r * multiple
+
+        m_s = max_val // multiple
+        m_i = min_val // multiple
+        m = m_s - m_i
+        if m <= 0:
+            return fail(
+                AbsentValue("No multiple exists within the requested range")
+            )
+        m_init = multiple + ((m_s - m) * multiple)
+        return _gen
+
+    if maximum < minimum:
+        return fail(AbsentValue("Invalid Maximum or Minimum"))
+    elif multiple_of:
+        return _generate_multiple_of(minimum, maximum, multiple_of)
+    else:
+        return _generate_simple(minimum, maximum)
 

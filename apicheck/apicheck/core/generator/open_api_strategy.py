@@ -42,43 +42,8 @@ def _open_api_object(
         yield proc()
 
 
-def _get_int_processor(
-        minimum: int,
-        maximum: int,
-        multiple_of: int
-        ) -> MaybeCallable[int]:
-    def _generate_simple(min_val: int, max_val: int) -> Callable[[], int]:
-        return lambda: random.randint(min_val, max_val)
-
-    def _generate_multiple_of(
-            min_val: int,
-            max_val: int,
-            multiple: int
-            ) -> MaybeCallable[int]:
-        def _gen() -> int:
-            r = random.randint(0, m-1)
-            return m_init + r * multiple
-
-        m_s = max_val // multiple
-        m_i = min_val // multiple
-        m = m_s - m_i
-        if m <= 0:
-            return p.fail(
-                AbsentValue("No multiple exists within the requested range")
-            )
-        m_init = multiple + ((m_s - m) * multiple)
-        return _gen
-
-    if maximum < minimum:
-        return p.fail(AbsentValue("Invalid Maximum or Minimum"))
-    elif multiple_of:
-        return _generate_multiple_of(minimum, maximum, multiple_of)
-    else:
-        return _generate_simple(minimum, maximum)
-
-
 def _open_api_int(definition: Definition, _: List[Strategy]):
-    proc = _get_int_processor(*m.int_extractor(definition))
+    proc = p.int_processor(*m.int_extractor(definition))
 
     while True:
         yield proc()
