@@ -3,14 +3,10 @@ import random
 import sys
 from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, TypeVar, Union
 
-from faker import Faker
-
 from . import AbsentValue, Definition, Properties, _type_matcher, generator
 
 import apicheck.core.generator.metadata.openapi3 as m
 import apicheck.core.generator.processor as p
-
-fake = Faker()
 
 
 Strategy = Tuple[Callable[[Dict], bool], Callable[[Dict], Any]]
@@ -19,20 +15,6 @@ X = TypeVar('X')
 MaybeValue = Union[X, AbsentValue]
 MaybeCallable = Callable[[], MaybeValue[X]]
 AsDefined = Dict[str, Any]
-
-
-def _str_processor(minimum: int, maximum: int) -> MaybeCallable[str]:
-    def _generate() -> MaybeValue[str]:
-        r = fake.text()
-        while len(r) < minimum:
-            r = r + r
-        if len(r) > maximum:
-            r = r[:maximum-1]
-        return r
-
-    if maximum < minimum:
-        return p.fail(AbsentValue("Incorrect maxLength or minLength"))
-    return _generate
 
 
 def _open_api_str(
@@ -45,7 +27,7 @@ def _open_api_str(
 
     :param definition: specification of a definition
     """
-    proc = _str_processor(*m.str_extractor(definition))
+    proc = p.str_processor(*m.str_extractor(definition))
 
     while True:
         yield proc()
