@@ -49,29 +49,8 @@ def _open_api_int(definition: Definition, _: List[Strategy]):
         yield proc()
 
 
-def _get_list_processor(
-        strategies: List[Strategy],
-        element_definition: Definition,
-        minimum: int,
-        maximum: int,
-        must_be_unique: bool
-        ) -> MaybeCallable[List[Any]]:
-    def _must_be_unique() -> MaybeValue[List[Any]]:
-        raise NotImplementedError()
-
-    def gen() -> MaybeValue[List[Any]]:
-        size = random.randint(minimum, maximum)
-        item_gen = generator(element_definition, strategies)
-        return [next(item_gen) for _ in range(size)]
-
-    if must_be_unique:
-        return _must_be_unique
-    else:
-        return gen
-
-
 def _open_api_list(definition: Definition, strategies: List[Strategy]):
-    proc = _get_list_processor(strategies, *m.list_extractor(definition))
+    proc = p.list_processor(strategies, *m.list_extractor(definition))
     while True:
         yield proc()
 

@@ -3,7 +3,7 @@ import random
 
 from faker import Faker
 
-from apicheck.core.generator import AbsentValue, Properties, generator
+from apicheck.core.generator import AbsentValue, Properties, generator, Definition
 
 Strategy = Tuple[Callable[[Dict], bool], Callable[[Dict], Any]]
 
@@ -93,4 +93,25 @@ def int_processor(
         return _generate_multiple_of(minimum, maximum, multiple_of)
     else:
         return _generate_simple(minimum, maximum)
+
+
+def list_processor(
+        strategies: List[Strategy],
+        element_definition: Definition,
+        minimum: int,
+        maximum: int,
+        must_be_unique: bool
+        ) -> MaybeCallable[List[Any]]:
+    def _must_be_unique() -> MaybeValue[List[Any]]:
+        raise NotImplementedError()
+
+    def gen() -> MaybeValue[List[Any]]:
+        size = random.randint(minimum, maximum)
+        item_gen = generator(element_definition, strategies)
+        return [next(item_gen) for _ in range(size)]
+
+    if must_be_unique:
+        return _must_be_unique
+    else:
+        return gen
 
