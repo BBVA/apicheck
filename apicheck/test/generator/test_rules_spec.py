@@ -58,7 +58,6 @@ def test_custom_policy():
     assert res is not None
     assert "path" in res
     assert res["path"] == "/linode/instances/500/disks"
-    """
     assert "method" in res
     assert res["method"] == "post"
     assert "headers" in res
@@ -69,7 +68,6 @@ def test_custom_policy():
     assert "stackscript_data" in res["body"]
     assert not isinstance(res["body"]["stackscript_data"], AbsentValue)
     assert res["body"]["stackscript_data"] == "A"
-    """
 
 
 def test_custom_policy_complete():
