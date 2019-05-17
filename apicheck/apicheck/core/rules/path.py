@@ -6,7 +6,11 @@ def _compare_paths(a, b):
         if a[i] == b[i]:
             return 1
         return 0
-    return sum(map(_count_equals, range(min(len(a), len(b)))))
+    a_len = len(a)
+    b_len = len(b)
+    if a_len != b_len:
+        return 0
+    return sum(map(_count_equals, range(a_len)))
 
 
 def find_endpoint(rules, url):
@@ -18,6 +22,7 @@ def find_endpoint(rules, url):
     most_path = None
     for url in rules:
         current = _compare_paths(url.split("/"), parsed.path.split("/"))
-        if current > most:
+        if current > 0 and current > most:
+            most = current
             most_path = url
     return most_path

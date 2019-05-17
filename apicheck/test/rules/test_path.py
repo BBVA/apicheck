@@ -30,3 +30,14 @@ def test_find_endpoint_with_params():
     }
     res = pa.find_endpoint(rules, "/some/how/is/dinamic")
     assert res == path
+
+
+def test_find_endpoint_with_several_rules():
+    path = "/some/{thing}/is/dinamic"
+    rules = {
+        path: {},
+        "/this/is/not/the/path/you/are/looking/for": {},
+        "/some/times/is/similar": {}
+    }
+    res = pa.find_endpoint(rules, "/some/how/is/dinamic")
+    assert res == path
