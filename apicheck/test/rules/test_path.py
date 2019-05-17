@@ -41,3 +41,14 @@ def test_find_endpoint_with_several_rules():
     }
     res = pa.find_endpoint(rules, "/some/how/is/dinamic")
     assert res == path
+
+
+def test_merge_path_happy_path():
+    current = "/some/times/is/dinamic"
+    original = "/some/{thing}/is/dinamic"
+    props = {
+        "thing": "how"
+    }
+    res = pa.merge_paths(current, original, props)
+    assert res is not None
+    assert res == "/some/how/is/dinamic"

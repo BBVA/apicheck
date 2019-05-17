@@ -7,19 +7,7 @@ from apicheck.core.generator import AbsentValue
 from apicheck.core.rules import rules_processsor
 
 
-@pytest.fixture()
-def openapi3_content() -> dict:
-    f = os.path.abspath(
-        os.path.join(os.path.dirname(__file__),
-                     "..",
-                     "openapi3-linode.json")
-    )
-
-    with open(f, "r") as f:
-        yield json.load(f)
-
-
-def test_no_rules(openapi3_content):
+def test_no_rules():
     req = object
     proc = rules_processsor(None)
     res = proc(req)
@@ -27,9 +15,20 @@ def test_no_rules(openapi3_content):
     proc = rules_processsor({})
     res = proc(req)
     assert res == req
+
+
+def test_endpoint_not_found():
+    req = object
+    rules = {
+        "/my/fine/endpoint": {}
+    }
+
+    proc = rules_processsor(None)
+    res = proc(req)
+    assert res == req
     
 
-def test_custom_policy(openapi3_content):
+def test_custom_policy():
     rules = {
         "/linode/instances/{linodeId}/disks": {
             "pathParams": {
@@ -56,10 +55,10 @@ def test_custom_policy(openapi3_content):
     }
     proc = rules_processsor(rules)
     res = proc(res_in)
-    """
     assert res is not None
     assert "path" in res
     assert res["path"] == "/linode/instances/500/disks"
+    """
     assert "method" in res
     assert res["method"] == "post"
     assert "headers" in res
@@ -73,7 +72,7 @@ def test_custom_policy(openapi3_content):
     """
 
 
-def test_custom_policy_complete(openapi3_content):
+def test_custom_policy_complete():
     url = "/linode/instances/{linodeId}/disks"
 
     # TODO: methods could be: a list or a string

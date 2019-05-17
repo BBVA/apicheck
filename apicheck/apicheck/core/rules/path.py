@@ -1,4 +1,10 @@
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlsplit, urlunparse
+
+from apicheck.core.generator import generator
+from apicheck.core.generator.open_api_strategy import strategy
+
+
+default_strategy = strategy
 
 
 def _compare_paths(a, b):
@@ -26,3 +32,30 @@ def find_endpoint(rules, url):
             most = current
             most_path = url
     return most_path
+
+
+def _find_index_in_part(parts, item):
+    for i, x in enumerate(parts):
+        if x == item:
+            return i
+    return None
+
+
+def merge_paths(current_path, rule_path, properties):
+    parsed = urlsplit(current_path)
+    parsed_parts = parsed[2].split("/")
+    rule_parts = rule_path.split("/")
+    for prop, info in properties.items():
+        i = _find_index_in_part(rule_parts, "{"+prop+"}")
+        if not i:
+            continue
+        if isinstance(i, dict):
+            gen = generator(info, default_strategy)
+            parsed_parts[i] = str(next(gen))
+        else:
+            parsed_parts[i] = str(info)
+    new_path = "/".join(parsed_parts)
+
+    return urlunparse((parsed[0], parsed[1], new_path, parsed[3], parsed[4], None))
+
+
