@@ -19,6 +19,16 @@ def openapi3_content() -> dict:
         yield json.load(f)
 
 
+def test_no_rules(openapi3_content):
+    req = object
+    proc = rules_processsor(None)
+    res = proc(req)
+    assert res == req
+    proc = rules_processsor({})
+    res = proc(req)
+    assert res == req
+    
+
 def test_custom_policy(openapi3_content):
     rules = {
         "/linode/instances/{linodeId}/disks": {
