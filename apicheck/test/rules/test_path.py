@@ -21,3 +21,12 @@ def test_find_endpoint_happy_path():
     }
     res = pa.find_endpoint(rules, path)
     assert res == path
+
+
+def test_find_endpoint_with_params():
+    path = "/some/{thing}/is/dinamic"
+    rules = {
+        path: {}
+    }
+    res = pa.find_endpoint(rules, "/some/how/is/dinamic")
+    assert res == path
