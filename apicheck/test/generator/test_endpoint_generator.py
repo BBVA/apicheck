@@ -8,6 +8,7 @@ from typing import Callable, Generator, Tuple, Set
 import pytest
 
 from apicheck.core.endpoint import request_generator
+from apicheck.core.generator import AbsentValue
 from apicheck.core.dict_helpers import search, ref_resolver, transform_tree
 
 
@@ -24,24 +25,17 @@ def openapi3_content() -> dict:
 
 
 def test_invalid_info_request_genetaror():
-    try:
-        request_generator(None)
-    except ValueError as ex:
-        assert isinstance(ex, ValueError)
-    else:
-        assert False, "Value Error expected if None data supplied"
-    try:
-        request_generator({})
-    except ValueError as ex:
-        assert isinstance(ex, ValueError)
-    else:
-        assert False, "Value Error expected if empty dict supplied"
-    try:
-        request_generator(["A", "B", "C"])
-    except ValueError as ex:
-        assert isinstance(ex, ValueError)
-    else:
-        assert False, "Value Error expected if not dict supplied"
+    gen = request_generator(None)
+    res = gen(None)
+    assert isinstance(res, AbsentValue)
+
+    gen = request_generator({})
+    res = gen(None)
+    assert isinstance(res, AbsentValue)
+
+    gen = request_generator(["A", "B", "C"])
+    res = gen(None)
+    assert isinstance(res, AbsentValue)
 
 
 def test_request_generator_must_return_a_function(openapi3_content):
@@ -52,18 +46,10 @@ def test_request_generator_must_return_a_function(openapi3_content):
 def test_request_generator_function_valid_endpoint(openapi3_content):
     query = request_generator(openapi3_content)
 
-    try:
-        query(None)
-    except ValueError as ex:
-        assert isinstance(ex, ValueError)
-    else:
-        assert False, "Value Error expected if None is supplied as query"
-    try:
-        query("")
-    except ValueError as ex:
-        assert isinstance(ex, ValueError)
-    else:
-        assert False, "Value Error expected if empty query"
+    res = query(None)
+    assert isinstance(res, AbsentValue)
+    res = query("")
+    assert isinstance(res, AbsentValue)
 
 
 def test_request_generator_must_return_a_generator(openapi3_content):
@@ -76,13 +62,8 @@ def test_request_generator_must_return_a_generator(openapi3_content):
 
 def test_request_generator_none_if_query_not_found(openapi3_content):
     query = request_generator(openapi3_content)
-
-    try:
-        query("/cuck_norris")
-    except:
-        assert True
-    else:
-        assert False, "exception expected"
+    res = query("/cuck_norris")
+    assert isinstance(res, AbsentValue)
 
 
 VALID_PATH = r"/[a-zA-Z0-9/]+"
@@ -147,39 +128,6 @@ def test_request_generator_must_return_valid_post_request(openapi3_content):
     assert "zip" in item
 
 
-def test_no_struct_schema(openapi3_content):
-    current = search(openapi3_content, "/linode/instances")
-    query = request_generator(openapi3_content)
-    try:
-        if "get" in current:
-            gen = query("/linode/instances")
-            res = next(gen)
-            assert res is not None
-        if "post" in current:
-            gen = query("/linode/instances", method="post")
-            res = next(gen)
-            assert res is not None
-    except ValueError as ve:
-        print("cannot generate data", ve)
-    except Exception as ex:
-        assert False, f"uncontrolled exception in, {ex}"
-
-
-def test_strange_parameters(openapi3_content):
-    url = "/linode/instances/{linodeId}/disks"
-    current = search(openapi3_content, url)
-    query = request_generator(openapi3_content)
-    try:
-        if "post" in current:
-            gen = query(url, method="post")
-            res = next(gen)
-            assert res is not None
-    except ValueError as ve:
-        print("cannot generate data", ve)
-    except Exception as ex:
-        assert False, f"uncontrolled exception in, {ex}"
-
-
 def test_all_in(openapi3_content):
     raw_endpoints = search(openapi3_content, "paths")
     query = request_generator(openapi3_content)
@@ -201,65 +149,8 @@ def test_all_in(openapi3_content):
                 res = next(gen)
                 assert res is not None
             if "delete" in endpoint:
-                # TODO: delete generator
-                pass
-        except ValueError as ve:
-            print("cannot generate data", ve, url)
+                gen = query(url, method="delete")
+                res = next(gen)
+                assert res is not None
         except Exception as ex:
             assert False, f"uncontrolled exception in {url}, {endpoint}, {ex}"
-
-
-def test_custom_policy(openapi3_content):
-    url = "/linode/instances/{linodeId}/disks"
-    rules = {
-        "/linode/instances/{linodeId}/disks": {
-            "pathParams": {
-                "linodeId": 500
-            },
-            "body": {
-                "stackscript_data": {
-                    "type": "dictionary",
-                    "values": [
-                        "A"
-                    ]
-                }
-            }
-        }
-    }
-    query = request_generator(openapi3_content)
-    try:
-        gen = query(url, method="post")
-        res = next(gen)
-
-        # TODO: must pass this test
-        # assert "/linode/instances/500/disks" == res["path"]
-    except ValueError as ve:
-        pass
-        # assert False, f"can't raise value error due new rules, {ve}"
-    except Exception as ex:
-        pass
-        # assert False, f"uncontrolled exception in, {ex}"
-
-
-def test_custom_policy_complete(openapi3_content):
-    url = "/linode/instances/{linodeId}/disks"
-
-    # TODO: methods could be: a list or a string
-    rules = {
-        "/linode/instances/{linodeId}/disks": {
-            "methods": "get",
-            "pathParams": {},
-            "headers": {},
-            "queryParams": {},
-            "body": {
-                "stackscript_data": {
-                    "type": "dictionary",
-                    "values": [
-                        "A"
-                    ]
-                }
-            }
-        }
-    }
-    # TODO
-    assert True

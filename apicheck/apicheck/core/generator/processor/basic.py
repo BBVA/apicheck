@@ -5,18 +5,6 @@ from faker import Faker
 
 from apicheck.core.generator import *
 
-Strategy = Tuple[Callable[[Dict], bool], Callable[[Dict], Any]]
-
-X = TypeVar('X')
-MaybeValue = Union[X, AbsentValue]
-MaybeCallable = Callable[[], MaybeValue[X]]
-AsDefined = Dict[str, Any]
-
-
-def fail(element: AbsentValue) -> MaybeCallable[X]:
-    return lambda: element
-
-
 fake = Faker()
 
 
