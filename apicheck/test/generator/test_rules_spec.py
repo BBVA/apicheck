@@ -4,7 +4,7 @@ import json
 import pytest
 
 from apicheck.core.generator import AbsentValue
-# TODO: Everything brand new test
+from apicheck.core.rules import rules_processsor
 
 
 @pytest.fixture()
@@ -20,7 +20,6 @@ def openapi3_content() -> dict:
 
 
 def test_custom_policy(openapi3_content):
-    url = "/linode/instances/{linodeId}/disks"
     rules = {
         "/linode/instances/{linodeId}/disks": {
             "pathParams": {
@@ -38,16 +37,30 @@ def test_custom_policy(openapi3_content):
     }
     res_in = {
         "method": "post",
-        "path": "",
+        "path": "/linode/instances/3850272634059/disks",
         "headers": [],
         "body": {
             "path": "/tmp/example",
             "stackscript_data": AbsentValue("No properties available")
         }
     }
-    res = None
-    # TODO: must pass this test
-    # assert "/linode/instances/500/disks" == res["path"]
+    proc = rules_processsor(rules)
+    res = proc(res_in)
+    """
+    assert res is not None
+    assert "path" in res
+    assert res["path"] == "/linode/instances/500/disks"
+    assert "method" in res
+    assert res["method"] == "post"
+    assert "headers" in res
+    assert len(res["headers"]) == 0
+    assert "body" in res
+    assert "path" in res["body"]
+    assert res["body"]["path"] == "/tmp/example"
+    assert "stackscript_data" in res["body"]
+    assert not isinstance(res["body"]["stackscript_data"], AbsentValue)
+    assert res["body"]["stackscript_data"] == "A"
+    """
 
 
 def test_custom_policy_complete(openapi3_content):
