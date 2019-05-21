@@ -14,6 +14,12 @@ def test_find_endpoint_invalid_params():
         assert res is None
 
 
+def test_endpoint_not_found():
+    rules = {}
+    res = pa.find_endpoint(rules, "/some/good/path")
+    assert res is None
+
+
 def test_find_endpoint_happy_path():
     path = "/some/good/path"
     rules = {

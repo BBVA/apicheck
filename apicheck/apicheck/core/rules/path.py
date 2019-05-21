@@ -1,10 +1,7 @@
-from urllib.parse import urlparse, urlsplit, urlunparse
+from urllib.parse import urlparse, urlunparse
 
 from apicheck.core.generator import generator
-from apicheck.core.generator.open_api_strategy import strategy
-
-
-default_strategy = strategy
+from . import rules_strategy
 
 
 def _compare_paths(a, b):
@@ -42,20 +39,39 @@ def _find_index_in_part(parts, item):
 
 
 def merge_paths(current_path, rule_path, properties):
-    parsed = urlsplit(current_path)
-    parsed_parts = parsed[2].split("/")
+    parsed = urlparse(current_path)
+    parsed_parts = parsed.path.split("/")
     rule_parts = rule_path.split("/")
     for prop, info in properties.items():
         i = _find_index_in_part(rule_parts, "{"+prop+"}")
         if not i:
             continue
         if isinstance(i, dict):
-            gen = generator(info, default_strategy)
+            gen = generator(info, rules_strategy)
             parsed_parts[i] = str(next(gen))
         else:
             parsed_parts[i] = str(info)
     new_path = "/".join(parsed_parts)
 
-    return urlunparse((parsed[0], parsed[1], new_path, parsed[3], parsed[4], None))
+    return urlunparse(parsed._replace(path=new_path))
 
 
+def merge_queries(current_path, properties):
+    parsed = urlparse(current_path)
+    parsed_query = parsed.query.split("&")
+    out = {}
+    for part in parsed_query:
+        [key, value] = part.split("=")
+        if key in properties:
+            spec = properties[key]
+            if isinstance(spec, dict):
+                gen = generator(spec, rules_strategy)
+                out[key] = str(next(gen))
+            else:
+                out[key] = str(spec)
+        else:
+            out[key] = value
+    parts_joined = [f"{k}={v}" for k,v in out.items()]
+    new_query = "&".join(parts_joined)
+
+    return urlunparse(parsed._replace(query=new_query))
