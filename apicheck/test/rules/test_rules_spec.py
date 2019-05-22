@@ -129,6 +129,163 @@ def test_body():
     _test_ruleset(rules, res_in, res_out)
 
 
+def test_body_generator():
+    res_in = {
+        "method": "post",
+        "path": "/my/great/endpoint",
+        "headers": [],
+        "body": {
+            "first": "hello",
+            "then": "loren ipsum"
+        }
+    }
+    rules = {
+        "/my/great/endpoint": {
+            "body": {
+                "then": {
+                    "type": "dictionary",
+                    "values": [
+                        "world"
+                    ]
+                }
+            }
+        }
+    }
+    res_out = {
+        "method": "post",
+        "path": "/my/great/endpoint",
+        "headers": [],
+        "body": {
+            "first": "hello",
+            "then": "world"
+        }
+    }
+    _test_ruleset(rules, res_in, res_out)
+
+
+def test_method_filter():
+    res_in_s = [
+        {
+            "method": "get",
+            "path": "/my/great/endpoint?id=109497203948",
+            "headers": []
+        },
+        {
+            "method": "post",
+            "path": "/my/great/endpoint?id=109497203948",
+            "headers": []
+        },
+        {
+            "method": "put",
+            "path": "/my/great/endpoint?id=109497203948",
+            "headers": []
+        },
+        {
+            "method": "delete",
+            "path": "/my/great/endpoint?id=109497203948",
+            "headers": []
+        }
+    ]
+    rules = {
+        "/my/great/endpoint": {
+            "queryParams": {
+                "id": {
+                    "type": "dictionary",
+                    "values": [
+                        "66"
+                    ]
+                }
+            }
+        }
+    }
+    res_out_s = [
+        {
+            "method": "get",
+            "path": "/my/great/endpoint?id=66",
+            "headers": []
+        },
+        {
+            "method": "post",
+            "path": "/my/great/endpoint?id=66",
+            "headers": []
+        },
+        {
+            "method": "put",
+            "path": "/my/great/endpoint?id=66",
+            "headers": []
+        },
+        {
+            "method": "delete",
+            "path": "/my/great/endpoint?id=66",
+            "headers": []
+        }
+    ]
+    for res_in, res_out in zip(res_in_s, res_out_s):
+        _test_ruleset(rules, res_in, res_out)
+
+
+def test_method_get_filter():
+    res_in_s = [
+        {
+            "method": "get",
+            "path": "/my/great/endpoint?id=109497203948",
+            "headers": []
+        },
+        {
+            "method": "post",
+            "path": "/my/great/endpoint?id=109497203948",
+            "headers": []
+        },
+        {
+            "method": "put",
+            "path": "/my/great/endpoint?id=109497203948",
+            "headers": []
+        },
+        {
+            "method": "delete",
+            "path": "/my/great/endpoint?id=109497203948",
+            "headers": []
+        }
+    ]
+    rules = {
+        "/my/great/endpoint": {
+            "method": "get",
+            "queryParams": {
+                "id": {
+                    "type": "dictionary",
+                    "values": [
+                        "66"
+                    ]
+                }
+            }
+        }
+    }
+    res_out_s = [
+        {
+            "method": "get",
+            "path": "/my/great/endpoint?id=66",
+            "headers": []
+        },
+        {
+            "method": "post",
+            "path": "/my/great/endpoint?id=109497203948",
+            "headers": []
+        },
+        {
+            "method": "put",
+            "path": "/my/great/endpoint?id=109497203948",
+            "headers": []
+        },
+        {
+            "method": "delete",
+            "path": "/my/great/endpoint?id=109497203948",
+            "headers": []
+        }
+    ]
+    for res_in, res_out in zip(res_in_s, res_out_s):
+        _test_ruleset(rules, res_in, res_out)
+
+
 def test_custom_policy():
     res_in = {
         "method": "post",

@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from apicheck.core.generator import _type_matcher 
+from apicheck.core.generator import _type_matcher
 from apicheck.core.generator.open_api_strategy import strategy
 from apicheck.core.generator.dict_strategy import dict_generator
 
@@ -22,6 +22,13 @@ def rules_processor(rules: Dict[str, Any]):
         else:
             return request
         rule = rules[endpoint]
+        if "method" in rule and "method" in request:
+            rules_method = rule["method"]
+            if isinstance(rules_method, list) and not request["method"] in rules_method:
+                return request
+            elif request["method"] != rules_method:
+                return request
+
         if "pathParams" in rule:
             request["path"] = pa.merge_paths(request["path"], endpoint, rule["pathParams"])
         if "queryParams" in rule:
