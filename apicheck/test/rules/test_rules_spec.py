@@ -100,6 +100,35 @@ def test_query_params_generated():
     _test_ruleset(rules, res_in, res_out)
 
 
+def test_body():
+    res_in = {
+        "method": "post",
+        "path": "/my/great/endpoint",
+        "headers": [],
+        "body": {
+            "first": "hello",
+            "then": "loren ipsum"
+        }
+    }
+    rules = {
+        "/my/great/endpoint": {
+            "body": {
+                "then": "world"
+            }
+        }
+    }
+    res_out = {
+        "method": "post",
+        "path": "/my/great/endpoint",
+        "headers": [],
+        "body": {
+            "first": "hello",
+            "then": "world"
+        }
+    }
+    _test_ruleset(rules, res_in, res_out)
+
+
 def test_custom_policy():
     res_in = {
         "method": "post",
