@@ -34,7 +34,11 @@ def rules_processor(rules: Dict[str, Any]):
         if "queryParams" in rule:
             request["path"] = pa.merge_queries(request["path"], rule["queryParams"])
         if "body" in rule:
-            request["body"] = bo.merge_body(request["body"], rule["body"])
+            if "override" in rule and "body" in rule["override"]:
+                proc = bo.override_body
+            else:
+                proc = bo.merge_body
+            request["body"] = proc(request["body"], rule["body"])
         return request
     if not rules or len(rules) == 0:
         return lambda x: x

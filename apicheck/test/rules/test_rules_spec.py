@@ -286,6 +286,42 @@ def test_method_get_filter():
         _test_ruleset(rules, res_in, res_out)
 
 
+def test_override():
+    res_in = {
+        "method": "post",
+        "path": "/my/great/endpoint",
+        "headers": [],
+        "body": {
+            "first": "hello",
+            "then": "loren ipsum"
+        }
+    }
+    rules = {
+        "/my/great/endpoint": {
+            "override": [
+                "body"
+            ],
+            "body": {
+                "then": {
+                    "type": "dictionary",
+                    "values": [
+                        "world"
+                    ]
+                }
+            }
+        }
+    }
+    res_out = {
+        "method": "post",
+        "path": "/my/great/endpoint",
+        "headers": [],
+        "body": {
+            "then": "world"
+        }
+    }
+    _test_ruleset(rules, res_in, res_out)
+
+
 def test_custom_policy():
     res_in = {
         "method": "post",
