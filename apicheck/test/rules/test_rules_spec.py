@@ -286,7 +286,7 @@ def test_method_get_filter():
         _test_ruleset(rules, res_in, res_out)
 
 
-def test_override():
+def test_override_body():
     res_in = {
         "method": "post",
         "path": "/my/great/endpoint",
@@ -318,6 +318,30 @@ def test_override():
         "body": {
             "then": "world"
         }
+    }
+    _test_ruleset(rules, res_in, res_out)
+
+
+def test_override_query_params():
+    res_in = {
+        "method": "get",
+        "path": "/my/great/endpoint?cool=no&id=33",
+        "headers": [],
+    }
+    rules = {
+        "/my/great/endpoint": {
+            "override": [
+                "queryParams"
+            ],
+            "queryParams": {
+                "id": 21
+            }
+        }
+    }
+    res_out = {
+        "method": "get",
+        "path": "/my/great/endpoint?id=21",
+        "headers": []
     }
     _test_ruleset(rules, res_in, res_out)
 

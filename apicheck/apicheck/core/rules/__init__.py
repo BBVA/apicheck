@@ -32,7 +32,10 @@ def rules_processor(rules: Dict[str, Any]):
         if "pathParams" in rule:
             request["path"] = pa.merge_paths(request["path"], endpoint, rule["pathParams"])
         if "queryParams" in rule:
-            request["path"] = pa.merge_queries(request["path"], rule["queryParams"])
+            if "override" in rule and "queryParams" in rule["override"]:
+                request["path"] = pa.override_query(request["path"], rule["queryParams"])
+            else:
+                request["path"] = pa.merge_queries(request["path"], rule["queryParams"])
         if "body" in rule:
             if "override" in rule and "body" in rule["override"]:
                 proc = bo.override_body

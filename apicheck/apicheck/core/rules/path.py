@@ -56,6 +56,32 @@ def merge_paths(current_path, rule_path, properties):
     return urlunparse(parsed._replace(path=new_path))
 
 
+def _parse_current_path(current):
+    parsed = urlparse(current)
+    out = {}
+    for part in parsed.query.split("&"):
+        [k, v] = part.split("=")
+        out[k] = v
+    return parsed, out
+
+
+# TODO: replace with gen_properties in body.py
+def _generate_new_query(properties):
+    out = {}
+    for k, v in properties.items():
+        if isinstance(v, dict):
+            gen = generator(v, rules_strategy)
+            out[k] = str(next(gen))
+        else:
+            out[k] = str(v)
+    return out
+
+
+def _compose_query_string(path):
+    parts = [f"{k}={v}" for k, v in path.items()]
+    return "&".join(parts)
+
+
 def merge_queries(current_path, properties):
     parsed = urlparse(current_path)
     parsed_query = parsed.query.split("&")
@@ -75,3 +101,10 @@ def merge_queries(current_path, properties):
     new_query = "&".join(parts_joined)
 
     return urlunparse(parsed._replace(query=new_query))
+
+
+def override_query(current_path, properties):
+    new_query = _generate_new_query(properties)
+    query_str = _compose_query_string(new_query)
+    parsed, _ = _parse_current_path(current_path)
+    return urlunparse(parsed._replace(query=query_str))
