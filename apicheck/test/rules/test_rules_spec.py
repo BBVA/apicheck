@@ -414,7 +414,7 @@ def test_header_rule():
     _test_ruleset(rules, res_in, res_out)
 
 
-def test_header_rule():
+def test_header_generator_rule():
     res_in = {
         "method": "post",
         "path": "/linode/instances/500/disks",
@@ -427,6 +427,46 @@ def test_header_rule():
     }
     rules = {
         "/linode/instances/{linodeId}/disks": {
+            "headers": {
+                "SOME_HEADER": {
+                    "type": "dictionary",
+                    "values": [
+                        "correct"
+                    ]
+                }
+            }
+        }
+    }
+    res_out = {
+        "method": "post",
+        "path": "/linode/instances/500/disks",
+        "headers": {
+            "SOME_HEADER": "correct"
+        },
+        "body": {
+            "path": "/tmp/example"
+        }
+    }
+    _test_ruleset(rules, res_in, res_out)
+
+
+def test_header_override_rule():
+    res_in = {
+        "method": "post",
+        "path": "/linode/instances/500/disks",
+        "headers": {
+            "SOME_HEADER": "crazy value",
+            "BORING": "header"
+        },
+        "body": {
+            "path": "/tmp/example"
+        }
+    }
+    rules = {
+        "/linode/instances/{linodeId}/disks": {
+            "override": [
+                "headers"
+            ],
             "headers": {
                 "SOME_HEADER": {
                     "type": "dictionary",

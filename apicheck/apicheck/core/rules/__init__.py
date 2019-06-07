@@ -52,7 +52,7 @@ def rules_processor(rules: Dict[str, Any]):
             request["body"] = proc(request["body"], rule["body"])
         if "headers" in rule:
             if "override" in rule and "headers" in rule["override"]:
-                raise NotImplementedError("no headers override yet")
+                proc = he.override_headers
             else:
                 proc = he.merge_headers
             request["headers"] = proc(request["headers"], rule["headers"])

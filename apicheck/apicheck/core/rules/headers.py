@@ -8,6 +8,10 @@ def merge_headers(current_headers, rules):
     return res
 
 
+def override_headers(_, rules):
+    return _gen_properties(rules)
+
+
 def _gen_properties(rules):
     res = {}
     for k, v in rules.items():
