@@ -24,18 +24,25 @@ def rules_processor(rules: Dict[str, Any]):
         rule = rules[endpoint]
         if "method" in rule and "method" in request:
             rules_method = rule["method"]
-            if isinstance(rules_method, list) and not request["method"] in rules_method:
+            is_list = isinstance(rules_method, list)
+            is_not_in_method = not request["method"] in rules_method
+            if is_list and is_not_in_method:
                 return request
             elif request["method"] != rules_method:
                 return request
 
         if "pathParams" in rule:
-            request["path"] = pa.merge_paths(request["path"], endpoint, rule["pathParams"])
+            request["path"] = pa.merge_paths(
+                    request["path"],
+                    endpoint,
+                    rule["pathParams"]
+                )
         if "queryParams" in rule:
             if "override" in rule and "queryParams" in rule["override"]:
-                request["path"] = pa.override_query(request["path"], rule["queryParams"])
+                proc = pa.override_query
             else:
-                request["path"] = pa.merge_queries(request["path"], rule["queryParams"])
+                proc = pa.merge_queries
+            request["path"] = proc(request["path"], rule["queryParams"])
         if "body" in rule:
             if "override" in rule and "body" in rule["override"]:
                 proc = bo.override_body

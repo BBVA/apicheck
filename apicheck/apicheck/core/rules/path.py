@@ -97,7 +97,7 @@ def merge_queries(current_path, properties):
                 out[key] = str(spec)
         else:
             out[key] = value
-    parts_joined = [f"{k}={v}" for k,v in out.items()]
+    parts_joined = [f"{k}={v}" for k, v in out.items()]
     new_query = "&".join(parts_joined)
 
     return urlunparse(parsed._replace(query=new_query))

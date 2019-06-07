@@ -15,4 +15,3 @@ class Singleton(type):
 class CommonConfig(object, metaclass=Singleton):
     db_connection_string: str
     log_level: str
-
