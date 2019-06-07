@@ -36,7 +36,7 @@ def test_path_params():
     res_in = {
         "method": "post",
         "path": "/my/entity/33456979458037",
-        "headers": []
+        "headers": {}
     }
     rules = {
         "/by/entity/{id}": {
@@ -48,7 +48,7 @@ def test_path_params():
     res_out = {
         "method": "post",
         "path": "/my/entity/a09941c5a-51fe-4379-b6e3-e91b9788b4fb",
-        "headers": []
+        "headers": {}
     }
     _test_ruleset(rules, res_in, res_out)
 
@@ -57,7 +57,7 @@ def test_query_params():
     res_in = {
         "method": "post",
         "path": "/my/great/endpoint?id=109497203948",
-        "headers": []
+        "headers": {}
     }
     rules = {
         "/my/great/endpoint": {
@@ -69,7 +69,7 @@ def test_query_params():
     res_out = {
         "method": "post",
         "path": "/my/great/endpoint?id=10",
-        "headers": []
+        "headers": {}
     }
     _test_ruleset(rules, res_in, res_out)
 
@@ -78,7 +78,7 @@ def test_query_params_generated():
     res_in = {
         "method": "post",
         "path": "/my/great/endpoint?id=109497203948",
-        "headers": []
+        "headers": {}
     }
     rules = {
         "/my/great/endpoint": {
@@ -95,7 +95,7 @@ def test_query_params_generated():
     res_out = {
         "method": "post",
         "path": "/my/great/endpoint?id=66",
-        "headers": []
+        "headers": {}
     }
     _test_ruleset(rules, res_in, res_out)
 
@@ -104,7 +104,7 @@ def test_body():
     res_in = {
         "method": "post",
         "path": "/my/great/endpoint",
-        "headers": [],
+        "headers": {},
         "body": {
             "first": "hello",
             "then": "loren ipsum"
@@ -120,7 +120,7 @@ def test_body():
     res_out = {
         "method": "post",
         "path": "/my/great/endpoint",
-        "headers": [],
+        "headers": {},
         "body": {
             "first": "hello",
             "then": "world"
@@ -133,7 +133,7 @@ def test_body_generator():
     res_in = {
         "method": "post",
         "path": "/my/great/endpoint",
-        "headers": [],
+        "headers": {},
         "body": {
             "first": "hello",
             "then": "loren ipsum"
@@ -154,7 +154,7 @@ def test_body_generator():
     res_out = {
         "method": "post",
         "path": "/my/great/endpoint",
-        "headers": [],
+        "headers": {},
         "body": {
             "first": "hello",
             "then": "world"
@@ -168,22 +168,22 @@ def test_method_filter():
         {
             "method": "get",
             "path": "/my/great/endpoint?id=109497203948",
-            "headers": []
+            "headers": {}
         },
         {
             "method": "post",
             "path": "/my/great/endpoint?id=109497203948",
-            "headers": []
+            "headers": {}
         },
         {
             "method": "put",
             "path": "/my/great/endpoint?id=109497203948",
-            "headers": []
+            "headers": {}
         },
         {
             "method": "delete",
             "path": "/my/great/endpoint?id=109497203948",
-            "headers": []
+            "headers": {}
         }
     ]
     rules = {
@@ -202,22 +202,22 @@ def test_method_filter():
         {
             "method": "get",
             "path": "/my/great/endpoint?id=66",
-            "headers": []
+            "headers": {}
         },
         {
             "method": "post",
             "path": "/my/great/endpoint?id=66",
-            "headers": []
+            "headers": {}
         },
         {
             "method": "put",
             "path": "/my/great/endpoint?id=66",
-            "headers": []
+            "headers": {}
         },
         {
             "method": "delete",
             "path": "/my/great/endpoint?id=66",
-            "headers": []
+            "headers": {}
         }
     ]
     for res_in, res_out in zip(res_in_s, res_out_s):
@@ -229,22 +229,22 @@ def test_method_get_filter():
         {
             "method": "get",
             "path": "/my/great/endpoint?id=109497203948",
-            "headers": []
+            "headers": {}
         },
         {
             "method": "post",
             "path": "/my/great/endpoint?id=109497203948",
-            "headers": []
+            "headers": {}
         },
         {
             "method": "put",
             "path": "/my/great/endpoint?id=109497203948",
-            "headers": []
+            "headers": {}
         },
         {
             "method": "delete",
             "path": "/my/great/endpoint?id=109497203948",
-            "headers": []
+            "headers": {}
         }
     ]
     rules = {
@@ -264,22 +264,22 @@ def test_method_get_filter():
         {
             "method": "get",
             "path": "/my/great/endpoint?id=66",
-            "headers": []
+            "headers": {}
         },
         {
             "method": "post",
             "path": "/my/great/endpoint?id=109497203948",
-            "headers": []
+            "headers": {}
         },
         {
             "method": "put",
             "path": "/my/great/endpoint?id=109497203948",
-            "headers": []
+            "headers": {}
         },
         {
             "method": "delete",
             "path": "/my/great/endpoint?id=109497203948",
-            "headers": []
+            "headers": {}
         }
     ]
     for res_in, res_out in zip(res_in_s, res_out_s):
@@ -290,7 +290,7 @@ def test_override_body():
     res_in = {
         "method": "post",
         "path": "/my/great/endpoint",
-        "headers": [],
+        "headers": {},
         "body": {
             "first": "hello",
             "then": "loren ipsum"
@@ -314,7 +314,7 @@ def test_override_body():
     res_out = {
         "method": "post",
         "path": "/my/great/endpoint",
-        "headers": [],
+        "headers": {},
         "body": {
             "then": "world"
         }
@@ -326,7 +326,7 @@ def test_override_query_params():
     res_in = {
         "method": "get",
         "path": "/my/great/endpoint?cool=no&id=33",
-        "headers": [],
+        "headers": {},
     }
     rules = {
         "/my/great/endpoint": {
@@ -341,7 +341,7 @@ def test_override_query_params():
     res_out = {
         "method": "get",
         "path": "/my/great/endpoint?id=21",
-        "headers": []
+        "headers": {}
     }
     _test_ruleset(rules, res_in, res_out)
 
@@ -350,7 +350,7 @@ def test_custom_policy():
     res_in = {
         "method": "post",
         "path": "/linode/instances/3850272634059/disks",
-        "headers": [],
+        "headers": {},
         "body": {
             "path": "/tmp/example",
             "stackscript_data": AbsentValue("No properties available")
@@ -374,10 +374,42 @@ def test_custom_policy():
     res_out = {
         "method": "post",
         "path": "/linode/instances/500/disks",
-        "headers": [],
+        "headers": {},
         "body": {
             "path": "/tmp/example",
             "stackscript_data": "A"
         }
     }
     _test_ruleset(rules, res_in, res_out)
+
+
+def test_header_rule():
+    res_in = {
+        "method": "post",
+        "path": "/linode/instances/500/disks",
+        "headers": {
+            "SOME_HEADER": "crazy value"
+        },
+        "body": {
+            "path": "/tmp/example"
+        }
+    }
+    rules = {
+        "/linode/instances/{linodeId}/disks": {
+            "headers": {
+                "SOME_HEADER": "correct"
+            }
+        }
+    }
+    res_out = {
+        "method": "post",
+        "path": "/linode/instances/500/disks",
+        "headers": {
+            "SOME_HEADER": "correct"
+        },
+        "body": {
+            "path": "/tmp/example"
+        }
+    }
+    _test_ruleset(rules, res_in, res_out)
+

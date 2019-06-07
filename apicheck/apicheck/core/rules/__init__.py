@@ -13,6 +13,7 @@ rules_strategy = strategy + [
 def rules_processor(rules: Dict[str, Any]):
     import apicheck.core.rules.path as pa
     import apicheck.core.rules.body as bo
+    import apicheck.core.rules.headers as he
 
     def _proc(request: Dict[str, Any]):
         # TODO: a request without path it's a valid request?
@@ -49,6 +50,12 @@ def rules_processor(rules: Dict[str, Any]):
             else:
                 proc = bo.merge_body
             request["body"] = proc(request["body"], rule["body"])
+        if "headers" in rule:
+            if "override" in rule and "headers" in rule["override"]:
+                raise NotImplementedError("no headers override yet")
+            else:
+                proc = he.merge_headers
+            request["headers"] = proc(request["headers"], rule["headers"])
         return request
     if not rules or len(rules) == 0:
         return lambda x: x
