@@ -12,7 +12,7 @@ def _gen_properties(rules):
     res = {}
     for k, v in rules.items():
         if isinstance(v, dict):
-            gen = generator(properties[k], rules_strategy)
+            gen = generator(rules[k], rules_strategy)
             res[k] = next(gen)
         else:
             res[k] = v

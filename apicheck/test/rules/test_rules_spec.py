@@ -413,3 +413,38 @@ def test_header_rule():
     }
     _test_ruleset(rules, res_in, res_out)
 
+
+def test_header_rule():
+    res_in = {
+        "method": "post",
+        "path": "/linode/instances/500/disks",
+        "headers": {
+            "SOME_HEADER": "crazy value"
+        },
+        "body": {
+            "path": "/tmp/example"
+        }
+    }
+    rules = {
+        "/linode/instances/{linodeId}/disks": {
+            "headers": {
+                "SOME_HEADER": {
+                    "type": "dictionary",
+                    "values": [
+                        "correct"
+                    ]
+                }
+            }
+        }
+    }
+    res_out = {
+        "method": "post",
+        "path": "/linode/instances/500/disks",
+        "headers": {
+            "SOME_HEADER": "correct"
+        },
+        "body": {
+            "path": "/tmp/example"
+        }
+    }
+    _test_ruleset(rules, res_in, res_out)
