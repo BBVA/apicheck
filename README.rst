@@ -12,16 +12,18 @@ API-Check - The DevSecOps toolset for REST APIs
 .. figure:: https://raw.githubusercontent.com/BBVA/apicheck/master/docs/source/_static/images/apicheck-logo-150x150.png
    :align: center
 
-``API-Check`` is a complete toolset designed and created for testing the REST API.
+``API-Check`` is a complete toolset designed and created for testing REST APIs.
 
 Why API-Check
 -------------
 
 API-Check focus not only in the security testing and hacking uses cases. The goal of the project is to be a complete toolset for ``DevSecOPs`` cycles and for different users profiles:
 
+The tool is aimed for different users profiles:
+
 - Developers
 - Systems SysAdmins
-- Security & penteters
+- Security & pentesters
 
 Contributions are welcome, see CONTRIBUTING.md or skim existing tickets to see where you could help out.
 

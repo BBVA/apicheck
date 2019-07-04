@@ -1,13 +1,27 @@
 from itertools import repeat
-from typing import Any, Dict
-
-Definition = Dict[str, Any]
-Properties = Dict[str, Any]
+from typing import *
 
 
 class AbsentValue(object):
     def __init__(self, reason):
         self.reason = reason
+
+
+Definition = Dict[str, Any]
+Properties = Dict[str, Any]
+
+Strategy = Tuple[Callable[[Dict], bool], Callable[[Dict], Any]]
+
+X = TypeVar('X')
+MaybeValue = Union[X, AbsentValue]
+MaybeCallable = Callable[[], MaybeValue[X]]
+AsDefined = Dict[str, Any]
+
+
+def fail(element: AbsentValue) -> MaybeCallable[X]:
+    def _any_case(*args, **kwargs):
+        return element
+    return _any_case
 
 
 def generator(field: dict, strategies):

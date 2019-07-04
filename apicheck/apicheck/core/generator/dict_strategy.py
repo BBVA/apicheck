@@ -1,5 +1,23 @@
-def dict_generator(words_dict):
-    def _generator(field: dict, strategies):
-        for n in words_dict:
-            yield n
-    return _generator
+import random
+
+
+def dict_generator(field: dict, strategies):
+    def _random_proc(size):
+        def _next():
+            n = random.randint(0, size-1)
+            return values[n]
+        return _next
+
+    def _const(thing):
+        return lambda: thing
+
+    values = field["values"]
+    size = len(values)
+
+    if size == 1:
+        proc = _const(values[0])
+    else:
+        proc = _random_proc(size)
+
+    while True:
+        yield proc()

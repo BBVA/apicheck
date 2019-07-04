@@ -1,7 +1,7 @@
 import re
 
 from apicheck.core.dict_helpers import search, ref_resolver, transform_tree
-from apicheck.core.generator import generator
+from apicheck.core.generator import generator, fail, AbsentValue
 
 
 def _param_generator(strategy, path, parameters):
@@ -94,29 +94,38 @@ def _post_gen(query, item, strategy, params=None):
         yield res
 
 
+def _delete_gen(query, item, strategy, params=None):
+    path = query
+    if params:
+        path = _param_generator(strategy, path, params)
+    else:
+        def _query():
+            while True:
+                yield query
+        path = _query()
+    while True:
+        yield {
+            "method": "delete",
+            "path": next(path),
+            "headers": {},
+        }
+
+
 def request_generator(open_api_data: dict,
                       default_strategy: list = []):
     if not open_api_data or not isinstance(open_api_data, dict):
-        raise ValueError("Not data supplied")
+        return fail(AbsentValue("Not openapi data supplied"))
     if not default_strategy:
         from apicheck.core.generator.open_api_strategy import strategy
         default_strategy = strategy
     transformer = ref_resolver(open_api_data)
 
     def _endpoint_generator(query, ancestors=set([]), method="get"):
-        # TODO: raise invalid query and item not found inside search
         if not query:
-            raise ValueError("Invalid query")
+            return AbsentValue("Invalid query")
         item = search(open_api_data, query, ancestors=ancestors)
         if not item or method not in item:
-            raise ValueError("Item not found")
-        # empty request to fill
-        request = {
-            "method": method,
-            "path": query,
-            "headers": []
-        }
-        # TODO: retrieve parameters
+            return AbsentValue("Item not found")
         if "parameters" in item:
             parameters = item["parameters"]
         else:
@@ -129,6 +138,6 @@ def request_generator(open_api_data: dict,
         elif method == "post":
             res = _post_gen(query, resolved, default_strategy, parameters)
         else:
-            raise NotImplementedError("No way man")
+            res = _delete_gen(query, resolved, default_strategy, parameters)
         return res
     return _endpoint_generator
