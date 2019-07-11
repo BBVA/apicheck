@@ -7,12 +7,13 @@ Pipelines & data flow
 Pipelines
 +++++++++
 
-As \*NIX like you can chain :samp:`commands` and :samp:`tools`. Imagine this \*NIX *pipeline* execution:
+In \*NIX you can chain multiple commands together in a *pipeline*. Consider this one:
 
 .. image:: /_static/images/apicheck_unix_pipeline.png
    :align: center
 
-You can build the ``API-Check``-like *pipeline* doing:
+
+In a similar fashion you can build ``API-Check`` *pipelines* chaining :samp:`commands` and :samp:`tools`. For example:
 
 .. image:: /_static/images/apicheck_unix_pipeline.png
    :align: center
@@ -22,7 +23,7 @@ You can build the ``API-Check``-like *pipeline* doing:
 Data format
 +++++++++++
 
-:samp:`commands` and :samp:`tools` receives from input and output information that allow to build pipelines (as we learnt in the previous section). To do that, they may share *speak* the same data format. The chosen data format for ``API-Check`` is :samp:`JSON`.
+To allow interoperation among :samp:`commands` and :samp:`tools` all of them share a common :samp:`JSON` data format. In other words, all of ``API-Check`` command output is :samp:`JSON` as well as the input. This allows to build pipelines (as we learnt in the previous section).
 
 Commands and Tools
 
@@ -34,7 +35,7 @@ Commands and Tools
 Commands & tools
 ----------------
 
-``API-Check`` has 2:
+We divide ``API-Check`` components into two categories:
 
 - Commands
 - Tools
@@ -44,38 +45,34 @@ Commands & tools
 Commands
 ++++++++
 
-Commands are a small programs that have more specific things. These commands follow the \*NIX philosophy: a lot os small pieces, but that can be connected between them.
+Commands are programs with well-defined small jobs. Commands follow the \*NIX philosophy: multiple small elements that can be connected together.
 
-You can imagine this commands as a ``awk`` or ``grep`` commands. Small, but powerful.
+You can compare those commands to ``awk`` or ``grep``. Small, but powerful.
 
 .. _tools_reference:
 
 Tools
 +++++
 
-Tools does more complex things that a command. You also can chain with commands.
+Tools are more convoluted than commands. The problem they solve is more complex. You also can chain them along with commands.
 
 .. _data_generation:
 
 Data generation
 ---------------
 
-All data generation tools are placed into apicheck.core.generator. Inside this
-package you can find apicheck.core.generator.open_api_strategy with the default
-strategy for open api files.
+Data generation tools are placed inside the `apicheck.core.generator` package. For instance `apicheck.core.generator.open_api_strategy` that implements the default data generation strategy for OpenAPI files.
 
 .. note::
-    By the moment string format it's not supported.
+    At the moment string formating is not supported.
 
-The generator will use the Faker package to generate data, following the
-openapi specification.
+The generator uses a Python package named ``Faker`` to generate fake data following the OpenAPI specification.
 
 Request definition
 ++++++++++++++++++
 
-The overall definition used across the file is the request definition. A request
-definition describe, in a very simple terms, how the request will look like.
-This definition allways have the same fields:
+A request definition describe, in a very simple terms, how the request will look like.
+This definition always have the same fields:
 
 .. code-block:: yaml
 
@@ -100,10 +97,10 @@ The fixed value looks like the following:
 Type definition
 +++++++++++++++
 
-The type used in apicheck is a direct copy of the type definition of open api 3
+The type used in ``API-Check`` is a direct copy of the type definition of OpenAPI 3
 specification.
-Every item can be defined as an open api type. You can use also some custom
-type created for apicheck. One of this is dictionary, that looks like:
+Every item can be defined as an OpenAPI type. You can use custom
+types created for ``API-Check`` also. One of the allowed types is *dictionary*, that looks like:
 
 .. code-block:: yaml
 
@@ -113,7 +110,7 @@ type created for apicheck. One of this is dictionary, that looks like:
         - B
         - C
 
-Used to define the userName field will look like:
+The definition of the *userName* field would look like:
 
 .. code-block:: yaml
 
@@ -127,8 +124,8 @@ Used to define the userName field will look like:
 Definition hierarchy
 ++++++++++++++++++++
 
-If software find several definition for the same element the last readed will
-remain. The following is the typical order or reading:
+If several definition for the same element are found, the last read will
+remain. The default precedence order when reading is the following:
 
     - Open Api 3 File
     - Rules files (readed in search order)
@@ -139,15 +136,12 @@ remain. The following is the typical order or reading:
 Definition override
 +++++++++++++++++++
 
-If we want to start from scratch a type definition, we must use de override
-keyword. By default this keyword has the false value. If we find the true
-value then the generator will use only our specification and will ignore
-the Open Api specification.
+When starting a type definition from scratch, we must use de *override* keyword. The value of this keyword is *false* by default. When the value *true* is provided, the generator will use only our specification and ignore the OpenAPI specification.
 
-OpenApi 3 override Example
+OpenAPI 3 override Example
 ++++++++++++++++++++++++++
 
-You can override openapi 3 type definition using your own file, like this:
+You can override OpenAPI 3 type definitions using your own file this way:
 
 .. code-block:: yaml
 
@@ -184,8 +178,8 @@ You can override openapi 3 type definition using your own file, like this:
             get:
                 override: true
 
-The first part is about metadata. You can query apicheck to find a set of
-rules using this data. Name and version are required, all other data is
+The first part is metadata. You can query ApiCheck to get the set of
+rules using this data. Name and version are required, any other datum is
 optional.
 
 .. code-block:: yaml
@@ -197,7 +191,7 @@ optional.
         - books
         - users
 
-The global part is a request definition used as a template of all other rules.
+The global section defines a request used as template for all other rules.
 When you include a header in this section, all requests regarding this rules
 will include this value.
 
@@ -207,28 +201,28 @@ will include this value.
         headers:
             Authorization: Basic YWxhZGRpbjpvcGVuc2VzYW1l
 
-Just below this section we found the endpoints. We can define the rules for
-some endpoints. In the next example you can read a typical endpoint.
+Just below this section we found the endpoints. We can define rules for
+the endpoints. In the next example you can see a typical endpoint
+definition.
 
 .. code-block:: yaml
 
     endpoints:
         /{userId}/books:
 
-And if you need some rule for several endpoints you can use the * wildcard.
+If you need a single rule to affect multiple endpoints at the same time, you can use the \* *wildcard*.
 
 .. code-block:: yaml
 
     endpoints:
         /{userId}/*
 
-Inside the endpoint you can add the request definition, see avobe what items
-you can specify.
-Every thing that you add just below the endpoint will affect to every method
+Inside the endpoint you can a request definition, The items you can set
+are listed above.
+Everything you add just below the endpoint will affect every method
 inside the endpoint.
 
-You can define a path parameter, in this case we need to generate requests
-only for the user with id 500, like this:
+A path parameter can be defined. For instance, in this example we need to generate requests only for the user with id 500:
 
 .. code-block:: yaml
 
@@ -236,8 +230,8 @@ only for the user with id 500, like this:
         pathParams:
             userId: 500
 
-Then we want to change the body of the post call declared inside the
-openapi 3, so we must specify the post keyword. And you can add another
+And if we wanted to change the body of the POST call declared inside the
+OpenAPI 3, we should specify the post keyword. After which you can add another
 request definition.
 
 .. code-block:: yaml
@@ -248,25 +242,7 @@ request definition.
             type: string
                 maxLength: 40
 
-Inside the name of the example we can see another addition to Open Api
-specification, the override keyword. This keyword is false by default,
-and when it's value is true, then will ignore the complete definition
-of the Open Api file.
-
-Another addition to the Open Api specification is the dictionary type.
-This type expect to find a values keyword, and will peek one random
-element each time that generate a new value:
-
-.. code-block:: yaml
-
-    genre:
-        type: dictionary
-        values:
-            - mistery
-            - fiction
-            - suspense
-
-If we want to override all settings of the Open Api file you can override
+If we want to override all settings of the OpenAPI file you can override
 a method and not provide any new rules. This will attend only to your
 definition file.
 

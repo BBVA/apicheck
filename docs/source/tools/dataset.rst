@@ -3,4 +3,4 @@ Dataset
 
 .. _dataset:
 
-Builds a dataset, analise it and create behavior graphs from user navigations stored in database.
+Builds a dataset, analyzes it and creates behavior graphs based on the user navigations stored in the database.

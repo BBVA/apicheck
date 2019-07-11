@@ -1,12 +1,14 @@
 SysAdmins
 =========
 
-Find strange servers in API
----------------------------
 
-With command "dataset" try to find anomalies in headers
+Find unexpected servers serving your API
+----------------------------------------
+
+With the *dataset* command try to find anomalies in headers.
+
 
 Check remote servers for different APIs
 ---------------------------------------
 
-Load API from database. The make a query and extract if the have servers configured
+With the API loaded in the database. Use a query to check that all your configured server are in use.

@@ -17,15 +17,13 @@ API-Check - The DevSecOps toolset for REST APIs
 Why API-Check
 -------------
 
-API-Check focus not only in the security testing and hacking uses cases. The goal of the project is to be a complete toolset for ``DevSecOPs`` cycles and for different users profiles:
+API-Check focuses not only in the security testing and hacking use cases. The goal of the project is to become a complete toolset for ``DevSecOps`` cycles.
 
-The tool is aimed for different users profiles:
+The tools are aimed to diverse users profiles:
 
 - Developers
 - Systems SysAdmins
 - Security & pentesters
-
-Contributions are welcome, see CONTRIBUTING.md or skim existing tickets to see where you could help out.
 
 Documentation
 -------------
@@ -35,7 +33,7 @@ You can find the complete documentation at: `Documentation <https://apicheck.rea
 Authors
 -------
 
-APICheck was made by Security BBVA-Labs Team members:
+API-Check was made by BBVA-Labs Security team members:
 
 - `Cesar Gallego <https://github.com/CesarGallego>`_
 - `Daniel García (cr0hn) <https://github.com/cr0hn>`_
@@ -43,7 +41,7 @@ APICheck was made by Security BBVA-Labs Team members:
 License
 -------
 
-API-Check is Open Source and available under the `Apache 2 license <https://github.com/BBVA/apicheck/blob/master/LICENSE>`_.
+API-Check is Open Source Software and available under the `Apache 2 license <https://github.com/BBVA/apicheck/blob/master/LICENSE>`_.
 
 Contributions
 -------------

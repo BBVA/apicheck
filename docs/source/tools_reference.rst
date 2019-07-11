@@ -1,6 +1,6 @@
 This document contains third parties tools that are interesting for REST API.
 
-If you have an interesting tools and it is not listed, please `open an issue <https://github.com/BBVA/apicheck/issues>`_ and mark it as :samp:`thirdparty-tool`.
+If you know any interesting tool not listed here, please `open an issue <https://github.com/BBVA/apicheck/issues>`_ and mark it as :samp:`thirdparty-tool`.
 
 TNT Fuzzer
 ++++++++++

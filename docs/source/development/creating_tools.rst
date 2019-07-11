@@ -1,12 +1,12 @@
 Creating a new tools
 ====================
 
-Before start writing new tool check the :ref:`Command & tools <commands_reference>` to be sure to understand the :samp:`tool` concept.
+Before start writing new commands check the :ref:`Command & tools <commands_reference>` to be sure you understand the :samp:`command` concept properly.
 
-What's a tool?
---------------
+What is a tool?
+---------------
 
-Tool is an utility integrated into ``API-Check`` suite. It does some complex thing.
+A tool is an utility integrated into the ``API-Check`` suite. Tools are not as simple as commands.
 
 Scaffolding
 -----------
@@ -14,20 +14,20 @@ Scaffolding
 Usually, a tool have these three files:
 
 - Command Line Interface contents: :samp:`cli.py`.
-- Tool configuration structures :samp:`config.py`.
-- Actions definitions file :samp:`run.py`.
+- Tool configuration structures: :samp:`config.py`.
+- Actions definitions file: :samp:`run.py`.
 
 .. note::
 
-   These 3 files are not mandatory. The only required file is the :samp:`cli.py`
+   The only mandatory file is :samp:`cli.py`; the others can be left out.
 
 Building New tool
 -----------------
 
-``API-Check`` has an integrated manage tool to help us to develop new tools. To create new tool you can run :samp:`create-tool` action.
+``API-Check`` has an integrated management tool to help us in the development of new tools. To create a new tool you can run :samp:`create-tool` action.
 
 .. code-block:: console
 
    > at-manage create-tool my_new_tool
 
-This command will create a new scaffolding. Each file is self-documented.
+This command will create the needed scaffolding. Each file is self-documented.

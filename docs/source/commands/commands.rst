@@ -1,10 +1,9 @@
-
 ac-y2j
 ======
 
 .. _ac_y2j:
 
-This command convert a content from YAML format to JSON with indent option.
+This command converts a from YAML format to JSON optionally indenting the output.
 
 Usage examples:
 
@@ -28,7 +27,7 @@ ac-j2y
 
 .. _ac_j2y:
 
-This command convert a content from JSON format to YAML.
+This command convert from JSON format to YAML.
 
 Usage examples:
 

@@ -3,7 +3,7 @@ Send-to
 
 .. _send_to:
 
-Send API Request to given host. Optionally can send the requests through a proxy.
+Send the given HTTP API traffic. Optionally you can specify a proxy to pass through.
 
 .. image:: /_static/images/tool_send_proxy.png
 
