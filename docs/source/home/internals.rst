@@ -13,7 +13,7 @@ In \*NIX you can chain multiple commands together in a *pipeline*. Consider this
    :align: center
 
 
-In a similar fashion you can build ``API-Check`` *pipelines* chaining :samp:`commands` and :samp:`tools`. For example:
+In a similar fashion you can build ``APICheck`` *pipelines* chaining :samp:`commands` and :samp:`tools`. For example:
 
 .. image:: /_static/images/apicheck_unix_pipeline.png
    :align: center
@@ -23,7 +23,7 @@ In a similar fashion you can build ``API-Check`` *pipelines* chaining :samp:`com
 Data format
 +++++++++++
 
-To allow interoperation among :samp:`commands` and :samp:`tools` all of them share a common :samp:`JSON` data format. In other words, all of ``API-Check`` command output is :samp:`JSON` as well as the input. This allows to build pipelines (as we learnt in the previous section).
+To allow interoperation among :samp:`commands` and :samp:`tools` all of them share a common :samp:`JSON` data format. In other words, all of ``APICheck`` command output is :samp:`JSON` as well as the input. This allows to build pipelines (as we learnt in the previous section).
 
 Commands and Tools
 
@@ -35,7 +35,7 @@ Commands and Tools
 Commands & tools
 ----------------
 
-We divide ``API-Check`` components into two categories:
+We divide ``APICheck`` components into two categories:
 
 - Commands
 - Tools
@@ -97,10 +97,10 @@ The fixed value looks like the following:
 Type definition
 +++++++++++++++
 
-The type used in ``API-Check`` is a direct copy of the type definition of OpenAPI 3
+The type used in ``APICheck`` is a direct copy of the type definition of OpenAPI 3
 specification.
 Every item can be defined as an OpenAPI type. You can use custom
-types created for ``API-Check`` also. One of the allowed types is *dictionary*, that looks like:
+types created for ``APICheck`` also. One of the allowed types is *dictionary*, that looks like:
 
 .. code-block:: yaml
 

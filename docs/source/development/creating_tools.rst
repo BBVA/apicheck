@@ -6,7 +6,7 @@ Before start writing new commands check the :ref:`Command & tools <commands_refe
 What is a tool?
 ---------------
 
-A tool is an utility integrated into the ``API-Check`` suite. Tools are not as simple as commands.
+A tool is an utility integrated into the ``APICheck`` suite. Tools are not as simple as commands.
 
 Scaffolding
 -----------
@@ -24,7 +24,7 @@ Usually, a tool have these three files:
 Building New tool
 -----------------
 
-``API-Check`` has an integrated management tool to help us in the development of new tools. To create a new tool you can run :samp:`create-tool` action.
+``APICheck`` has an integrated management tool to help us in the development of new tools. To create a new tool you can run :samp:`create-tool` action.
 
 .. code-block:: console
 

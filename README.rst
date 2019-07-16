@@ -1,5 +1,5 @@
 ***********************************************
-API-Check - The DevSecOps toolset for REST APIs
+APICheck - The DevSecOps toolset for REST APIs
 ***********************************************
 
 .. image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
@@ -12,12 +12,12 @@ API-Check - The DevSecOps toolset for REST APIs
 .. figure:: https://raw.githubusercontent.com/BBVA/apicheck/master/docs/source/_static/images/apicheck-logo-150x150.png
    :align: center
 
-``API-Check`` is a complete toolset designed and created for testing REST APIs.
+``APICheck`` is a complete toolset designed and created for testing REST APIs.
 
-Why API-Check
+Why APICheck
 -------------
 
-API-Check focuses not only in the security testing and hacking use cases. The goal of the project is to become a complete toolset for ``DevSecOps`` cycles.
+APICheck focuses not only in the security testing and hacking use cases. The goal of the project is to become a complete toolset for ``DevSecOps`` cycles.
 
 The tools are aimed to diverse users profiles:
 
@@ -33,7 +33,7 @@ You can find the complete documentation at: `Documentation <https://apicheck.rea
 Authors
 -------
 
-API-Check was made by BBVA-Labs Security team members:
+APICheck was made by BBVA-Labs Security team members:
 
 - `Cesar Gallego <https://github.com/CesarGallego>`_
 - `Daniel García (cr0hn) <https://github.com/cr0hn>`_
@@ -41,7 +41,7 @@ API-Check was made by BBVA-Labs Security team members:
 License
 -------
 
-API-Check is Open Source Software and available under the `Apache 2 license <https://github.com/BBVA/apicheck/blob/master/LICENSE>`_.
+APICheck is Open Source Software and available under the `Apache 2 license <https://github.com/BBVA/apicheck/blob/master/LICENSE>`_.
 
 Contributions
 -------------

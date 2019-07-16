@@ -1,9 +1,9 @@
 Tools & commands index
 ======================
 
-This document contains a index reference for ``API-Check`` supported commands.
+This document contains a index reference for ``APICheck`` supported commands.
 
-Command are grouped in two types ``API-Check``:
+Command are grouped in two types ``APICheck``:
 
 - :ref:`Tools <tools_reference>`
 - :ref:`Commands <commands_reference>`
