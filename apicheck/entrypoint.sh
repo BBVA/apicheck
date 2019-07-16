@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 echo "**************************"
-echo " Welcome to API-Check Cli"
+echo " Welcome to APICheck Cli"
 echo "**************************"
 echo ""
-echo "You can find complete index reference at API-Check Documentation Home:"
+echo "You can find complete index reference at APICheck Documentation Home:"
 echo ""
 echo "https://apicheck.readthedocs.io/"
 echo ""

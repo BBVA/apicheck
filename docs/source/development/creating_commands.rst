@@ -1,19 +1,19 @@
 Creating a new commands
 =======================
 
-Before start writing new command check the :ref:`Command & tools <commands_reference>` to be sure to understand the :samp:`command` concept.
+Before start writing new commands check the :ref:`Command & tools <commands_reference>` to be sure you understand the :samp:`command` concept properly.
 
-What's a command?
------------------
+What is a command?
+------------------
 
-Command is a small utility integrated into ``API-Check`` suite. Usually is a **simple .py script**.
+A :samp:`command` is a small utility integrated into the ``APICheck`` suite. Usually is a **simple .py script**.
 
 Entry point
 +++++++++++
 
-To create a new command only you need to do is create a new :samp:`.py` file with the function :samp:`main()` inside. This function doesn't will receive any parameter.
+To create a new command the only thing you need to do is create a new :samp:`.py` file with the function :samp:`main()` inside. This function doesn't receive any parameters.
 
-This function will be used as entry point for ``API-Check``
+This function will be used as entry point for ``APICheck``.
 
 .. code-block:: python
    :linenos:
@@ -35,14 +35,14 @@ This function will be used as entry point for ``API-Check``
         main()
 
 
-**Passing information**
+**Passing information along**
 
-All of :samp:`commands` and :samp:`tools` in ``API-Check`` must receive configuration by to ways:
+All :samp:`commands` and :samp:`tools` in ``APICheck`` can receive configuration by to ways:
 
-- By cli parameter.
+- By command line parameters.
 - By standard input (:samp:`stdin`).
 
-This means that you command must be able to be executed in a pipeline.
+This means that your command must be able to be executed as part of a *pipeline*.
 
 .. code-block:: python
    :linenos:
@@ -68,11 +68,11 @@ This means that you command must be able to be executed in a pipeline.
     if __name__ == '__main__':
         main()
 
-**Information format**
+**Data format**
 
-As documented in section :ref:`Data format <data_format>` ``API-Check`` works internally with :samp:`JSON`. So the format received will be so.
+As documented in the section :ref:`Data format <data_format>`, ``APICheck`` works internally with :samp:`JSON`. So the format received will be so.
 
-Following previous example, we add parsing JSON format:
+Following the previous example, we add parsing JSON format:
 
 .. code-block:: python
    :linenos:
@@ -109,5 +109,4 @@ Following previous example, we add parsing JSON format:
 Output information
 ++++++++++++++++++
 
-To be able to chain your command into a a compatible ``API-Check`` pipeline, you command must output the execution result in the standard output (:samp:`stdout`).
-
+To be able to chain your command into a compatible ``APICheck`` pipeline, your command must output the execution result to the standard output (:samp:`stdout`).

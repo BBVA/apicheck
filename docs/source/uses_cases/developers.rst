@@ -6,33 +6,33 @@ Acceptance tests
 
 
 
-Check Flow navigation
----------------------
+Navigation Flow Checking
+------------------------
 
-Some steps, that inplies comples flows. You can use long test code cases or open a browser. navigate, save this session and re-run it for infinite times.
+Some steps imply complex navigation flows. Instead of writing long test code cases or opening a browser. Navigate through ``APICheck`` proxy, save the session and re-run it infinite times.
 
 
-Tracking API Versions
----------------------
+API Version Tracking
+--------------------
 
-One step in the C.I. pipeline, before to promote to the production environment, you can save the api defintion into an external database. 
+``APICheck`` can be used as an additional step in CI pipelines, just before promoting code to production environments, launch an APICheck instance to capture the real API definition.
 
-So you have tracked all of API versions promoted to producction.
+This way you would have all API versions promoted to production stored.
 
 
 Find low level bugs
---------------------
+-------------------
 
-Navigate using proxy. Then analyze with *dataset*. This tool able to you to discover some straing http headers, or some straing end-points called for non-sense cases.
+Navigate using ``APICheck``'s proxy. Then analyze with *dataset*. This tool allows you to discover strange http headers, or unusual endpoints used during the navigation. Also Cookie or JWT Token size growth.
 
-Cookie size increase analytics and JWT Token.
 
 API Diff
 --------
 
-Find differences between two API Versions
+Find differences between two API versions.
+
 
 Real World vs Definition
 ------------------------
 
-Find diferences between API definition and real usage of API
+Find differences between your API definition and the real API implementation.

@@ -6,17 +6,17 @@ Management tool for APICheck internals.
 API Definition
 --------------
 
-Load API Definition to database
+Load API definition to database.
 
 Manage stored APIs
 ------------------
 
-Manage stored APIs
+Manage stored APIs.
 
 Create Tool
 -----------
 
-Create structure for a new tool
+Create the scaffolding for a new tool.
 
 .. code-block:: console
 

@@ -28,7 +28,7 @@ ACTION_MAP = {
 
 def cli():
     parser = argparse.ArgumentParser(
-        description="API-Check manage commands"
+        description="APICheck manage commands"
     )
 
     # Add global options
