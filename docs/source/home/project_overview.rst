@@ -15,7 +15,7 @@ What is APICheck?
 Why another REST APIs tool?
 ---------------------------
 
-``APICheck`` aims to be a universal toolset for REST APIs, allowing you to mix and match its own commands, and even integrate with third party tools. This way we hope that it will be useful to a wide spectrum of users that need to deal with REST APIs.
+``APICheck`` aims to be a universal toolset for REST APIs, allowing you to mix and match its commands, and even integrate with third party tools. This way we hope that it will be useful to a wide spectrum of users that need to deal with REST APIs.
 
 We have classified our target users according to the kind of tasks they may be facing:
 
