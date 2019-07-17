@@ -19,9 +19,9 @@ Why another REST APIs tool?
 
 Having in mind the tasks our target users have to complete, we classified them into three distinct categories:
 
-- :doc:`Security Engineers / Pentesters </uses_cases/pentesters>`
+- :doc:`Security Engineers / Penetration Testers </uses_cases/pentesters>`
 - :doc:`Developers </uses_cases/developers>`
-- :doc:`System Admins </uses_cases/sysadmins>`
+- :doc:`System Administrators </uses_cases/sysadmins>`
 
 The ``APICheck`` toolset is useful for the above three user profiles.
 
