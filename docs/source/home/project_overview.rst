@@ -6,7 +6,7 @@ What is APICheck?
 
 .. _apicheck_structure:
 
-``APICheck`` is a **toolset** to help you interact with REST APIs. This means the project is a collection of tools.
+``APICheck`` is a **toolset** that can help you interact with REST APIs. This means the project is a collection of tools.
 
 .. image:: /_static/images/apicheck_001_structure.png
    :align: center
@@ -15,9 +15,9 @@ What is APICheck?
 Why another REST APIs tool?
 ---------------------------
 
-``APICheck`` aims to be a universal toolset for REST APIs, allowing you to mix and match its own commands and even integrate with third party tools. This way we hope will be useful to everybody that needs to use REST APIs.
+``APICheck`` aims to be a universal toolset for REST APIs, allowing you to mix and match its own commands, and even integrate with third party tools. This way we hope that it will be useful to a wide spectrum of users that need to deal with REST APIs.
 
-Having in mind the tasks our user base have to achieve we classified them into three distinct categories:
+Having in mind the tasks our target users have to complete, we classified them into three distinct categories:
 
 - :doc:`Security Engineers / Pentesters </uses_cases/pentesters>`
 - :doc:`Developers </uses_cases/developers>`
