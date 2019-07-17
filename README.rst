@@ -22,7 +22,7 @@ APICheck focuses not only in the security testing and hacking use cases. The goa
 The tools are aimed to diverse users profiles:
 
 - Developers
-- Systems SysAdmins
+- System Administrators
 - Security & pentesters
 
 Documentation
