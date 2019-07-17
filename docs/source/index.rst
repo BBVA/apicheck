@@ -17,10 +17,10 @@ Contents
    :maxdepth: 2
    :caption: Use cases & examples
 
-   uses_cases/uses_cases_overview
-   uses_cases/developers
-   uses_cases/pentesters
-   uses_cases/sysadmins
+   use_cases/use_cases_overview
+   use_cases/developers
+   use_cases/pentesters
+   use_cases/sysadmins
 
 .. toctree::
    :maxdepth: 2
