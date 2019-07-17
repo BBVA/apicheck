@@ -50,7 +50,7 @@ The usage of ``APICheck`` is quite simple. After :ref:`installation <installatio
 Learning by example: Discovering non-documented APIs
 ----------------------------------------------------
 
-One of the biggest problems you'll face while testing an API is the lack of documentation. The majority of REST API are not designed to be *auto-discoverable*. For this reason ``APICheck`` has the **proxy** command.
+One of the biggest problems you'll face while testing an API is the lack of documentation. The majority of REST API are not designed to be *auto-discoverable*. For this reason ``APICheck`` provides the **proxy** command.
 
 1 - Launching the proxy
 +++++++++++++++++++++++
