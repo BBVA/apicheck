@@ -55,7 +55,7 @@ One of the biggest problems you'll face while testing an API is the lack of docu
 1 - Launching the proxy
 +++++++++++++++++++++++
 
-``APICheck``'s **proxy** command is a local proxy that track all request for a specific domain. ``APICheck`` stores this requests into a database. With this data, ``APICheck`` can perform tons of operations with the API, one of them: derive the API definition and test it.
+``APICheck``'s **proxy** command is a local proxy that tracks all requests to a specific domain. ``APICheck`` stores these requests into a database. With this data, ``APICheck`` can perform tons of operations with the API, for instance, deriving the API definition and testing it.
 
 To start the proxy we execute:
 
