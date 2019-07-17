@@ -18,7 +18,7 @@ Using Pip
 
 .. note::
 
-    **MySQL Support**: If you want to install ``APICheck`` with Mysql Support use this command instead:
+    **MySQL Support**: If you want to install ``APICheck`` with MySQL Support use this command instead:
 
     .. code-block:: console
 
