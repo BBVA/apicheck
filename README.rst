@@ -28,7 +28,7 @@ The tools are aimed to diverse users profiles:
 Documentation
 -------------
 
-You can find the complete documentation at: `Documentation <https://apicheck.readthedocs.io>`_
+`Here <https://apicheck.readthedocs.io>`_ you can find the complete documentation.
 
 Authors
 -------
