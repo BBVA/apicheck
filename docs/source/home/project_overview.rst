@@ -17,7 +17,7 @@ Why another REST APIs tool?
 
 ``APICheck`` aims to be a universal toolset for REST APIs, allowing you to mix and match its own commands, and even integrate with third party tools. This way we hope that it will be useful to a wide spectrum of users that need to deal with REST APIs.
 
-Having in mind the tasks our target users have to complete, we classified them into three distinct categories:
+We have classified our target users according to the kind of tasks they may be facing:
 
 - :doc:`Security Engineers / Penetration Testers </uses_cases/pentesters>`
 - :doc:`Developers </uses_cases/developers>`
