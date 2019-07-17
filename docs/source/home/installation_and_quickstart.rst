@@ -66,7 +66,7 @@ To start the proxy we execute:
 2 - Configuring proxy and browsing
 +++++++++++++++++++++++++++++++++++
 
-Once we have the proxy running, we must `configure the browser to use it<https://www2.aston.ac.uk/library/staff/mozillaproxy/index>`_.
+Once we have the proxy running, we must `configure the browser to use it <https://www2.aston.ac.uk/library/staff/mozillaproxy/index>`_.
 
 At this stage we must browse the website we want to extract the REST API from.
 
