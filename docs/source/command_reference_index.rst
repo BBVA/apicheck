@@ -1,4 +1,4 @@
-Tools & commands index
+Tool & Command index
 ======================
 
 This document contains a index reference for ``APICheck`` supported commands.
