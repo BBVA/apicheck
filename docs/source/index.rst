@@ -8,7 +8,7 @@ Contents
    :maxdepth: 2
    :caption: The Project
 
-   home/overview_project
+   home/project_overview
    home/installation_and_quickstart
    home/internals
 
