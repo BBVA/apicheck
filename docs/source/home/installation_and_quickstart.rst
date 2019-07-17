@@ -43,7 +43,7 @@ Use this command to open an interactive CLI for API testing:
 Quick Start
 -----------
 
-The usage of ``APICheck`` is quite simple. After :ref:`install <installation>` you'll have all **tools** and **commands** available as shell commands.
+The usage of ``APICheck`` is quite simple. After :ref:`installation <installation>` you'll have all **tools** and **commands** available as shell commands.
 
 ``APICheck`` has a lot of commands. You can find the complete reference in :doc:`/command_reference_index` and a list of curated recipes grouped by use case in :doc:`/uses_cases/uses_cases_overview`.
 
