@@ -33,7 +33,7 @@ You can find the complete documentation at: `Documentation <https://apicheck.rea
 Authors
 -------
 
-APICheck was made by BBVA-Labs Security team members:
+APICheck is being developed by BBVA-Labs Security team members:
 
 - `César Gallego <https://github.com/CesarGallego>`_
 - `Daniel García (cr0hn) <https://github.com/cr0hn>`_
