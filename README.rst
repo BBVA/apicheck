@@ -23,7 +23,7 @@ The tools are aimed to diverse users profiles:
 
 - Developers
 - System Administrators
-- Security & pentesters
+- Security Engineers & Penetration Testers
 
 Documentation
 -------------
