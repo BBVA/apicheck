@@ -46,4 +46,4 @@ APICheck is Open Source Software and available under the `Apache 2 license <http
 Contributions
 -------------
 
-Contributions are very welcome. See `CONTRIBUTING.md <https://github.com/BBVA/apicheck/blob/master/CONTRIBUTING.md>`_ or skim existing tickets to see where you could help out.
+Contributions are of course welcome. See `CONTRIBUTING.md <https://github.com/BBVA/apicheck/blob/master/CONTRIBUTING.md>`_ or skim existing tickets to see where you could help out.
