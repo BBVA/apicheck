@@ -30,8 +30,10 @@ What exactly is the toolset made from?
 
 ``APICheck`` components are divided in two types:
 
-- Commands: are small utilities.
-- Tools: do more complex actions.
+Commands
+    are small utilities.
+Tools
+    do more complex actions.
 
 .. note::
 
