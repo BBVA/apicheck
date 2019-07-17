@@ -35,7 +35,7 @@ Authors
 
 APICheck was made by BBVA-Labs Security team members:
 
-- `Cesar Gallego <https://github.com/CesarGallego>`_
+- `César Gallego <https://github.com/CesarGallego>`_
 - `Daniel García (cr0hn) <https://github.com/cr0hn>`_
 
 License
