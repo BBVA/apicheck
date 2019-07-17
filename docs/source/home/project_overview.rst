@@ -28,7 +28,7 @@ The ``APICheck`` toolset is useful for the above three user profiles.
 What exactly is the toolset made from?
 --------------------------------------
 
-``APICheck`` components are divided in two types:
+``APICheck`` is comprised of two types of components:
 
 Commands
     are small utilities.
