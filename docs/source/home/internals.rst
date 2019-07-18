@@ -7,7 +7,7 @@ Pipelines & data flow
 Pipelines
 +++++++++
 
-In \*NIX you can chain multiple commands together in a *pipeline*. Consider this one:
+In \*NIX, you can chain multiple commands together in a *pipeline*. Consider this one:
 
 .. image:: /_static/images/apicheck_unix_pipeline.png
    :align: center
@@ -23,7 +23,7 @@ In a similar fashion you can build ``APICheck`` *pipelines* chaining :samp:`comm
 Data format
 +++++++++++
 
-To allow interoperation among :samp:`commands` and :samp:`tools` all of them share a common :samp:`JSON` data format. In other words, all of ``APICheck`` command output is :samp:`JSON` as well as the input. This allows to build pipelines (as we learnt in the previous section).
+To allow interoperation among :samp:`commands` and :samp:`tools`, all of them share a common :samp:`JSON` data format. In other words, ``APICheck`` commands output :samp:`JSON`, and accept it as input, too. This allows to build pipelines (as we showed in the previous section).
 
 Commands and Tools
 
@@ -35,7 +35,7 @@ Commands and Tools
 Commands & tools
 ----------------
 
-We divide ``APICheck`` components into two categories:
+``APICheck`` components fall into two categories:
 
 - Commands
 - Tools
@@ -54,24 +54,24 @@ You can compare those commands to ``awk`` or ``grep``. Small, but powerful.
 Tools
 +++++
 
-Tools are more convoluted than commands. The problem they solve is more complex. You also can chain them along with commands.
+Tools are more complex than plain commands. The problems they tackle are harder. You also can chain them together along with commands.
 
 .. _data_generation:
 
 Data generation
 ---------------
 
-Data generation tools are placed inside the `apicheck.core.generator` package. For instance `apicheck.core.generator.open_api_strategy` that implements the default data generation strategy for OpenAPI files.
+Data generation tools are placed inside the `apicheck.core.generator` package. For instance, `apicheck.core.generator.open_api_strategy`, that implements the default data generation strategy for OpenAPI files.
 
 .. note::
-    At the moment string formating is not supported.
+    At the moment, string formating is not supported.
 
 The generator uses a Python package named ``Faker`` to generate fake data following the OpenAPI specification.
 
 Request definition
 ++++++++++++++++++
 
-A request definition describe, in a very simple terms, how the request will look like.
+A request definition describes, in a very simple terms, how the request will look like.
 This definition always have the same fields:
 
 .. code-block:: yaml
@@ -85,7 +85,7 @@ This definition always have the same fields:
     body:
         [value or type]
 
-The headers are a set of key values that can hold two type of values. A fixed
+The headers are a set of key-values that can hold two types of values, either a fixed
 value or a type definition.
 
 The fixed value looks like the following:
@@ -124,11 +124,11 @@ The definition of the *userName* field would look like:
 Definition hierarchy
 ++++++++++++++++++++
 
-If several definition for the same element are found, the last read will
-remain. The default precedence order when reading is the following:
+If several definitions for the same element are found, the last one read will
+remain in effect. The default precedence order when reading is:
 
     - Open Api 3 File
-    - Rules files (readed in search order)
+    - Rules files (read in search order)
     - Global tag inside rule
     - Request definition inside endpoint
     - Request definition inside method
@@ -136,12 +136,12 @@ remain. The default precedence order when reading is the following:
 Definition override
 +++++++++++++++++++
 
-When starting a type definition from scratch, we must use de *override* keyword. The value of this keyword is *false* by default. When the value *true* is provided, the generator will use only our specification and ignore the OpenAPI specification.
+When starting a type definition from scratch, we must use the *override* keyword. The value of this keyword is *false* by default. When set to *true*, the generator will use only our specification and ignore the OpenAPI specification.
 
 OpenAPI 3 override Example
 ++++++++++++++++++++++++++
 
-You can override OpenAPI 3 type definitions using your own file this way:
+You can override OpenAPI 3 type definitions using your own file like this:
 
 .. code-block:: yaml
 
@@ -178,8 +178,8 @@ You can override OpenAPI 3 type definitions using your own file this way:
             get:
                 override: true
 
-The first part is metadata. You can query ApiCheck to get the set of
-rules using this data. Name and version are required, any other datum is
+The first part is metadata. You can query ``APICheck`` to get the set of
+rules that apply to this data. Name and version are required, any other datum is
 optional.
 
 .. code-block:: yaml
@@ -191,8 +191,8 @@ optional.
         - books
         - users
 
-The global section defines a request used as template for all other rules.
-When you include a header in this section, all requests regarding this rules
+The global section defines a request used as a template for all other rules.
+When you include a header in this section, all requests regarding these rules
 will include this value.
 
 .. code-block:: yaml
@@ -201,7 +201,7 @@ will include this value.
         headers:
             Authorization: Basic YWxhZGRpbjpvcGVuc2VzYW1l
 
-Just below this section we found the endpoints. We can define rules for
+Just below this section we find the endpoints. We can define rules for
 the endpoints. In the next example you can see a typical endpoint
 definition.
 
@@ -217,12 +217,12 @@ If you need a single rule to affect multiple endpoints at the same time, you can
     endpoints:
         /{userId}/*
 
-Inside the endpoint you can a request definition, The items you can set
+Below the endpoint you can add a request definition. The items you can set
 are listed above.
 Everything you add just below the endpoint will affect every method
 inside the endpoint.
 
-A path parameter can be defined. For instance, in this example we need to generate requests only for the user with id 500:
+A path parameter can also be defined. For instance, in this example we want to generate requests only for the user whose id is 500:
 
 .. code-block:: yaml
 
@@ -231,7 +231,7 @@ A path parameter can be defined. For instance, in this example we need to genera
             userId: 500
 
 And if we wanted to change the body of the POST call declared inside the
-OpenAPI 3, we should specify the post keyword. After which you can add another
+OpenAPI 3, we should specify the ``post`` keyword. After which you can add another
 request definition.
 
 .. code-block:: yaml
@@ -242,8 +242,8 @@ request definition.
             type: string
                 maxLength: 40
 
-If we want to override all settings of the OpenAPI file you can override
-a method and not provide any new rules. This will attend only to your
+If we want to override all settings of the OpenAPI file, you can override
+a method and not provide any new rules. This will only affect that
 definition file.
 
 .. code-block:: yaml
