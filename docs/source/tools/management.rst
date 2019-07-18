@@ -1,7 +1,7 @@
 Management tools
 ================
 
-Management tool for APICheck internals.
+Management tools for APICheck internals.
 
 API Definition
 --------------
@@ -21,4 +21,3 @@ Create the scaffolding for a new tool.
 .. code-block:: console
 
     > at-manage create-tool -d my_tool_destination/ my_tool_name
-
