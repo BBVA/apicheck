@@ -25,7 +25,7 @@ We have classified our target users according to the kind of tasks they may be f
 
 The ``APICheck`` toolset is useful for the above three user profiles.
 
-What exactly is the toolset made from?
+What exactly is the toolset made of?
 --------------------------------------
 
 ``APICheck`` is comprised of two types of components:
