@@ -37,4 +37,4 @@ Tools
 
 .. note::
 
-    You can check the complete information about :samp:`commands` and :samp:`tools` into :ref:`Core Concepts Page for more information <apicheck_structure>`
+    TODO: You can learn more about about :samp:`commands` and :samp:`tools` at the :ref:`Core Concepts <apicheck_structure>` page.
