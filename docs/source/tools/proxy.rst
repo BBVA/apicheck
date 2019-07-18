@@ -11,7 +11,7 @@ Launches a local proxy and stores all the intercepted navigation traffic into th
 Basic usage
 -----------
 
-For the simplest proxy use case you should pass a database connection string. If you don't want lo launch a database server, you can use the SQLite connector.
+For the simplest proxy use case, you should pass a database connection string. If you don't want lo launch a database server, you can use the SQLite connector.
 
 .. code-block:: console
 
@@ -20,4 +20,3 @@ For the simplest proxy use case you should pass a database connection string. If
 .. note::
 
     The connections strings for different databases follow the SQL `Alchemy format <https://docs.sqlalchemy.org/en/13/core/engines.html#database-urls>`_
-
