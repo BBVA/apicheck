@@ -1,4 +1,4 @@
-This document contains third parties tools that are useful for dealing with REST APIs.
+This document contains third party tools that are useful for dealing with REST APIs.
 
 If you know any interesting tool not listed here, please `open an issue <https://github.com/BBVA/apicheck/issues>`_ and mark it as :samp:`thirdparty-tool`.
 
