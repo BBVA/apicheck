@@ -1,7 +1,7 @@
-Creating a new commands
-=======================
+Creating a new command
+======================
 
-Before start writing new commands check the :ref:`Command & tools <commands_reference>` to be sure you understand the :samp:`command` concept properly.
+Before writing new commands, check the :ref:`Commands & Tools <commands_reference>` to be sure you understand the :samp:`command` concept adequately.
 
 What is a command?
 ------------------
@@ -11,9 +11,9 @@ A :samp:`command` is a small utility integrated into the ``APICheck`` suite. Usu
 Entry point
 +++++++++++
 
-To create a new command the only thing you need to do is create a new :samp:`.py` file with the function :samp:`main()` inside. This function doesn't receive any parameters.
+To create a new command, the only thing you need to do is create a new :samp:`.py` file with a function :samp:`main()` inside. Note that this function doesn't accept any parameters.
 
-This function will be used as entry point for ``APICheck``.
+This function will be used as the entry point by ``APICheck``.
 
 .. code-block:: python
    :linenos:
@@ -37,10 +37,10 @@ This function will be used as entry point for ``APICheck``.
 
 **Passing information along**
 
-All :samp:`commands` and :samp:`tools` in ``APICheck`` can receive configuration by to ways:
+All :samp:`commands` and :samp:`tools` in ``APICheck`` can receive configuration in two ways:
 
-- By command line parameters.
-- By standard input (:samp:`stdin`).
+- Via command line parameters.
+- Via standard input (:samp:`stdin`).
 
 This means that your command must be able to be executed as part of a *pipeline*.
 
@@ -70,7 +70,7 @@ This means that your command must be able to be executed as part of a *pipeline*
 
 **Data format**
 
-As documented in the section :ref:`Data format <data_format>`, ``APICheck`` works internally with :samp:`JSON`. So the format received will be so.
+As documented in the :ref:`Data format <data_format>` section, ``APICheck`` works internally with :samp:`JSON`. So the format received will be so.
 
 Following the previous example, we add parsing JSON format:
 
@@ -109,4 +109,4 @@ Following the previous example, we add parsing JSON format:
 Output information
 ++++++++++++++++++
 
-To be able to chain your command into a compatible ``APICheck`` pipeline, your command must output the execution result to the standard output (:samp:`stdout`).
+To be able to chain your command into a compatible ``APICheck`` pipeline, your command must output the result of the execution to the standard output (:samp:`stdout`).

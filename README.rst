@@ -22,20 +22,20 @@ APICheck focuses not only in the security testing and hacking use cases. The goa
 The tools are aimed to diverse users profiles:
 
 - Developers
-- Systems SysAdmins
-- Security & pentesters
+- System Administrators
+- Security Engineers & Penetration Testers
 
 Documentation
 -------------
 
-You can find the complete documentation at: `Documentation <https://apicheck.readthedocs.io>`_
+`Here <https://apicheck.readthedocs.io>`_ you can find the complete documentation.
 
 Authors
 -------
 
-APICheck was made by BBVA-Labs Security team members:
+APICheck is being developed by BBVA-Labs Security team members:
 
-- `Cesar Gallego <https://github.com/CesarGallego>`_
+- `César Gallego <https://github.com/CesarGallego>`_
 - `Daniel García (cr0hn) <https://github.com/cr0hn>`_
 
 License
@@ -46,4 +46,4 @@ APICheck is Open Source Software and available under the `Apache 2 license <http
 Contributions
 -------------
 
-Contributions are very welcome. See `CONTRIBUTING.md <https://github.com/BBVA/apicheck/blob/master/CONTRIBUTING.md>`_ or skim existing tickets to see where you could help out.
+Contributions are of course welcome. See `CONTRIBUTING <https://github.com/BBVA/apicheck/blob/master/CONTRIBUTING.rst>`_ or skim existing tickets to see where you could help out.
