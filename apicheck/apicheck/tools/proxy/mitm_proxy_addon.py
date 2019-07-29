@@ -3,6 +3,7 @@ import json
 import uuid
 import asyncio
 import logging
+import warnings
 
 # Always use absolute imports in mitmproxy scripts
 from apicheck.db import get_engine, ProxyLogs, APIMetadata
@@ -42,9 +43,15 @@ class APICheckProxyMode:
         #
         # If not 'learning mode' is set, only stores the log
         #
-        if self.proxy_config.promiscuous is False \
-                and flow.request.host not in self.proxy_config.domain:
+        if not self.proxy_config.promiscuous:
+            warnings.warn("Promiscuous mode not enabled. No navigation data will be logged")
             return
+
+        if self.proxy_config.domain:  # No domain specified is interpreted as 'log all traffic'
+            if flow.request.host not in self.proxy_config.domain:
+                warnings.warn("Some flows are filtered. Enable debug mode for details")
+                logger.debug(f"Skipping filtered domain {flow.request.host !r}")
+                return
 
         # if self.proxy_config.learning_mode:
         #     asyncio.get_event_loop().create_task(self.save_definition(flow))
