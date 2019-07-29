@@ -48,11 +48,11 @@ def find_commands() -> list:
     This function finds apicheck cli commands to build the cli entry-points
     """
 
-    tools_base_path = os.path.join(apicheck_home, "commands")
+    commands_base_path = os.path.join(apicheck_home, "commands")
 
     entry_points = []
 
-    for command in os.listdir(tools_base_path):
+    for command in os.listdir(commands_base_path):
         if command.startswith("_"):
             continue
 
