@@ -4,9 +4,9 @@ import uuid
 import asyncio
 import logging
 
+# Always use absolute imports in mitmproxy scripts
 from apicheck.db import get_engine, ProxyLogs, APIMetadata
-
-from .config import RunningConfig
+from apicheck.tools.proxy.config import RunningConfig
 
 logger = logging.getLogger("apicheck")
 
