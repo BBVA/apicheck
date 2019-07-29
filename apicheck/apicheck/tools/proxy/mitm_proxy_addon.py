@@ -167,9 +167,9 @@ class APICheckProxyMode:
             await connection.execute(ProxyLogs.insert().values(
                 proxy_session_id=self.proxy_session_id,
                 request=plain_request,
-        except Exception as e:
-            logger.error(f"error saving proxy logs: {e}")
                 response=plain_response))
+        except:
+            logger.exception("Saving proxy logs")
 
 
 addons = [
