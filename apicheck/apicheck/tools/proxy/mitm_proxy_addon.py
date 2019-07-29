@@ -31,6 +31,8 @@ class APICheckProxyMode:
 
     def response(self, flow):
         """This functions overwrites the MITM Proxy event 'response'"""
+
+        logger.debug(f"Processing flow on host {flow.request.data.host !r}")
         #
         # Only if proxy is set as 'learning mode' will storage the definitions.
         # In this case, after save the definition, 'save_definition' method
@@ -144,6 +146,7 @@ class APICheckProxyMode:
     async def save_into_log(self, flow, request_id: int = None):
         """Save request / response into ProxyLog database table"""
 
+        logger.debug(f"Saving traffic to host {flow.request.data.host !r} to Proxy Logs")
         #
         # Doesn't store assets content, by default
         #
