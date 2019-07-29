@@ -171,6 +171,7 @@ def run(running_config: RunningConfig):
     # Attach addon
     #
     args.extend([
+        "--quiet",
         "--cert",
         f"*={cert_path}",
         "-s",
