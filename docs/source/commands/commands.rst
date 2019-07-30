@@ -43,3 +43,23 @@ Usage examples:
 .. code-block:: console
 
     > cat petstore-swagger.json | ac-j2y  > petstore-swagger.yaml
+
+
+ac-replay
+=========
+
+.. _ac_replay:
+
+This command replays saved proxy logs to network.
+
+Usage examples:
+
+.. code-block:: console
+
+    > ac-replay -C sqlite:///proxy.sqlite3
+    [ ... JSON CONTENT ... ]
+
+.. code-block:: console
+
+    > ac-replay -C sqlite:///proxy.sqlite3 --multiplier 10  # Ten times faster
+    [ ... JSON CONTENT ... ]
