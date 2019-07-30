@@ -1,3 +1,4 @@
+import base64
 import re
 import json
 import uuid
@@ -126,6 +127,9 @@ class APICheckProxyMode:
 
         ret = {}
         for x, y in data.__dict__.items():
+            if x == "content":
+                continue
+
             if x == "headers" or x.startswith("_"):
                 continue
 
@@ -142,6 +146,9 @@ class APICheckProxyMode:
             for x, y in data.headers.fields
         }
 
+        if "content" in content:
+            ret["content"] = base64.b64encode(content["content"]).decode("ASCII")
+
         return ret
 
     def bytes_dict_to_string(self, bytes_dict: dict) -> dict:
@@ -153,25 +160,25 @@ class APICheckProxyMode:
     async def save_into_log(self, flow, request_id: int = None):
         """Save request / response into ProxyLog database table"""
 
-        logger.debug(f"Saving traffic to host {flow.request.data.host !r} to Proxy Logs")
-        #
-        # Doesn't store assets content, by default
-        #
-        exclude = None
-        if not self.proxy_config.store_assets_content:
-            content_type = flow.response.data.headers[b"content-type"]
-            if content_type not in VALID_CONTENT_TYPES:
-                exclude = "content"
-
-        plain_request = json.dumps(self.clean_content(flow.request.__dict__))
-        plain_response = json.dumps(self.clean_content(
-            flow.response.__dict__, exclude=exclude
-        ))
-
         #
         # Store into logs
         #
         try:
+            logger.debug(f"Saving traffic to host {flow.request.data.host !r} to Proxy Logs")
+            #
+            # Doesn't store assets content, by default
+            #
+            exclude = None
+            if not self.proxy_config.store_assets_content:
+                content_type = flow.response.data.headers[b"content-type"]
+                if content_type not in VALID_CONTENT_TYPES:
+                    exclude = "content"
+
+            plain_request = json.dumps(self.clean_content(flow.request.__dict__))
+            plain_response = json.dumps(self.clean_content(
+                flow.response.__dict__, exclude=exclude
+            ))
+
             connection = await self.db_connection()
 
             await connection.execute(ProxyLogs.insert().values(
