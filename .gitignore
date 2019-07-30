@@ -140,7 +140,10 @@ Vagrantfile
 
 # VSCode
 .vscode
-apicheck/mydatabase.sqlite3
 apicheck/salida.h5
 apicheck/salida.json
 .mypy_cache/
+
+# Proxy traffic database
+*.sqlite3
+*.sqlite
