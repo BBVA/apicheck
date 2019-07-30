@@ -4,7 +4,7 @@ from sqlalchemy import and_
 from apicheck.db import ProxyLogs, get_engine
 
 
-async def get_proxy_logs(log_id: int) -> Iterator[dict]:
+async def get_proxy_logs(log_id: int = None) -> Iterator[dict]:
     """
     This method returns an iterator with the proxy logs structures.
 
@@ -18,11 +18,9 @@ async def get_proxy_logs(log_id: int) -> Iterator[dict]:
     """
     connection = await get_engine().connect()
 
-    _logs = await connection.execute(ProxyLogs.select().where(and_(
-        ProxyLogs.c.id
-    )))
+    _logs = await connection.execute(ProxyLogs.select())
 
-    async for log in await _logs.fetchall():
+    for log in await _logs.fetchall():
         yield {
             "request": log["request"],
             "response": log["response"]
