@@ -1,5 +1,0 @@
-tinydb
-pyyaml
-pymongo
-openapi3
-python-slugify
