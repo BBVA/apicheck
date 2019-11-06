@@ -1,0 +1,10 @@
+{
+  "host": "nvd.nist.gov",
+  "method": "get",
+  "scheme": "INVALID",
+  "httpVersion": "1.1",
+  "headers": {
+    "User-Agent": "curl/7.54.0",
+    "Accept": "*/*"
+  }
+}
