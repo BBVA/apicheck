@@ -1,1 +1,2 @@
+#!/bin/sh
 python3.7 setup.py install
