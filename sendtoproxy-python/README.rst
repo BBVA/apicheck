@@ -6,10 +6,10 @@ This tool send stdin request to a remote proxy.
 Install
 -------
 
-Shell mode
-++++++++++
+Generic
++++++++
 
-sh INSTALL
+./INSTALL
 
 Python mode
 +++++++++++
