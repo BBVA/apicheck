@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Observable, empty, from, of } from "rxjs";
 import { flatMap } from "rxjs/operators";
 import axios from "axios";
