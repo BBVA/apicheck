@@ -32,11 +32,11 @@ setup(
     name='apicheck-sendtoproxy',
     version=VERSION,
     install_requires=REQUIREMENTS,
+    include_package_data=True,
     url='https://github.com/bbva/apicheck',
     license='MIT',
     author='BBVA-Labs Team',
     packages=find_packages(),
-    include_package_data=True,
     entry_points={
         'console_scripts': {
             "ac-sendtoproxy = apicheck_sendtoproxy.sendtoproxy:main"
