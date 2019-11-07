@@ -1,0 +1,10 @@
+{
+  "request": {
+    "url": "https://nvd.nist.gov/",
+    "method": "get",
+    "headers": {
+      "User-Agent": "curl/7.54.0",
+      "Accept": "*/*"
+    }
+  }
+}

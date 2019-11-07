@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 
 import requests
@@ -12,6 +13,10 @@ from dataclasses import dataclass
 requests.packages.urllib3.disable_warnings()
 
 
+class UnknownException(Exception):
+    pass
+
+
 class InvalidJsonFormat(Exception):
     pass
 
@@ -22,41 +27,11 @@ class InvalidProxyFormat(Exception):
 
 @dataclass
 class Request:
-    #
-    # Schema format from: https://json-schema.org/understanding-json-schema/
-    #
-    # SCHEMA = {}
-    SCHEMA = {
-        "type": "object",
-        "properties": {
-            "path": {"type": "string"},
-            "host": {"type": "string"},
-            "method": {"type": "string"},
-            "scheme": {
-                "type": "string",
-                "enum": ["http", "https", "websocket"]
-            },
-            "body": {"type": "string"},
-            "httpVersion": {
-                "type": "string",
-                "enum": ["1.0", "1.1", "2"]
-            },
-            "headers": {
-                "type": "object",
-                "minItems": 0,
-                "uniqueItems": True
-            }
-        },
-        "required": ["path", "host"]
-    }
 
-    path: str
-    host: str
-    method: str = "GET"
-    scheme: str = "http"
+    url: str
     body: str = None
+    method: str = "GET"
     headers: dict = None
-    httpVersion: str = "1.1"
 
     @classmethod
     def from_json(cls, json_data: str) -> object or InvalidJsonFormat:
@@ -68,25 +43,26 @@ class Request:
 
         # Check json format
         try:
-            jsonschema.validate(loaded_json, schema=Request.SCHEMA)
+            # Load json-schema for validation
+            with open(os.path.join(os.path.dirname(__file__),
+                                   "json-schema.json"), "r") as f:
+                json_schema = json.load(f)
+
+            jsonschema.validate(loaded_json, schema=json_schema)
         except jsonschema.ValidationError as e:
             raise InvalidJsonFormat(
                 f"JSON data doesn't have correct format: {e}"
             )
+        except Exception as e:
+            raise UnknownException(e)
 
-        return cls(**loaded_json)
+        return cls(**loaded_json["request"])
 
     # def __str__(self):
     #     return pprint.pprint(self.__dict__)
 
-    @property
-    def url(self):
-        return f"{self.scheme}://{self.host}{self.path}"
-
     def __post_init__(self):
         self.method = self.method.lower()
-        if not self.path.startswith("/"):
-            self.path = f"/{self.path}"
 
 
 def parse_proxy(proxy: str) -> str or InvalidProxyFormat:
