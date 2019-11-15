@@ -1,0 +1,84 @@
+= Spec
+César Gallego <cesar.gallego.next@bbva.com>
+v0.3.1, 2019-11-15
+
+This document contains the connecting protocol between ApiCheck tools. In order
+to achive toolset integration you must follow this principles and protocols.
+
+== ApiCheck
+ApiCheck is a data driven toolset. The most important core concept is how the
+data will be processed. ApiCheck only has one kind of message, the request and
+response data object (ReqRes).
+
+The ReqRes data object has the following fields:
+
+ * request
+ * response
+ * meta
+
+A valid ReqRes data object must have at least a request. Response and meta
+fields are optional.
+
+IMPORTANT: A ReqRes will be a valid json encoded object.
+
+A ReqRes object must have allways the request. There is no response whitout
+request.
+
+=== Request
+The request will encapsulate all the information in the most resumed way. The
+expected fields are:
+
+ * url: the full url required
+ * method: the http method to be used
+ * headers: a json object with all headers
+ * body: a optional body
+
+WARNING: Multiheaders will be encapsulated as lists.
+
+The body will be allways a string, if original data is binary use base64
+encoding.
+
+=== Response
+The response will have the following fields:
+
+ * status: the response status code
+ * reason: optional reason
+ * headers: a json object will all headers.
+ * body: a optional body
+
+WARNING: Multiheaders will be encapsulated as lists.
+
+=== Meta
+This json encoded object will hold whatever you need. Please consider keep
+original fields unchanged and use meta for everything else.
+
+== Tools as commands
+Every ApiCheck tool is a command that read a ReqRes from stdin and write a
+ReqRes to stdout.
+
+With the current ReqRes form we can find the following tools:
+
+ * Generator: writes a ReqRes to stdout
+ * Transformer: reads a ReqRes from stdin and writes a ReqRes to stdout
+ * Action: reads a ReqRes from stdin
+
+TIP: On Generators and Actions you can use stdin and stdout as you want.
+ApiCheck Spec only take care of ReqRes data object.
+
+== Developer tools
+To make life easier we provide several tools to help developer in their tasks.
+
+TIP: All helper tools are focused on ReqRes data object.
+
+=== Request enforcer
+The request enforcer will use json format files to check if the format are
+correct.
+
+=== Response enforcer
+The response enforcer will use json format files to check if the format are
+correct.
+
+=== Transformer helper
+The most hard part is the transformer. Because requieres a complete rest server.
+We encourage you to take a look on mountebank, or similar tools. 
+
