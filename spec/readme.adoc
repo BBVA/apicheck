@@ -5,6 +5,8 @@ ifdef::env-github[]
 :important-caption: :heavy_exclamation_mark:
 :caution-caption: :fire:
 :warning-caption: :warning:
+:toc:
+:toc-placement!:
 endif::[]
 César Gallego <cesar.gallego.next@bbva.com>
 v0.3.1, 2019-11-15
@@ -13,6 +15,9 @@ This document contains the connecting protocol between ApiCheck tools. In order
 to achive toolset integration you must follow this principles and protocols.
 
 == ApiCheck
+
+toc::[]
+
 ApiCheck is a data driven toolset. The most important core concept is how the
 data will be processed. ApiCheck only has one kind of message, the request and
 response data object (ReqRes).
