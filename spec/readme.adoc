@@ -26,9 +26,9 @@ The ReqRes data object has the following fields:
 
  * request
  * response
- * meta
+ * extra
 
-A valid ReqRes data object must have at least a request. Response and meta
+A valid ReqRes data object must have at least a request. Response and extra
 fields are optional.
 
 IMPORTANT: A ReqRes will be a valid json encoded object.
@@ -41,28 +41,29 @@ The request will encapsulate all the information in the most resumed way. The
 expected fields are:
 
  * url: the full url required
+ * version: the http version
  * method: the http method to be used
  * headers: a json object with all headers
  * body: a optional body
 
 WARNING: Multiheaders will be encapsulated as lists.
 
-The body will be allways a string, if original data is binary use base64
-encoding.
+The body will be allways a base 64 encoded string.
 
 === Response
 The response will have the following fields:
 
  * status: the response status code
+ * version: the http version
  * reason: optional reason
  * headers: a json object will all headers.
  * body: a optional body
 
 WARNING: Multiheaders will be encapsulated as lists.
 
-=== Meta
+=== Extra
 This json encoded object will hold whatever you need. Please consider keep
-original fields unchanged and use meta for everything else.
+original fields unchanged and use extra for everything else.
 
 == Tools as commands
 Every ApiCheck tool is a command that read a ReqRes from stdin and write a
