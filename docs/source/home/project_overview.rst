@@ -8,9 +8,6 @@ What is APICheck?
 
 ``APICheck`` is a **toolset** that can help you interact with REST APIs. This means the project is a collection of tools.
 
-.. image:: /_static/images/apicheck_001_structure.png
-   :align: center
-
 
 Why another REST APIs tool?
 ---------------------------
@@ -19,22 +16,20 @@ Why another REST APIs tool?
 
 We have classified our target users according to the kind of tasks they may be facing:
 
-- :doc:`Security Engineers / Penetration Testers </use_cases/pentesters>`
-- :doc:`Developers </use_cases/developers>`
-- :doc:`System Administrators </use_cases/sysadmins>`
+- Security Engineers / Penetration Testers
+- Developers
+- System Administrators
 
-The ``APICheck`` toolset is useful for the above three user profiles.
 
-What exactly is the toolset made of?
---------------------------------------
+Pipelines & data flow
+---------------------
 
-``APICheck`` is comprised of two types of components:
+``API-Check`` was born as small interoperable suite of tools. Small tools with very specific function.
 
-Commands
-    are small utilities.
-Tools
-    do more complex actions.
+As \*NIX systems does, you can chain multiple commands together in a *pipeline*. Consider this one:
 
-.. note::
+.. image:: /_static/images/apicheck_unix_pipeline.png
+   :align: center
 
-    TODO: You can learn more about about :samp:`commands` and :samp:`tools` at the :ref:`Core Concepts <apicheck_structure>` page.
+With ``API-Check`` you can do the same.
+

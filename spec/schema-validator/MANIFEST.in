@@ -1,0 +1,17 @@
+include requirements.txt README.rst apicheck_schema_validator/request-json-schema.json
+
+recursive-exclude * __pycache__
+recursive-exclude * *.pyc
+recursive-exclude * *.pyo
+recursive-exclude * *.orig
+recursive-exclude * .DS_Store
+global-exclude __pycache__/*
+global-exclude .cache
+global-exclude .tox
+global-exclude .deps/*
+global-exclude *.so
+global-exclude *.pyd
+global-exclude *.pyc
+global-exclude .git*
+global-exclude .DS_Store
+global-exclude .mailmap

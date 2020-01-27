@@ -1,5 +1,5 @@
-Creating a new tool
-===================
+Creating a new command
+======================
 
 Before writing new commands, check the :ref:`Commands & Tools <commands_reference>` to be sure you understand the :samp:`command` concept adequately.
 
