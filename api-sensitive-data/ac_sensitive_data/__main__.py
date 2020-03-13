@@ -113,6 +113,8 @@ def analyze(args: argparse.Namespace):
     rules = _load_rules(args)
     ignores = set(_load_ignore_ids(args))
 
+    content_json: dict  = json.loads(content)
+
     found_issues = []
 
     # Matching
