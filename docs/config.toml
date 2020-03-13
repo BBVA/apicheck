@@ -1,3 +1,5 @@
-baseURL = "http://example.org/"
+baseURL = "https://bbva.github.io/apicheck/"
 languageCode = "en-us"
-title = "My New Hugo Site"
+title = "APICheck Project page"
+RelativeURLs=true
+CanonifyURLs=true
