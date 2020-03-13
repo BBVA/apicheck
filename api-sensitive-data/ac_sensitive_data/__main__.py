@@ -102,37 +102,45 @@ def _load_ignore_ids(args: argparse.Namespace) -> List[str]:
 
 
 def analyze(args: argparse.Namespace):
+
+    found_issues = []
+
     # -------------------------------------------------------------------------
     # Load Dockerfile by stdin or parameter
     # -------------------------------------------------------------------------
     if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
-        content = sys.stdin.read()
+
+        #
+        # APICheck input JSON format line by line. The JSON will be one per
+        # line
+        #
+        for content in sys.stdin.readlines():
+
+            rules = _load_rules(args)
+            ignores = set(_load_ignore_ids(args))
+
+            # this var contains JSON data in APICheck format
+            content_json: dict = json.loads(content)
+
+            # Matching
+            for rule in rules:
+
+                if rule["id"] in ignores:
+                    continue
+
+                #
+                # TODO: here the logic
+                #
+                regex = re.search(rule["regex"], content)
+
+                if regex:
+                    res = rule.copy()
+                    del res["regex"]
+
+                    found_issues.append(res)
     else:
-        raise FileNotFoundError("Input data needed")
-
-    rules = _load_rules(args)
-    ignores = set(_load_ignore_ids(args))
-
-    content_json: dict  = json.loads(content)
-
-    found_issues = []
-
-    # Matching
-    for rule in rules:
-
-        if rule["id"] in ignores:
-            continue
-
-        #
-        # TODO: here the logic
-        #
-        regex = re.search(rule["regex"], content)
-
-        if regex:
-            res = rule.copy()
-            del res["regex"]
-
-            found_issues.append(res)
+        raise FileNotFoundError("Input data must be entered as a UNIX "
+                                "pipeline")
 
     _process_results(args, found_issues)
 

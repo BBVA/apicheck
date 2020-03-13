@@ -2,4 +2,4 @@
   description: Find plain text password in HTTP responses
   regex: '([pP][aA][sS][sS][wW][oO][rR][dD])'
   severity: Medium
-  searchIn: response  # Allowed values: response, request, both- id: core-001
+  searchIn: response  # Allowed values: response, request, both
