@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Kube theme for Hugo on APICheck Project page</title>
-    <link>http://apicheck.cr0hn.com/</link>
-    <description>Recent content in Kube theme for Hugo on APICheck Project page</description>
+    <title>Docs on APICheck Project page</title>
+    <link>http://apicheck.cr0hn.com/docs/</link>
+    <description>Recent content in Docs on APICheck Project page</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 10 Apr 2017 16:43:36 +0100</lastBuildDate>
     
-	<atom:link href="http://apicheck.cr0hn.com/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://apicheck.cr0hn.com/docs/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Welcome to Kube</title>
-      <link>http://apicheck.cr0hn.com/blog/welcome/</link>
-      <pubDate>Thu, 02 Mar 2017 21:56:55 +0100</pubDate>
-      
-      <guid>http://apicheck.cr0hn.com/blog/welcome/</guid>
-      <description>Welcome to Kube – an open source documentation like theme for Hugo Hi there and welcome to kube - my two theme for the static site generator hugo. kube is open source and can be found on kube. This article is just a demo post and shows you the style of common used elements.
-Bear claw danish chocolate lollipop soufflé jelly. Apple pie chocolate cake jelly-o icing bonbon. Gingerbread pastry fruitcake muffin chocolate bar cheesecake.</description>
-    </item>
     
     <item>
       <title>Quick Start</title>
@@ -46,25 +36,6 @@ Bear claw danish chocolate lollipop soufflé jelly. Apple pie chocolate cake jel
       
       <guid>http://apicheck.cr0hn.com/docs/typography/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>Typography with kube</title>
-      <link>http://apicheck.cr0hn.com/blog/typography/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://apicheck.cr0hn.com/blog/typography/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Prototyping with markdown</title>
-      <link>http://apicheck.cr0hn.com/blog/prototyping/</link>
-      <pubDate>Sun, 02 Apr 2017 22:01:15 +0100</pubDate>
-      
-      <guid>http://apicheck.cr0hn.com/blog/prototyping/</guid>
-      <description>I have been working on a large set of documentation for a prototype that will eventually make it into a product. One issue with the publishing system at my company is that it makes doing prototypes, or really anything not within the rigidly and narrowly scoped model, difficult to set up. It takes a lot of work just to get to the point where you can begin writing.
-Since time was of the essence and writing is expensive, I decided to do the prototype outside of the publishing system.</description>
     </item>
     
     <item>
@@ -111,15 +82,6 @@ Since time was of the essence and writing is expensive, I decided to do the prot
       
       <guid>http://apicheck.cr0hn.com/docs/labels/</guid>
       <description>&amp;lt;!&amp;ndash; html &amp;ndash;&amp;gt;&amp;lt;spanclass=&amp;quot;label custom&amp;quot;&amp;gt;Label&amp;lt;/span&amp;gt;&amp;lt;spanclass=&amp;quot;label badge custom&amp;quot;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;spanclass=&amp;quot;label tag custom&amp;quot;&amp;gt;Tag&amp;lt;/span&amp;gt;</description>
-    </item>
-    
-    <item>
-      <title>Messages</title>
-      <link>http://apicheck.cr0hn.com/blog/messages/</link>
-      <pubDate>Mon, 10 Apr 2017 16:41:34 +0100</pubDate>
-      
-      <guid>http://apicheck.cr0hn.com/blog/messages/</guid>
-      <description></description>
     </item>
     
     <item>
@@ -184,15 +146,6 @@ Since time was of the essence and writing is expensive, I decided to do the prot
       
       <guid>http://apicheck.cr0hn.com/docs/sticky/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>Collapse</title>
-      <link>http://apicheck.cr0hn.com/blog/collapse/</link>
-      <pubDate>Mon, 10 Apr 2017 16:42:50 +0100</pubDate>
-      
-      <guid>http://apicheck.cr0hn.com/blog/collapse/</guid>
-      <description>&amp;lt;divid=&amp;quot;my-collapse-api&amp;quot;data-component=&amp;quot;collapse&amp;quot;&amp;gt;&amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;h4&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;a&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-attr&amp;quot;&amp;gt;href&amp;lt;/span&amp;gt;=&amp;lt;span class=&amp;quot;hljs-string&amp;quot;&amp;gt;&amp;quot;#box-1&amp;quot;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-attr&amp;quot;&amp;gt;class&amp;lt;/span&amp;gt;=&amp;lt;span class=&amp;quot;hljs-string&amp;quot;&amp;gt;&amp;quot;collapse-toggle&amp;quot;&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt;...&amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;/&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;a&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;/&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;h4&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;div&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-attr&amp;quot;&amp;gt;class&amp;lt;/span&amp;gt;=&amp;lt;span class=&amp;quot;hljs-string&amp;quot;&amp;gt;&amp;quot;collapse-box hide&amp;quot;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-attr&amp;quot;&amp;gt;id&amp;lt;/span&amp;gt;=&amp;lt;span class=&amp;quot;hljs-string&amp;quot;&amp;gt;&amp;quot;box-1&amp;quot;&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt;...&amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;/&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;div&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;h4&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;a&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-attr&amp;quot;&amp;gt;href&amp;lt;/span&amp;gt;=&amp;lt;span class=&amp;quot;hljs-string&amp;quot;&amp;gt;&amp;quot;#box-2&amp;quot;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-attr&amp;quot;&amp;gt;class&amp;lt;/span&amp;gt;=&amp;lt;span class=&amp;quot;hljs-string&amp;quot;&amp;gt;&amp;quot;collapse-toggle&amp;quot;&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt;...&amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;/&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;a&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;/&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;h4&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;div&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-attr&amp;quot;&amp;gt;class&amp;lt;/span&amp;gt;=&amp;lt;span class=&amp;quot;hljs-string&amp;quot;&amp;gt;&amp;quot;collapse-box hide&amp;quot;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-attr&amp;quot;&amp;gt;id&amp;lt;/span&amp;gt;=&amp;lt;span class=&amp;quot;hljs-string&amp;quot;&amp;gt;&amp;quot;box-2&amp;quot;&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt;...&amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;/&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;div&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;h4&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;a&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-attr&amp;quot;&amp;gt;href&amp;lt;/span&amp;gt;=&amp;lt;span class=&amp;quot;hljs-string&amp;quot;&amp;gt;&amp;quot;#box-3&amp;quot;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-attr&amp;quot;&amp;gt;class&amp;lt;/span&amp;gt;=&amp;lt;span class=&amp;quot;hljs-string&amp;quot;&amp;gt;&amp;quot;collapse-toggle&amp;quot;&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt;...&amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;/&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;a&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;/&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;h4&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-tag&amp;quot;&amp;gt;&amp;amp;lt;&amp;lt;span class=&amp;quot;hljs-name&amp;quot;&amp;gt;div&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-attr&amp;quot;&amp;gt;class&amp;lt;/span&amp;gt;=&amp;lt;span class=&amp;quot;hljs-string&amp;quot;&amp;gt;&amp;quot;collapse-box hide&amp;quot;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;hljs-attr&amp;quot;&amp;gt;id&amp;lt;/span&amp;gt;=&amp;lt;span class=&amp;quot;hljs-string&amp;quot;&amp;gt;&amp;quot;box-3&amp;quot;&amp;lt;/span&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt;.</description>
     </item>
     
     <item>
@@ -269,42 +222,6 @@ Since time was of the essence and writing is expensive, I decided to do the prot
       
       <guid>http://apicheck.cr0hn.com/docs/utils/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>Inline 🐣Text Styles</title>
-      <link>http://apicheck.cr0hn.com/blog/inline-style/</link>
-      <pubDate>Sun, 02 Apr 2017 21:56:55 +0100</pubDate>
-      
-      <guid>http://apicheck.cr0hn.com/blog/inline-style/</guid>
-      <description>Chocolate tiramisu pastry a link cotton candy sesame snaps. Dessert cake chocolate bar a bold part sugar plum bonbon marshmallow lollipop toffee soufflé. Donut caramels chocolate bar. Oat cake cookie a marked part cheesecake donut. Jelly-o $code marzipan cake. Bonbon sesame snaps chocolate an italic part oat cake pudding sweet roll caramels bonbon. Soufflé muffin 👻 gummies sugar plum dessert bonbon bear claw. Sweet ice cream jujubes. Marzipan sugar plum pastry chocolate ⌘+A bar fruitcake.</description>
-    </item>
-    
-    <item>
-      <title>Company</title>
-      <link>http://apicheck.cr0hn.com/company/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://apicheck.cr0hn.com/company/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Password Recovery</title>
-      <link>http://apicheck.cr0hn.com/password-recovery/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://apicheck.cr0hn.com/password-recovery/</guid>
-      <description>&amp;lt;div class=&amp;quot;form-item&amp;quot;&amp;gt; &amp;lt;label&amp;gt;Your email &amp;lt;span class=&amp;quot;error&amp;quot; id=&amp;quot;user-email-validation-error&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/label&amp;gt; &amp;lt;input type=&amp;quot;email&amp;quot; name=&amp;quot;user-email&amp;quot; autofocus=&amp;quot;true&amp;quot; autocomplete=&amp;quot;off&amp;quot; style=&amp;quot;background-image: url(&amp;amp;quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&amp;amp;quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;&amp;quot;&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p&amp;gt; &amp;lt;button class=&amp;quot;button primary width-100&amp;quot;&amp;gt;Send&amp;lt;/button&amp;gt; &amp;lt;/p&amp;gt; &amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;/account/&amp;quot; class=&amp;quot;small muted&amp;quot;&amp;gt;Back to Log In&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;  </description>
-    </item>
-    
-    <item>
-      <title>Sign In</title>
-      <link>http://apicheck.cr0hn.com/account/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://apicheck.cr0hn.com/account/</guid>
-      <description>&amp;lt;div class=&amp;quot;form-item&amp;quot;&amp;gt; &amp;lt;label&amp;gt;Email &amp;lt;span id=&amp;quot;user-email-validation-error&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/label&amp;gt; &amp;lt;input type=&amp;quot;email&amp;quot; name=&amp;quot;user-email&amp;quot; autofocus=&amp;quot;true&amp;quot; autocomplete=&amp;quot;off&amp;quot; style=&amp;quot;background-image: url(&amp;amp;quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&amp;amp;quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;&amp;quot;&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;quot;form-item&amp;quot;&amp;gt; &amp;lt;label&amp;gt;Password &amp;lt;span id=&amp;quot;user-password-validation-error&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/label&amp;gt; &amp;lt;input type=&amp;quot;password&amp;quot; name=&amp;quot;user-password&amp;quot; autocomplete=&amp;quot;off&amp;quot; style=&amp;quot;background-image: url(&amp;amp;quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&amp;amp;quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;&amp;quot;&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p&amp;gt;&amp;lt;button class=&amp;quot;button primary width-100&amp;quot;&amp;gt;Log in&amp;lt;/button&amp;gt;&amp;lt;/p&amp;gt; &amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;/password-recovery/&amp;quot; class=&amp;quot;small muted&amp;quot;&amp;gt;Forgot password?&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt; &amp;lt;p class=&amp;quot;small&amp;quot;&amp;gt;If you have any questions about authorization or you&#39;re our customer but haven&#39;t receive your login credentials, just send us a short email at &amp;lt;b&amp;gt;support@company.</description>
     </item>
     
   </channel>

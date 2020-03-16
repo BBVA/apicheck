@@ -3,15 +3,214 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://apicheck.cr0hn.com/blog/welcome/</loc>
+    <lastmod>2017-03-02T21:56:55+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/quick-start/</loc>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/custom-plugins/</loc>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/typography/</loc>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/blog/typography/</loc>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/blog/prototyping/</loc>
+    <lastmod>2017-04-02T22:01:15+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/grid/</loc>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/tables/</loc>
+    <lastmod>2017-04-10T16:40:43+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/forms/</loc>
+    <lastmod>2017-04-10T16:40:50+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/buttons/</loc>
+    <lastmod>2017-04-10T16:41:16+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/labels/</loc>
+    <lastmod>2017-04-10T16:40:43+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/blog/messages/</loc>
+    <lastmod>2017-04-10T16:41:34+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/messages/</loc>
+    <lastmod>2017-04-10T16:41:34+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/tabs/</loc>
+    <lastmod>2017-04-10T16:41:40+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/breadcrumbs/</loc>
+    <lastmod>2017-04-10T16:41:54+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/pagination/</loc>
+    <lastmod>2017-04-10T16:42:03+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/dropdown/</loc>
+    <lastmod>2017-04-10T16:42:12+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/modal/</loc>
+    <lastmod>2017-04-10T16:42:18+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/sticky/</loc>
+    <lastmod>2017-04-10T16:42:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/blog/collapse/</loc>
+    <lastmod>2017-04-10T16:42:50+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/collapse/</loc>
+    <lastmod>2017-04-10T16:42:50+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/offcanvas/</loc>
+    <lastmod>2017-04-10T16:42:43+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/toggleme/</loc>
+    <lastmod>2017-04-10T16:42:59+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/animation/</loc>
+    <lastmod>2017-04-10T16:43:08+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/colors/</loc>
+    <lastmod>2017-04-10T16:43:14+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/sizing/</loc>
+    <lastmod>2017-04-10T16:43:21+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/mixins/</loc>
+    <lastmod>2017-04-10T16:43:36+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/utils/</loc>
+    <lastmod>2017-04-10T16:43:30+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/docs/</loc>
+    <lastmod>2017-04-10T16:43:36+01:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://apicheck.cr0hn.com/</loc>
+    <lastmod>2017-04-10T16:43:36+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/blog/</loc>
+    <lastmod>2017-04-10T16:42:50+01:00</lastmod>
   </url>
   
   <url>
     <loc>http://apicheck.cr0hn.com/categories/</loc>
+    <lastmod>2017-04-02T22:01:15+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/categories/design/</loc>
+    <lastmod>2017-04-02T22:01:15+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/tags/hugo/</loc>
+    <lastmod>2017-04-02T22:01:15+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/tags/markdown/</loc>
+    <lastmod>2017-04-02T22:01:15+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/tags/prototype/</loc>
+    <lastmod>2017-04-02T22:01:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>http://apicheck.cr0hn.com/tags/</loc>
+    <lastmod>2017-04-02T22:01:15+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/tags/example/</loc>
+    <lastmod>2017-04-02T21:56:55+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/categories/general/</loc>
+    <lastmod>2017-04-02T21:56:55+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/blog/inline-style/</loc>
+    <lastmod>2017-04-02T21:56:55+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/company/</loc>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/faq/</loc>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/password-recovery/</loc>
+  </url>
+  
+  <url>
+    <loc>http://apicheck.cr0hn.com/account/</loc>
   </url>
   
 </urlset>
