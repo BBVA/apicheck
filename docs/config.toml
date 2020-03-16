@@ -1,6 +1,3 @@
-baseURL = "https://bbva.github.io/apicheck/"
+baseURL = "https://apicheck.cr0hn.com"
 languageCode = "en-us"
 title = "APICheck Project page"
-RelativeURLs=true
-CanonifyURLs=true
-prefix="/apicheck"
