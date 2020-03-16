@@ -3,3 +3,4 @@
   regex: '([pP][aA][sS][sS][wW][oO][rR][dD])'
   severity: Medium
   searchIn: response  # Allowed values: response, request, both
+  includeKeys: true  # Search in Json keys. Values always are inspected

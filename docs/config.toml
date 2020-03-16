@@ -3,3 +3,4 @@ languageCode = "en-us"
 title = "APICheck Project page"
 RelativeURLs=true
 CanonifyURLs=true
+prefix="/apicheck"
