@@ -29,7 +29,7 @@ setup(
         'Operating System :: MacOS',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX',
-        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.8',
     ],
 )
 

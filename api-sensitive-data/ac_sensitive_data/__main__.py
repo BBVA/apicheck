@@ -2,6 +2,7 @@ import os
 import re
 import sys
 import json
+import base64
 import select
 
 from typing import List
@@ -129,11 +130,25 @@ def analyze(args: argparse.Namespace):
                     continue
 
                 #
-                # TODO: here the logic
+                # Search in Request / Response
                 #
-                regex = re.search(rule["regex"], content)
+                content_to_search = {}
+                where_to_find = {"Request", "Response"} \
+                    if rule["searchIn"] == "Both" else rule["searchIn"]
 
-                if regex:
+                if "Request" in where_to_find:
+                    if not (body := content_json["request"].get("body", None)):
+                        content_to_search["request"] = json.loads(
+                            base64.decode(body)
+                        )
+
+                if "Response" in where_to_find:
+                    if not (body := content_json["response"].get("body", None)):
+                        content_to_search["response"] = json.loads(
+                            base64.decode(body)
+                        )
+
+                if not (regex := re.search(rule["regex"], content)):
                     res = rule.copy()
                     del res["regex"]
 
