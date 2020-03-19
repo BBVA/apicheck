@@ -5,7 +5,7 @@ import json
 import base64
 import select
 
-from typing import List
+from typing import List, Tuple, Any
 
 import yaml
 import requests
@@ -16,44 +16,55 @@ from terminaltables import AsciiTable
 HERE = os.path.dirname(__file__)
 
 
-def _process_results(args: argparse.Namespace, found_issues: List[dict]):
+def recurse(target: Any,
+            path=None) -> Tuple[Tuple[str], str, str or int or bool]:
+    """
+    This function flatten a dictionary.
 
-    # -------------------------------------------------------------------------
-    # Building results
-    # -------------------------------------------------------------------------
-    table_data = [
-        ['Rule Id', 'Description', 'Severity'],
+    Return format: [(PATH, DICT KEY, DICT VALUE)]
+
+    Usage example:
+
+    >> inp = {
+        "name": "Jonh",
+        "surname": "Doe",
+        "age": 33,
+        "meta": {
+            "since": "2001-01-01"
+        }
+    }
+    >> expected = [
+        (None,"name","Jonh"),
+        (None,"surname","Doe"),
+        (None,"age",33),
+        (("meta",), "since", "2001-01-01")
     ]
+    >> recurse(inp)
+    >> res = list(recurse(inp))
+    >> assert res == expected
+    """
+    def _path_add(item):
+        if path:
+            return *path, item
+        return item,
 
-    if not found_issues:
-        table_data.append(["No issues found"])
+    if not target:
+        yield None
+    elif target.__class__.__name__ == "dict":
+        for k, v in target.items():
+            for res in recurse(v, _path_add(k)):
+                yield res
+    elif target.__class__.__name__ == "list":
+        for i, v in enumerate(target):
+            for res in recurse(v, _path_add(i)):
+                yield res
+    elif len(path) == 0:
+        # error, this can't happen
+        print("nah")
+    elif len(path) == 1:
+        yield None, path[0], target
     else:
-
-        for res in found_issues:
-            table_data.append((
-                res["id"],
-                res["description"],
-                res["severity"]
-            ))
-
-        # Export results
-        if args.output_file:
-            with open(args.output_file, "w") as f:
-                json.dump(found_issues, f)
-
-    if not args.quiet:
-        if sys.stdout.isatty():
-            # We're in terminal
-            print(AsciiTable(table_data).table)
-        else:
-            try:
-                sys.stdout.write(json.dumps(found_issues))
-                sys.stdout.flush()
-            except (BrokenPipeError, IOError) as e:
-                # Piped command doesn't support data input as pipe
-                sys.stderr.write(e)
-            except Exception as e:
-                pass
+        yield path[:-1], path[-1], target
 
 
 def _load_rules(args: argparse.Namespace) -> List[dict]:
@@ -133,31 +144,43 @@ def analyze(args: argparse.Namespace):
                 # Search in Request / Response
                 #
                 content_to_search = {}
+                include_keys = rule.get("includeKeys", False)
                 where_to_find = {"Request", "Response"} \
                     if rule["searchIn"] == "Both" else rule["searchIn"]
 
                 if "Request" in where_to_find:
-                    if not (body := content_json["request"].get("body", None)):
+                    if body := content_json["request"].get("body", None):
                         content_to_search["request"] = json.loads(
-                            base64.decode(body)
+                            base64.decodebytes(body.encode("UTF-8"))
                         )
 
                 if "Response" in where_to_find:
-                    if not (body := content_json["response"].get("body", None)):
+                    if body := content_json["response"].get("body", None):
                         content_to_search["response"] = json.loads(
-                            base64.decode(body)
+                            base64.decodebytes(body.encode("UTF-8"))
                         )
 
-                if not (regex := re.search(rule["regex"], content)):
-                    res = rule.copy()
-                    del res["regex"]
+                for where, body in content_to_search.items():
+                    for (path, key, value) in recurse(body):
 
-                    found_issues.append(res)
+                        if include_keys:
+                            values = [("key", key), ("value", value)]
+                        else:
+                            values = [("value", value)]
+
+                        for (key_or_value, v) in values:
+                            if regex := re.search(rule["regex"], v):
+                                found_issues.append({
+                                    "where": where,
+                                    "path": ".".join(path or "/"),
+                                    "keyOrValue": key_or_value,
+                                    "sensitiveData": regex.group()
+                                })
     else:
         raise FileNotFoundError("Input data must be entered as a UNIX "
                                 "pipeline")
 
-    _process_results(args, found_issues)
+    return found_issues
 
 
 def main():
@@ -181,10 +204,28 @@ def main():
                         help="quiet mode")
     parsed_cli = parser.parse_args()
 
-    try:
-        analyze(parsed_cli)
-    except Exception as e:
-        print("[!] ", e)
+    res = analyze(parsed_cli)
+
+    # Export results
+    if parsed_cli.output_file:
+        with open(parsed_cli.output_file, "w") as f:
+            json.dump(res, f)
+
+    if not parsed_cli.quiet:
+        json_res = json.dumps(res)
+
+        if sys.stdout.isatty():
+            # We're in terminal
+            print(json_res)
+        else:
+            try:
+                sys.stdout.write(json_res)
+                sys.stdout.flush()
+            except (BrokenPipeError, IOError) as e:
+                # Piped command doesn't support data input as pipe
+                sys.stderr.write(e)
+            except Exception as e:
+                pass
 
 
 if __name__ == '__main__':
