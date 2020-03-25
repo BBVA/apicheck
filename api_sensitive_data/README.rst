@@ -3,8 +3,18 @@ APICheck Sensitive Data Finder
 
 **PYTHON 3.8 needed**
 
-Usage
------
+Usage through Kapow!
+--------------------
+
+.. code-block:: console
+
+    > docker build -t ac-sd .
+    > docker run -p 8080:8080 --rm ac-sd -d
+    > curl --data-raw '{"password": "sss"}' -v http://localhost:8080/apicheck/sensitive-data
+    [{"where": "response", "path": "/", "keyOrValue": "key", "sensitiveData": "password"}]
+
+Usage cli
+---------
 
 For the following examples *data.json* is a APICheck format file with a Request / Response info.
 

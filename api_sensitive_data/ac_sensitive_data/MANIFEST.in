@@ -1,4 +1,4 @@
-include requirements.txt rules.yaml
+include requirements.txt ac_sd/rules.yaml
 
 recursive-exclude * __pycache__
 recursive-exclude * *.pyc

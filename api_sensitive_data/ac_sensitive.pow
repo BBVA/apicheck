@@ -1,0 +1,23 @@
+
+#
+# This file contains instructions to expose APICheck Sensitive Data tool
+# throught Kapow!
+#
+
+kapow route add -X POST /apicheck/sensitive-data - <<-'EOF'
+  # Conver input into APICheck format
+  BASE64_BODY=$(kapow get /request/body | base64)
+
+  # We use 'jq -c' to convert multiline JSON to single line
+  echo '{}' | jq "
+  {
+    \"_meta\": null,
+    \"response\": {
+      \"status\": 200,
+      \"reason\": \"Ok\",
+      \"headers\": \"{}\",
+      \"body\": \"${BASE64_BODY}\"
+    }
+  }" | jq -c | ac-sensitive |  kapow set /response/body
+EOF
+

@@ -8,7 +8,7 @@ with open(join(here, 'requirements.txt')) as f:
     required = f.read().splitlines()
 
 setup(
-    name='ac-sensitive-data',
+    name='ac_sensitive_data',
     version="1.0.0",
     packages=find_packages(),
     description='Find sensitive data in HTTP Request / Response',
@@ -19,7 +19,7 @@ setup(
     license='Apache 2.0',
     author='BBVA Labs',
     entry_points={'console_scripts': [
-        'ac-sensitive = ac_sensitive_data.__main__:main'
+        'ac-sensitive = ac_sd.__main__:main'
     ]},
     classifiers=[
         'Environment :: Console',
