@@ -26,7 +26,7 @@ This way you will be able to store all API versions that have been promoted to p
 Find low level bugs
 -------------------
 
-Navigate using ``APICheck``'s proxy. Then analyze it with *dataset*. This tool allows you to discover strange http headers, or unusual endpoints used during the navigation. Also Cookie or JWT Token size growth.
+Navigate using ``APICheck``'s proxy. Then cli_analyze it with *dataset*. This tool allows you to discover strange http headers, or unusual endpoints used during the navigation. Also Cookie or JWT Token size growth.
 
 
 API Diff

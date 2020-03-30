@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "_meta": {
+      "type": "object"
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "pattern": "https?:\/\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}"
+        },
+        "method": {
+          "type": "string",
+          "enum": ["get", "head", "post", "put", "delete", "connect", "options", "trace", "patch"]
+        },
+        "headers": {
+          "type": "object"
+        },
+        "body": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "url"
+      ]
+    }
+  },
+  "required": [
+    "request"
+  ]
+}
