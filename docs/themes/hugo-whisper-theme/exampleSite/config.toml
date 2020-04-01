@@ -1,8 +1,8 @@
-baseURL = "/"
-themesDir = "themes"
-theme = "hugo-whisper-theme"
+baseURL = "www.example.com"
 languageCode = "en-us"
 title = "Hugo Whisper Theme"
+themesDir = "../.."
+theme = "hugo-whisper-theme"
 
 pygmentsCodeFences = true
 pygmentsCodefencesGuessSyntax = true
@@ -45,4 +45,4 @@ summaryLength = 30
 
   [params.logo]
       mobile = "/images/logo-mobile.svg"
-      standard  = "/images/apicheck-logo.png"
+      standard  = "/images/logo.svg"
