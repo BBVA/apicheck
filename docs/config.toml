@@ -1,4 +1,4 @@
-baseURL = "/"
+baseURL = "/apicheck/"
 themesDir = "themes"
 theme = "hugo-whisper-theme"
 languageCode = "en-us"
