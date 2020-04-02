@@ -1,4 +1,3 @@
-{
-    "name": "ac-replay",
-    "version": "1.0.0"
-}
+name = ac-replay
+version = 1.0.0
+description = Send the traffic to the same place, in the same order, with the same params

@@ -2,10 +2,11 @@
 This file build the documentation for APICheck
 """
 import os
-import sys
 import json
+import configparser
 
 HERE = os.path.abspath(os.path.dirname(__file__))
+
 DOC_PATH = os.path.join(HERE, "docs")
 TOOLS_PATH = os.path.join(HERE, "tools")
 STATIC_PATH = os.path.join(HERE, "docs", "static")
@@ -35,7 +36,11 @@ def main():
 
         try:
             with open(meta_path, "r") as meta_handler:
-                catalog.append(json.load(meta_handler))
+                cf = configparser.ConfigParser()
+                cf.read_string(f"[DEFAULT]\n {meta_handler.read()}")
+
+                catalog.append(dict(cf["DEFAULT"]))
+
         except OSError:
             print(f"[!] Tool \"{d}\" doesnt has README.md file")
             continue

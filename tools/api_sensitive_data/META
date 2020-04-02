@@ -1,4 +1,3 @@
-{
-    "name": "ac-sensitive",
-    "version": "1.0.0"
-}
+name = ac-sensitive
+version = 1.0.0
+description = Find sensitive data in JSON content in HTTP Request / Response
