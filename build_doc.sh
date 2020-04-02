@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DOC_BASE=docs/content/docs/
-CATALOG_FILE="docs/content/static/catalog.json"
+CATALOG_FILE="docs/static/catalog.json"
 
 echo "[\n" > ${CATALOG_FILE}
 
