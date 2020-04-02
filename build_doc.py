@@ -12,7 +12,7 @@ STATIC_PATH = os.path.join(HERE, "docs", "static")
 
 
 def main():
-    print(sys.version_info)
+
     catalog = []
 
     #
@@ -58,7 +58,7 @@ def main():
     # Build catalog
     #
     with open(os.path.join(STATIC_PATH, "catalog.json"), "w") as f:
-        json.dump(catalog)
+        json.dump(catalog, f)
 
 
 if __name__ == '__main__':
