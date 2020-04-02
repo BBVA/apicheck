@@ -23,7 +23,7 @@ jobs:
           extended: true
 
       - name: Build Doc
-        run: python build_doc.py
+        run: python3 build_doc.py
 
       - name: Build Site
         run: hugo -D --minify -d static -s docs/
