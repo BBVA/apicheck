@@ -12,3 +12,4 @@ for tool_dir in $(ls tools); do
   docker build -T ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_VERSION} -t ${DOCKER_IMAGE_NAME}:latest ${DOCKERFILE}
   docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_VERSION}
   docker push ${DOCKER_IMAGE_NAME}:latest
+done
