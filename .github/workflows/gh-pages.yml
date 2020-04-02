@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - "docs/"
+      - "tools/"
 
 jobs:
   deploy:
@@ -22,7 +23,7 @@ jobs:
           extended: true
 
       - name: Build Doc
-        run: sh build_doc.sh
+        run: python build_doc.py
 
       - name: Build Site
         run: hugo -D --minify -d static -s docs/
