@@ -2,6 +2,7 @@
 This file build the documentation for APICheck
 """
 import os
+import sys
 import json
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -11,7 +12,7 @@ STATIC_PATH = os.path.join(HERE, "docs", "static")
 
 
 def main():
-
+    print(sys.version_info)
     catalog = []
 
     #
