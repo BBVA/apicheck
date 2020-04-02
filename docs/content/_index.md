@@ -1,6 +1,5 @@
 ---
-title: 'Hugo Whisper Docs'
-date: 2018-11-28T15:14:39+10:00
+title: 'APICheck - The DevSecOps toolset for REST APIs'
 ---
 
-Whisper is a documentation theme built with Hugo. The design and functionality is intentionally minimal. 
+APICheck is set of tools built for testing REST APIs
