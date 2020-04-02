@@ -19,7 +19,7 @@ for tool_dir in $(ls tools); do
   cat "tools/${tool_dir}/README.md" >> "${DOC_PATH_PLUGIN}/index.md"
 
   # Add metainformation for catalog
-  cat "tools/${tool_dir}/META" >> ${CATALOG_FILE}
+  echo "$(cat "tools/${tool_dir}/META")," >> ${CATALOG_FILE}
 
 done
 
