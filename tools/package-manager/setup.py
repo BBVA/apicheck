@@ -8,10 +8,10 @@ with open(join(here, 'requirements.txt')) as f:
     required = f.read().splitlines()
 
 setup(
-    name='ac_sensitive_data',
+    name='apicheck-package-manager',
     version="1.0.0",
     packages=find_packages(),
-    description='Find sensitive data in HTTP Request / Response',
+    description='APICheck package manager',
     install_requires=required,
     include_package_data=True,
     zip_safe=True,
@@ -19,7 +19,7 @@ setup(
     license='Apache 2.0',
     author='BBVA Labs',
     entry_points={'console_scripts': [
-        'ac-sensitive = ac_sd.__main__:main'
+        'acp = package_manager.__main__:main'
     ]},
     classifiers=[
         'Environment :: Console',
