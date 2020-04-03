@@ -1,3 +1,0 @@
-name = ac-send-to-proxy
-version = 1.0.0
-description = Read request from stdin and send it to proxyh

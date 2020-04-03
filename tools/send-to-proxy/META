@@ -1,0 +1,6 @@
+name = send-to-proxy
+short-command = asp
+version = 1.0.0
+description = Read request from stdin and send it to proxy
+home = https://github.com/BBVA/apicheck
+author = BBVA Labs Security

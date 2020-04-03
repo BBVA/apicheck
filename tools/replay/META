@@ -1,3 +1,6 @@
-name = ac-replay
+name = replay
+short-command = arep
 version = 1.0.0
 description = Send the traffic to the same place, in the same order, with the same params
+home = https://github.com/BBVA/apicheck
+author = BBVA Labs Security
