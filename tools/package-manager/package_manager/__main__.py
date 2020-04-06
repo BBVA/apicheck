@@ -97,6 +97,9 @@ def print_table(content: List[Tuple[str, str]],
     max_key_len = max(len(x[0]) for x in content)
 
     if head:
+        if len(head[0]) > max_key_len:
+            max_key_len = len(head[0])
+
         border()
         if len(head) == 2:
             print(f"| {head[0]}", end="")
@@ -345,10 +348,43 @@ def describe_env(args: argparse.Namespace):
 
     env_info = meta_json["environments"][env_name]
 
-    print_table(content=[
+    print_table(content=[("Environment", env_name)])
+    content = [
         (y["name"], y["version"])
         for y in env_info["installed"]
-    ], head=(f"Tool name", "Version"))
+    ]
+    print(f"|{'|' * 60}|")
+    print_table(content=content, head=(f"Tool name", "Version"))
+
+
+def list_environments(args: argparse.Namespace):
+
+    base = Path().home().joinpath(".apicheck_manager")
+    meta = base.joinpath("meta.json")
+
+    if not meta.exists():
+        print("[i] There's not APICheck tools installed yet")
+        exit(0)
+
+    with open(str(meta), "r") as f:
+        meta_json = json.load(f)
+
+    # Get environments
+    environments = [
+        x for x in os.listdir(str(base))
+        if not x.endswith("json") and not x.endswith("deactivate")
+    ]
+
+    results = []
+    for env in environments:
+        _env = meta_json["environments"][env]
+        results.append((
+            env,
+            str(len(_env.get("installed", 0))))
+        )
+
+    print_table(content=results,
+                head=(f"Environment Name", "Number of installed tools"))
 
 
 def main():
@@ -357,7 +393,8 @@ def main():
         "info": info_package,
         "install": install_package,
         "activate": activate_env,
-        "describe": describe_env
+        "describe": describe_env,
+        "envs": list_environments,
     }
 
     parser = argparse.ArgumentParser(description='APICheck Manager')
@@ -391,11 +428,14 @@ def main():
 
     tool_activate = subparsers.add_parser('describe',
                                           help='show info of environment')
-    tool_activate.add_argument("--environment_name",
+    tool_activate.add_argument("-e", "--environment_name",
                                dest="env_name",
                                nargs="*",
                                default=None,
                                help="show information about environments")
+
+    environments = subparsers.add_parser('envs',
+                                         help='show available environments')
 
     # Listar herramientas instaladas -> describe entorno
     # Guardar meta de qué se ha instalado, versión y demás
