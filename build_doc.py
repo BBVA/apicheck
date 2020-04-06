@@ -81,7 +81,10 @@ def main():
         #
         # Build tools documentation
         #
-        doc_tool_path = os.path.join(DOC_PATH, "content", d.replace("_", "-"))
+        doc_tool_path = os.path.join(DOC_PATH,
+                                     "content",
+                                     "docs",
+                                     d.replace("_", "-"))
         readme_title = readme_text[0].replace("#", "").strip()
 
         if not os.path.exists(doc_tool_path):
