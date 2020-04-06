@@ -119,6 +119,9 @@ def main():
             f" {os.path.dirname(docker_file)}"
         ]))
 
+        commands.append(f"docker push {DOCKER_HUB_REPO}/{image}:{version}")
+        commands.append(f"docker push {DOCKER_HUB_REPO}/{image}:latest")
+
         # Go script base path
         commands.append(f"cd {HERE}")
 
