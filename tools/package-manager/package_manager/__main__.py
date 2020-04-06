@@ -306,7 +306,8 @@ def activate_env(args: argparse.Namespace):
     if not env_path_route.exists():
         print("[!] Env name doesn't exits")
 
-    os.system(f"source {env_path_route}")
+    with open(str(env_path_route), "r") as f:
+        print(f.read())
 
 
 def info_package(args: argparse.Namespace):
