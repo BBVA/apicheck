@@ -3,7 +3,7 @@ FROM python:3.8-alpine
 RUN apk update \
     && apk add --no-cache build-base
 
-COPY ./sensitive_json/requirements.txt /app/sensitive_json/requirements.txt
+COPY ./requirements.txt /app/sensitive_json/requirements.txt
 RUN pip install -U -r /app/sensitive_json/requirements.txt \
     && rm -rf /var/cache/apk/* /var/tmp/* /tmp/* /root/.cache/*
 

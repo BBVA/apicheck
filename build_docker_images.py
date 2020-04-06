@@ -66,7 +66,7 @@ def main():
                     docker_images[name] = (
                         version,
                         os.path.join(TOOLS_PATH, d),
-                        meta.get("docker-file", "Dockerfile")
+                        f'./{meta.get("docker-file", "Dockerfile")}'
                     )
 
         except OSError:
@@ -116,9 +116,7 @@ def main():
             f"docker build",
             f" -t {DOCKER_HUB_REPO}/{image}:{version}",
             f" -t {DOCKER_HUB_REPO}/{image}:latest",
-            f" -"
-            f" <"
-            f" {docker_file}"
+            f" {os.path.dirname(docker_file)}"
         ]))
 
         # Go script base path
