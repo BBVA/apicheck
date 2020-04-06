@@ -17,6 +17,7 @@ RC_FILES = {
     "zsh": ".zshrc"
 }
 
+VERSION = "1.0.0"
 
 def get_current_rc_file():
     shell_name = Path(os.environ.get("SHELL", "/bin/bash")).name
@@ -121,7 +122,7 @@ def print_table(content: List[Tuple[str, str]],
         print(f"{' ' * (max_key_len - len(cat[0]))}", end="")
         print(" | ", end="")
 
-        rest_space = width - len(cat[1]) - max_key_len - 5
+        rest_space = width - (len(cat[1]) + max_key_len + 5)
         if len(cat[1]) < rest_space:
             print(f"{cat[1]}", end="")
             print(f"{' ' * (width - len(cat[1]) - max_key_len - 5)}", end="")
@@ -136,7 +137,7 @@ def print_table(content: List[Tuple[str, str]],
 
             while 1:
                 text = ""
-                for i, x in enumerate(split_text[prev:]):
+                for i, x in enumerate(split_text[prev:], start=1):
 
                     t_text = f"{text} {x}"
 
@@ -395,6 +396,7 @@ def main():
         "activate": activate_env,
         "describe": describe_env,
         "envs": list_environments,
+        "version": lambda x: print(f"\nCurrent version: {VERSION}\n"),
     }
 
     parser = argparse.ArgumentParser(description='APICheck Manager')
@@ -437,9 +439,8 @@ def main():
     environments = subparsers.add_parser('envs',
                                          help='show available environments')
 
-    # Listar herramientas instaladas -> describe entorno
-    # Guardar meta de qué se ha instalado, versión y demás
-    # Activar entornos
+    version = subparsers.add_parser('version',
+                                    help='displays version')
 
     cli_parsed = parser.parse_args()
 
