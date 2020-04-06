@@ -171,7 +171,7 @@ def list_packages(args: argparse.Namespace):
 def install_package(args: argparse.Namespace):
 
     def build_alias_cmd(cmd: str, docker_image: str):
-        return f'''alias {cmd}="docker run --rm -it {docker_image}"'''
+        return f'''alias {cmd}="docker run --rm -i {docker_image}"'''
 
     tool_name = args.tool_name
     env_name = args.env_name or "default"
