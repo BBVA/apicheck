@@ -195,7 +195,7 @@ def cli_analyze(args: argparse.Namespace):
     found_issues = []
 
     # -------------------------------------------------------------------------
-    # Load Dockerfile by stdin or parameter
+    # Read info by stdin or parameter
     # -------------------------------------------------------------------------
     if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
 

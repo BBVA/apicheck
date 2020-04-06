@@ -1,5 +1,6 @@
 import json
 import os
+import select
 import sys
 
 import requests
@@ -95,13 +96,7 @@ def parse_proxy(proxy: str) -> str or InvalidProxyFormat:
     return scheme, proxy
 
 
-def run(args: argparse.Namespace):
-    #
-    # Read stdin
-    #
-    print("[*] Loading input data", file=sys.stderr)
-    input_data = "".join(sys.stdin.readlines())
-
+def send_one_input_data(input_data, args: argparse.Namespace):
     #
     # Load json request
     #
@@ -141,15 +136,36 @@ def run(args: argparse.Namespace):
     print("[*] Sending request to proxy", file=sys.stderr)
     response = method(**params)
 
-    if not args.QUIET_MODE:
-        print(
-            json.dumps({
-                "source": "sendtoproxy",
-                "outputStatus": 0,
-                "outputMessage": response.content.decode("UTF-8")
-            }),
-            file=sys.stdout
-        )
+    return response
+
+
+def run(args: argparse.Namespace):
+    # -------------------------------------------------------------------------
+    # Read info by stdin or parameter
+    # -------------------------------------------------------------------------
+    if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+
+        #
+        # APICheck input JSON format line by line. The JSON will be one per
+        # line
+        #
+        for content in sys.stdin.readlines():
+
+            response = send_one_input_data(content, args)
+
+            if not args.QUIET_MODE:
+                print(
+                    json.dumps({
+                        "source": "sendtoproxy",
+                        "outputStatus": 0,
+                        "outputMessage": response.content.decode("UTF-8")
+                    }),
+                    file=sys.stdout
+                )
+
+    else:
+        raise FileNotFoundError("Input data must be entered as a UNIX "
+                                "pipeline")
 
 
 def main():

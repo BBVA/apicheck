@@ -1,7 +1,9 @@
 import os
 import json
 import argparse
+import subprocess
 import urllib.request
+from collections import defaultdict
 
 from pathlib import Path
 
@@ -98,11 +100,11 @@ def print_table(content: List[Tuple[str, str]],
         border()
         if len(head) == 2:
             print(f"| {head[0]}", end="")
-            print(f"{' ' * (max_key_len - 4)}", end="")
+            print(f"{' ' * (max_key_len - len(head[0]))}", end="")
             print(" | ", end="")
             print(f"{head[1]}", end="")
             print(
-                f"{' ' * (width - len(head[0]) - len(head[1]) - max_key_len - 1)}",
+                f"{' ' * (width - (max_key_len + len(head[1]) + 5 ))}",
                 end="")
             print(" |")
         else:
@@ -192,11 +194,18 @@ def install_package(args: argparse.Namespace):
     #
     print(f"[*] Fetching Docker image for tool '{tool_name}'")
     docker_image_name = f"bbvalabs/{docker_image_name}"
-    docker_image_name = "python:3.8-alpine"
 
     command = f"docker pull {docker_image_name}"
 
-    # os.system(command)
+    proc = subprocess.Popen(command,
+                            stdout=subprocess.PIPE,
+                            shell=True)
+
+    # while line := proc.stdout.poll():
+    print("")
+    while line := proc.stdout.readline():
+        print("   ", line.decode("UTF-8"), end="")
+    print("")
 
     #
     # Get / create environment config file
@@ -249,6 +258,37 @@ def install_package(args: argparse.Namespace):
     rm_new_alias(deactivate_env_path, catalog_tool_name)
     rm_new_alias(deactivate_env_path, catalog_tool_name)
 
+    #
+    # Add to installed packages
+    #
+    if not path.joinpath("meta.json").exists():
+        meta = defaultdict(dict)
+        meta["environments"][env_name] = {}
+    else:
+        with open(str(path.joinpath("meta.json")), "r") as f:
+            meta = json.load(f)
+
+    env_config = meta["environments"][env_name]
+
+    if "installed" not in env_config:
+        env_config["installed"] = []
+
+    # Search for already installed
+    for s in env_config["installed"]:
+        if s["name"] == tool_name and s["version"] == tool["version"]:
+            break
+    else:
+        env_config["installed"].append({
+            "name": tool_name,
+            "version": tool["version"]
+        })
+
+    #
+    # Dump the config
+    #
+    with open(str(path.joinpath("meta.json")), "w") as f:
+        json.dump(meta, f)
+
 
 def activate_env(args: argparse.Namespace):
     env_name = args.env_name or "default"
@@ -286,21 +326,46 @@ def info_package(args: argparse.Namespace):
     ], head=(f"Tool name '{tool_name}'",))
 
 
+def describe_env(args: argparse.Namespace):
+    env_name = args.env_name or "default"
+
+    meta = Path().home().joinpath(".apicheck_manager").joinpath("meta.json")
+
+    if not meta.exists():
+        print("[i] There's not APICheck tools installed yet")
+        exit(0)
+
+    with open(str(meta), "r") as f:
+        meta_json = json.load(f)
+
+    if env_name not in meta_json["environments"]:
+        print(f"[!] Environment '{env_name}' doesnt exits")
+        exit(1)
+
+    env_info = meta_json["environments"][env_name]
+
+    print_table(content=[
+        (y["name"], y["version"])
+        for y in env_info["installed"]
+    ], head=(f"Tool name", "Version"))
+
+
 def main():
     actions = {
         "list": list_packages,
         "info": info_package,
         "install": install_package,
-        "activate": activate_env
+        "activate": activate_env,
+        "describe": describe_env
     }
 
     parser = argparse.ArgumentParser(description='APICheck Manager')
-    subparsers = parser.add_subparsers(dest="action", help='available actions')
+    parser.add_argument("-H", "--docker-host",
+                        dest="docker_host",
+                        default=None,
+                        help="docker url. default: tcp://127.0.0.1:2375")
 
-    # create the parser for the "a" command
-    tool_install = subparsers.add_parser('install',
-                                         help='install an APICheck tool')
-    tool_install.add_argument('bar', type=int, help='bar help')
+    subparsers = parser.add_subparsers(dest="action", help='available actions')
 
     # create the parser for the "a" command
     tool_list = subparsers.add_parser('list', help='search in A')
@@ -308,27 +373,32 @@ def main():
     tool_info = subparsers.add_parser('info', help='show expanded tool info')
     tool_info.add_argument("tool_name")
 
-    tool_info = subparsers.add_parser('install',
-                                      help='install an APICheck tool')
-    tool_info.add_argument("tool_name")
-    tool_info.add_argument("-e", "--environment-name",
-                           dest="env_name",
-                           default=None,
-                           help="custom environment name")
+    tool_install = subparsers.add_parser('install',
+                                         help='install an APICheck tool')
+    tool_install.add_argument("tool_name")
+    tool_install.add_argument("-e", "--environment-name",
+                              dest="env_name",
+                              default=None,
+                              help="custom environment name")
 
     tool_activate = subparsers.add_parser('activate',
                                           help='activate an environment')
+    tool_activate.add_argument("-e", "--environment-name",
+                               dest="env_name",
+                               default=None,
+                               help="custom environment name")
 
-    tool_activate.add_argument(
-        "-e", "--environment-name",
-        dest="env_name",
-        default=None,
-        help="custom environment name")
-    tool_activate.add_argument(
-        "-H", "--docker-host",
-        dest="docker_host",
-        default=None,
-        help="docker url. default: tcp://127.0.0.1:2375")
+    tool_activate = subparsers.add_parser('describe',
+                                          help='show info of environment')
+    tool_activate.add_argument("--environment_name",
+                               dest="env_name",
+                               nargs="*",
+                               default=None,
+                               help="show information about environments")
+
+    # Listar herramientas instaladas -> describe entorno
+    # Guardar meta de qué se ha instalado, versión y demás
+    # Activar entornos
 
     cli_parsed = parser.parse_args()
 
