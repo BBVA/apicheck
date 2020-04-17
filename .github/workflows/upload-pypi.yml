@@ -13,8 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1  # v2 does not have submodules option now
       - uses: actions/setup-python@v1
-          with:
-            python-version: '3.8'
+        with:
+          python-version: '3.8'
 
       - name: Build distribution package for Package Manager
         run: |
