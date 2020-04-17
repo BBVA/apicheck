@@ -22,7 +22,7 @@ jobs:
           python setup.py sdist bdist_wheel bdist
 
       - name: Publish Package Manager to TestPyPI
-          uses: pypa/gh-action-pypi-publish@master
-          with:
-            user: ${{ secrets.pypi_user }}
-            password: ${{ secrets.pypi_password }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: ${{ secrets.pypi_user }}
+          password: ${{ secrets.pypi_password }}
