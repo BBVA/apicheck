@@ -17,12 +17,14 @@ jobs:
           python-version: '3.8'
 
       - name: Build distribution package for Package Manager
+        working-directory: ./package-manager
         run: |
           python3 -m pip install setuptools
           python setup.py sdist bdist_wheel bdist
 
       - name: Publish Package Manager to TestPyPI
         uses: pypa/gh-action-pypi-publish@master
+        working-directory: ./package-manager
         with:
           user: ${{ secrets.pypi_user }}
           password: ${{ secrets.pypi_password }}
