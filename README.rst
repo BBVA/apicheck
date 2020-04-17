@@ -9,7 +9,7 @@ APICheck - The DevSecOps toolset for REST APIs
    :target: https://apicheck.readthedocs.io
    :alt: Documentation Status
 
-.. figure:: https://raw.githubusercontent.com/BBVA/apicheck/master/docs/source/_static/images/apicheck-logo-150x150.png
+.. figure:: https://bbva.github.io/apicheck/assets/images/apicheck-logo-150x150.png
    :align: center
 
 ``APICheck`` is a complete toolset designed and created for testing REST APIs.
@@ -28,7 +28,7 @@ The tools are aimed to diverse users profiles:
 Documentation
 -------------
 
-`Here <https://apicheck.readthedocs.io>`_ you can find the complete documentation.
+`Here <https://bbva.github.io/apicheck/>`_ you can find the complete documentation.
 
 Authors
 -------

@@ -1,20 +1,28 @@
-name: Build Docker Images
+name: Build Pypi Artifacts
 
 on:
   push:
     branches:
       - master
     paths:
-      - "tools/package-manager/**"
+      - "package-manager/**"
 
 jobs:
   deploy:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1  # v2 does not have submodules option now
+      - uses: actions/setup-python@v1
+          with:
+            python-version: '3.8'
 
-      - name: Build images
-        run: python3 build_docker_images.py | sh
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build distribution package for Package Manager
+        run: |
+          python3 -m pip install setuptools
+          python setup.py sdist bdist_wheel bdist
+
+      - name: Publish Package Manager to TestPyPI
+          uses: pypa/gh-action-pypi-publish@master
+          with:
+            user: ${{ secrets.pypi_user }}
+            password: ${{ secrets.pypi_password }}
