@@ -1,0 +1,18 @@
+{
+  "_meta": null,
+  "request": {
+    "url": "https://nvd.nist.gov/",
+    "method": "get",
+    "headers": {
+      "User-Agent": "curl/7.54.0",
+      "Accept": "*/*"
+    },
+    "body": "{'name': 'safsd', 'author': 'asdf', 'pages': 'asdf}"
+  },
+  "response": {
+    "status": 1,
+    "reason": "",
+    "headers": {},
+    "body": null
+  }
+}

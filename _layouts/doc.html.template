@@ -1,0 +1,83 @@
+---
+permalink: /
+layout: default
+---
+
+<div class="container pt-2 pt-md-6 pb-3 pb-md-6">
+    <div class="row">
+        <div class="col-12 col-md-3 mb-3">
+            <div class="sidebar">
+
+                <div class="docs-menu">
+                    <h4>The Project</h4>
+                    <ul>
+                        <li>
+                            <a href="{{ "/docs/about-project" | relative_url }}#whats-the-project">What's APICheck</a>
+                        </li>
+                        <li>
+                            <a href="{{ "/docs/about-project" | relative_url }}#basic-concepts">Basic concepts</a>
+                        </li>
+                        <li class="active">
+                            <a href="{{ "/docs/about-project" | relative_url }}#terminology">Terminology</a>
+                        </li>
+                    </ul>
+                    <br>
+
+                    <h4>Quickstart</h4>
+                    <ul>
+                        <li class="active">
+                            <a href="{{ "/docs/quick-start" | relative_url }}#installation">Installation</a>
+                        </li>
+                        <li class="active">
+                            <a href="{{ "/docs/quick-start" | relative_url }}#requirements">Requirements</a>
+                        </li>
+                        <li class="active">
+                            <a href="{{ "/docs/quick-start" | relative_url }}#the-first-run">First run</a>
+                        </li>
+                        <li class="active">
+                            <a href="{{ "/docs/quick-start" | relative_url }}#managing-tools">Managing tools</a>
+                        </li>
+                        <li class="active">
+                            <a href="{{ "/docs/quick-start" | relative_url }}#tools-and-pipelines">Tools & Pipelines</a>
+                        </li>
+                    </ul>
+                    <br>
+
+                    <h4>Building new tools</h4>
+                    <ul>
+
+                        <li class="active">
+                            <a href="{{ "/docs/building-new-tools" | relative_url }}#why-create-new-a-tool">Why create a new tool</a>
+                        </li>
+                        <li class="active">
+                            <a href="{{ "/docs/building-new-tools" | relative_url }}#what-do-you-need">What do you need</a>
+                        </li>
+                        <li class="active">
+                            <a href="{{ "/docs/building-new-tools" | relative_url }}#tool-scaffolding">Tool scaffolding</a>
+                        </li>
+                        <li class="active">
+                            <a href="{{ "/docs/building-new-tools" | relative_url }}#tool-example">Tool example</a>
+                        </li>
+                        <li class="active">
+                            <a href="{{ "/docs/building-new-tools" | relative_url }}#glossary">Glossary</a>
+                        </li>
+                    </ul>
+                    <br>
+
+                    <h4>Tool list</h4>
+                    <ul>
+                        {dynamic_content}
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-12 col-md-9">
+
+            {{{{ content }}}}
+
+        </div>
+    </div>
+</div>
+
+</div>
