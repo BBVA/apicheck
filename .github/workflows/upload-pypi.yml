@@ -24,7 +24,7 @@ jobs:
 
       - name: Publish Package Manager to TestPyPI
         uses: pypa/gh-action-pypi-publish@master
-        working-directory: ./package-manager
         with:
           user: ${{ secrets.pypi_user }}
           password: ${{ secrets.pypi_password }}
+          packages_dir: ./package-manager/dist/
