@@ -92,11 +92,14 @@ def main():
         #
         doc_tool_path = os.path.join(DOC_PATH,
                                      "docs",
-                                     "tools",
-                                     d.replace("_", "-"))
+                                     "tools")
         readme_title = readme_text[0].replace("#", "").strip()
 
-        with open(os.path.join(f"{doc_tool_path}.md"), "w") as f:
+        if not os.path.exists(doc_tool_path):
+            os.makedirs(doc_tool_path, exist_ok=True)
+
+        with open(os.path.join(doc_tool_path,
+                               f"{d.replace('_', '-')}.md"), "w") as f:
             f.write("\n".join([
                 "---",
                 "layout: doc",
