@@ -15,12 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1  # v2 does not have submodules option now
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: '0.66.0'
-          extended: true
-
       - name: Build Doc
         run: python3 build_doc.py
 
