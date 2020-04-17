@@ -24,12 +24,15 @@ jobs:
       - name: Build Doc
         run: python3 build_doc.py
 
-      - name: Build Site
-        run: hugo -D --minify -d static -s docs/
+      - name: Jekyll Build
+        uses: gha-utilities/jekyll-build@v0.0.3
+        with:
+          source: ./docs
+          destination: ./docs/_site
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/static
+          publish_dir: ~/docs/_site
           keep_files: false
