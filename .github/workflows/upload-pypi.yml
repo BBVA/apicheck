@@ -5,9 +5,7 @@ on:
     branches:
       - master
     paths:
-      - "tools/**/Dockerfile"
-      - "tools/**/META"
-
+      - "tools/package-manager/**"
 
 jobs:
   deploy:

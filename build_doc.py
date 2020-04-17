@@ -3,6 +3,7 @@ This file build the documentation for APICheck
 """
 import os
 import json
+import hashlib
 import configparser
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -84,11 +85,12 @@ def main():
         doc_tool_path = os.path.join(DOC_PATH,
                                      "content",
                                      "docs",
+                                     "tools",
                                      d.replace("_", "-"))
         readme_title = readme_text[0].replace("#", "").strip()
 
         if not os.path.exists(doc_tool_path):
-            os.mkdir(doc_tool_path)
+            os.makedirs(doc_tool_path, exist_ok=True)
 
         with open(os.path.join(doc_tool_path, "index.md"), "w") as f:
             f.write(f"---\ntitle: {readme_title}\n---\n")
@@ -98,8 +100,16 @@ def main():
     #
     # Build catalog
     #
-    with open(os.path.join(STATIC_PATH, "catalog.json"), "w") as f:
-        json.dump(catalog, f)
+    catalog_path = os.path.join(STATIC_PATH, "catalog.json")
+    catalog_path_checksum = os.path.join(STATIC_PATH, "catalog.json.checksum")
+    with open(catalog_path, "w") as f, open(catalog_path_checksum, "w") as c:
+        cat_content = json.dumps(catalog)
+
+        h = hashlib.sha512()
+        h.update(cat_content.encode("UTF-8"))
+
+        f.write(cat_content)
+        c.write(h.hexdigest())
 
 
 if __name__ == '__main__':
