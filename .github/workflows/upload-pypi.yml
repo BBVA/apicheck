@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - master
-    paths:
-      - "package-manager/**"
+#    paths:
+#      - "package-manager/**"
 
 jobs:
   deploy:
