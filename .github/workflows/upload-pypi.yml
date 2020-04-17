@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - master
-#    paths:
-#      - "package-manager/**"
+    paths:
+      - "package-manager/apicheck_package_manager/__init__.py"
 
 jobs:
   deploy:

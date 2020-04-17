@@ -73,8 +73,9 @@ def create_alias():
 # -------------------------------------------------------------------------
 # Catalog manage
 # -------------------------------------------------------------------------
-CATALOG_REMOTE_FILE = "https://bbva.github.io/apicheck/catalog.json"
-CATALOG_CHECK_SUM = "https://bbva.github.io/apicheck/catalog.json.checksum"
+CATALOG_REMOTE_FILE = "https://bbva.github.io/apicheck/assets/catalog.json"
+CATALOG_CHECK_SUM = \
+    "https://bbva.github.io/apicheck/assets/catalog.json.checksum"
 
 
 def get_catalog() -> List[dict] or CatalogCheckSumError:
