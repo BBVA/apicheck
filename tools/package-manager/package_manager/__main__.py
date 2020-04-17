@@ -1,5 +1,6 @@
 import os
 import json
+import hashlib
 import argparse
 import subprocess
 import urllib.request
@@ -18,6 +19,11 @@ RC_FILES = {
 }
 
 VERSION = "1.0.0"
+
+
+class CatalogCheckSumError(Exception):
+    pass
+
 
 def get_current_rc_file():
     shell_name = Path(os.environ.get("SHELL", "/bin/bash")).name
@@ -68,14 +74,24 @@ def create_alias():
 # Catalog manage
 # -------------------------------------------------------------------------
 CATALOG_REMOTE_FILE = "https://bbva.github.io/apicheck/catalog.json"
+CATALOG_CHECK_SUM = "https://bbva.github.io/apicheck/catalog.json.checksum"
 
 
-def get_catalog() -> List[dict]:
+def get_catalog() -> List[dict] or CatalogCheckSumError:
     # Fetch remote catalog
-    with urllib.request.urlopen(CATALOG_REMOTE_FILE) as response:
-        catalog_json = json.loads(response.read())
+    with urllib.request.urlopen(CATALOG_REMOTE_FILE) as catalog, \
+            urllib.request.urlopen(CATALOG_CHECK_SUM) as check_sum:
+        raw_content = catalog.read()
+        remote_catalog_check_sum = check_sum.read()
 
-    return catalog_json
+        h = hashlib.sha512()
+        h.update(raw_content.encode("UTF-8"))
+        check_sum = h.hexdigest()
+
+        if check_sum != remote_catalog_check_sum:
+            raise CatalogCheckSumError("Wrong remote catalog checksum")
+
+        return json.loads(raw_content)
 
 
 def search_in_catalog(catalog: List[dict], tool_name: str) -> dict:
@@ -450,7 +466,10 @@ def main():
         exit(1)
 
     # Launch action
-    actions[cli_parsed.action](cli_parsed)
+    try:
+        actions[cli_parsed.action](cli_parsed)
+    except CatalogCheckSumError as e:
+        print(f"[!] {e}")
 
 
 if __name__ == '__main__':

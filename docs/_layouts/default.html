@@ -18,31 +18,22 @@
     <meta name="twitter:site" content="@zerostaticio" />
     <meta name="twitter:creator" content="@zerostaticio" />
 
-    <link rel="icon" href="//localhost:1313/favicon.png">
-
-
-
+    <link rel="icon" href="{{ "/favicon.png" | relative_url }}">
     <link rel="stylesheet" href="{{ "/assets/style.css" | relative_url }}">
-
-
-
-
 </head>
 
 <body class='page '>
 <div id="main-menu-mobile" class="main-menu-mobile">
     <ul>
-
-
         <li class="menu-item-home active">
-            <a href="/">
+            <a href="{{ "/" | relative_url }}">
                 <span>Home</span>
             </a>
         </li>
 
         <li class="menu-item-docs">
-            <a href="/docs/">
-                <span>Docs</span>
+            <a href="{{ "/docs/" | relative_url }}">
+                <span>Doc</span>
             </a>
         </li>
 
@@ -52,23 +43,23 @@
     <div class='header'>
         <div class="container">
             <div class="logo">
-                <a href="/"><img alt="Logo" src="{{ "/assets/images/apicheck-logo.png" | relative_url }}" /></a>
+                <a href="{{ "/" | relative_url }}"><img alt="Logo" src="{{ "/assets/images/apicheck-logo.png" | relative_url }}" /></a>
             </div>
             <div class="logo-mobile">
-                <a href="/"><img alt="Logo" src="{{ "/assets/images/apicheck-logo.png" | relative_url }}" /></a>
+                <a href="{{ "/" | relative_url }}"><img alt="Logo" src="{{ "/assets/images/apicheck-logo.png" | relative_url }}" /></a>
             </div>
             <div id="main-menu" class="main-menu">
                 <ul>
 
 
                     <li class="menu-item-home active">
-                        <a href="/">
+                        <a href="{{ "/" | relative_url }}">
                             <span>Home</span>
                         </a>
                     </li>
 
                     <li class="menu-item-docs">
-                        <a href="/docs/">
+                        <a href="{{ "/docs" | relative_url }}">
                             <span>Docs</span>
                         </a>
                     </li>

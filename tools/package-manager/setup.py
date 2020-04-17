@@ -1,11 +1,18 @@
+import re
+
 from os import path
 from setuptools import setup, find_packages
 
 here = path.abspath(path.dirname(__file__))
 
+# Get version
+with open(path.join(here, "package_manager", "__main__.py"), "r") as f:
+    c = f.read()
+    version = re.search(r'''(VERSION\s=\s\")([\d\.]+)(\")''', c).group(2)
+
 setup(
     name='apicheck-package-manager',
-    version="1.0.0",
+    version=version,
     packages=find_packages(),
     description='APICheck package manager',
     include_package_data=True,
