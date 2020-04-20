@@ -1,0 +1,12 @@
+menu_title: The Project
+url: /docs/about-project
+
+menu:
+  - title: What's APICheck
+    anchor: whats-the-project
+
+  - title: Basic concepts
+    anchor: basic-concepts
+
+  - title: Terminology
+    anchor: terminology

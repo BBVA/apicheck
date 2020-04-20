@@ -1,0 +1,22 @@
+
+menu_title: Tool list
+
+menu:
+
+  - title: replay
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: Send the traffic to the same place, in the same order, with the same params
+    url: /tools/replay
+
+  - title: sensitive-json
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: Find sensitive data in JSON content in HTTP Request / Response
+    url: /tools/sensitive-json
+
+  - title: send-to-proxy
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: Read request from stdin and send it to proxy
+    url: /tools/send-to-proxy

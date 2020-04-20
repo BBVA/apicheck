@@ -9,78 +9,38 @@ layout: default
             <div class="sidebar">
 
                 <div class="docs-menu">
-                    <h4>The Project</h4>
+                    <h4><a {% if "/docs" != page.url %}style="color: #212529"{% endif %} href="{{ "/docs/" | relative_url }}">Documentation home</a></h4>
+                    <br>
+
+                    <h4 {% if site.data.menu_project.url == page.url %}class="active"{% endif %}>{{ site.data.menu_project.menu_title }}</h4>
                     <ul>
-                        <li>
-                            <a href="{{ "/docs/about-project" | relative_url }}#whats-the-project">What's APICheck</a>
-                        </li>
-                        <li>
-                            <a href="{{ "/docs/about-project" | relative_url }}#basic-concepts">Basic concepts</a>
-                        </li>
-                        <li class="active">
-                            <a href="{{ "/docs/about-project" | relative_url }}#terminology">Terminology</a>
-                        </li>
+                        {% for item in site.data.menu_project.menu %}
+                            <li><a href="{{ site.data.menu_project.url | relative_url }}#{{ item.anchor }}">{{ item.title }}</a></li>
+                        {% endfor %}
                     </ul>
                     <br>
 
-                    <h4>Quickstart</h4>
+                    <h4 {% if site.data.menu_quickstart.url == page.url %}class="active"{% endif %}>{{ site.data.menu_quickstart.menu_title }}</h4>
                     <ul>
-                        <li class="active">
-                            <a href="{{ "/docs/quick-start" | relative_url }}#installation">Installation</a>
-                        </li>
-                        <li class="active">
-                            <a href="{{ "/docs/quick-start" | relative_url }}#requirements">Requirements</a>
-                        </li>
-                        <li class="active">
-                            <a href="{{ "/docs/quick-start" | relative_url }}#the-first-run">First run</a>
-                        </li>
-                        <li class="active">
-                            <a href="{{ "/docs/quick-start" | relative_url }}#managing-tools">Managing tools</a>
-                        </li>
-                        <li class="active">
-                            <a href="{{ "/docs/quick-start" | relative_url }}#tools-and-pipelines">Tools & Pipelines</a>
-                        </li>
+                        {% for item in site.data.menu_quickstart.menu %}
+                            <li><a href="{{ site.data.menu_quickstart.url | relative_url }}#{{ item.anchor }}">{{ item.title }}</a></li>
+                        {% endfor %}
                     </ul>
                     <br>
 
-                    <h4>Building new tools</h4>
+                    <h4 {% if site.data.menu_developers.url == page.url %}class="active"{% endif %}>{{ site.data.menu_developers.menu_title }}</h4>
                     <ul>
-
-                        <li class="active">
-                            <a href="{{ "/docs/building-new-tools" | relative_url }}#why-create-new-a-tool">Why create a new tool</a>
-                        </li>
-                        <li class="active">
-                            <a href="{{ "/docs/building-new-tools" | relative_url }}#what-do-you-need">What do you need</a>
-                        </li>
-                        <li class="active">
-                            <a href="{{ "/docs/building-new-tools" | relative_url }}#tool-scaffolding">Tool scaffolding</a>
-                        </li>
-                        <li class="active">
-                            <a href="{{ "/docs/building-new-tools" | relative_url }}#tool-example">Tool example</a>
-                        </li>
-                        <li class="active">
-                            <a href="{{ "/docs/building-new-tools" | relative_url }}#glossary">Glossary</a>
-                        </li>
+                        {% for item in site.data.menu_developers.menu %}
+                            <li><a href="{{ site.data.menu_developers.url | relative_url }}#{{ item.anchor }}">{{ item.title }}</a></li>
+                        {% endfor %}
                     </ul>
                     <br>
 
-                    <h4>Tool list</h4>
+                    <h4>{{ site.data.tools.menu_title }}</h4>
                     <ul>
-                        
-                        <li class="active">
-                            <a href="{{ "/tools/replay/" | relative_url }}">Replay</a>
-                        </li>
-
-
-                        <li class="active">
-                            <a href="{{ "/tools/sensitive-json/" | relative_url }}">Sensitive-json</a>
-                        </li>
-
-
-                        <li class="active">
-                            <a href="{{ "/tools/send-to-proxy/" | relative_url }}">Send-to-proxy</a>
-                        </li>
-
+                        {% for item in site.data.tools.menu %}
+                            <li><a {% if item.url == page.url %}class="active"{% endif %} href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+                        {% endfor %}
                     </ul>
                 </div>
 

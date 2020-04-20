@@ -8,45 +8,22 @@ title: APICheck Sensitive Data Finder
     <span class="overview">Tools Overview</span>
     <h1 class="title">Overview</h1>
     <div class="content">
-        <h2 id="whisper-theme">Whisper Theme</h2>
-
-        <p>Whisper is a minimal documentation theme for Hugo. The design and functionality is intentionally minimal. We’re aiming for a similar feel to a Github readme.</p>
+        <h2 id="whisper-theme">APICheck Project Documentation</h2>
+        <p>APICheck is a compendium of tools that you can connect between them to achieve a lot os functionality, depending how to connect them.</p>
+        <p>This page is an a list of the available tools and a brief of them. </p>
     </div>
-    
+
+    {% for item in site.data.tools.menu %}
     <div class="summary mb-2">
-        <h2 class="title-summary"><a href="{{ "/tools/replay/" | relative_url }}">Replay</a></h2>
-        <p>Send the traffic to the same place, in the same order, with the same params</p>
+        <h2 class="title-summary"><a href="{{ item.url | relative_url }}">{{ item.title | capitalize }}</a></h2>
+        <p>{{ item.brief }}</p>
         <ul>
-            <ol>- Author: <b>BBVA Labs Security</b></ol>
-            <ol>- Developer Site: <a target="_blank" href="https://github.com/BBVA/apicheck">https://github.com/BBVA/apicheck</a></ol>
+            <ol>- Author: <b>{{ item.author }}</b></ol>
+            <ol>- Developer Site: <a target="_blank" href="{{ item.home }}">{{ item.home }}</a></ol>
         </ul>
         <br />
-        <a class="button button-primary mb-2" href="{{ "/tools/replay/" | relative_url }}">Go to doc &rarr;</a>
+        <a class="button button-primary mb-2" href="{{ item.url | relative_url }}">Go to doc &rarr;</a>
     </div>
-
-
-    <div class="summary mb-2">
-        <h2 class="title-summary"><a href="{{ "/tools/sensitive-json/" | relative_url }}">Sensitive-json</a></h2>
-        <p>Find sensitive data in JSON content in HTTP Request / Response</p>
-        <ul>
-            <ol>- Author: <b>BBVA Labs Security</b></ol>
-            <ol>- Developer Site: <a target="_blank" href="https://github.com/BBVA/apicheck">https://github.com/BBVA/apicheck</a></ol>
-        </ul>
-        <br />
-        <a class="button button-primary mb-2" href="{{ "/tools/sensitive-json/" | relative_url }}">Go to doc &rarr;</a>
-    </div>
-
-
-    <div class="summary mb-2">
-        <h2 class="title-summary"><a href="{{ "/tools/send-to-proxy/" | relative_url }}">Send-to-proxy</a></h2>
-        <p>Read request from stdin and send it to proxy</p>
-        <ul>
-            <ol>- Author: <b>BBVA Labs Security</b></ol>
-            <ol>- Developer Site: <a target="_blank" href="https://github.com/BBVA/apicheck">https://github.com/BBVA/apicheck</a></ol>
-        </ul>
-        <br />
-        <a class="button button-primary mb-2" href="{{ "/tools/send-to-proxy/" | relative_url }}">Go to doc &rarr;</a>
-    </div>
-
+    {% endfor %}
 
 </div>

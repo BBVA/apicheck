@@ -1,0 +1,18 @@
+menu_title: The Project
+url: /docs/quick-start
+
+menu:
+  - title: Installation
+    anchor: installation
+
+  - title: Requirements
+    anchor: requirements
+
+  - title: First run
+    anchor: the-first-run
+
+  - title: Managing tools
+    anchor: managing-tools
+
+  - title: Tools & Pipelines
+    anchor: tools-and-pipelines
