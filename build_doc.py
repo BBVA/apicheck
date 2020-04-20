@@ -160,23 +160,24 @@ def main():
         menu_content = f.read()
 
     with open(os.path.join(f"{tools_menu_path}.html"), "w") as f:
-        f.write(menu_content.format(
-            dynamic_content="\n".join(tools_menu))
-        )
+        f.write(menu_content.replace(
+            "##dynamic_content##",
+            "\n".join(tools_menu)
+        ))
 
-    #
-    # Build catalog
-    #
-    catalog_path = os.path.join(STATIC_PATH, "catalog.json")
-    catalog_path_checksum = os.path.join(STATIC_PATH, "catalog.json.checksum")
-    with open(catalog_path, "w") as f, open(catalog_path_checksum, "w") as c:
-        cat_content = json.dumps(catalog)
+        #
+        # Build catalog
+        #
+        catalog_path = os.path.join(STATIC_PATH, "catalog.json")
+        catalog_path_checksum = os.path.join(STATIC_PATH, "catalog.json.checksum")
+        with open(catalog_path, "w") as f, open(catalog_path_checksum, "w") as c:
+            cat_content = json.dumps(catalog)
 
-        h = hashlib.sha512()
-        h.update(cat_content.encode("UTF-8"))
+            h = hashlib.sha512()
+            h.update(cat_content.encode("UTF-8"))
 
-        f.write(cat_content)
-        c.write(h.hexdigest())
+            f.write(cat_content)
+            c.write(h.hexdigest())
 
 
 if __name__ == '__main__':
