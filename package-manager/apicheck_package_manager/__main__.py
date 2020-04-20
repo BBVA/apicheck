@@ -1,12 +1,13 @@
 import os
+import re
 import json
 import hashlib
 import argparse
 import subprocess
 import urllib.request
-from collections import defaultdict
 
 from pathlib import Path
+from collections import defaultdict
 
 # -------------------------------------------------------------------------
 # Alias management
@@ -18,7 +19,15 @@ RC_FILES = {
     "zsh": ".zshrc"
 }
 
-VERSION = "1.0.0"
+
+def _get_version() -> str:
+    here = os.path.dirname(__name__)
+    init_file = os.path.join(here, "__init__.py")
+    with open(init_file, "r") as f:
+        content = f.read()
+
+    return re.match(r'(__version__)([\s]+=[\s]+)(\")([\.\d]+)(\")',
+                    content).group(4)
 
 
 class CatalogCheckSumError(Exception):
@@ -127,7 +136,7 @@ def print_table(content: List[Tuple[str, str]],
             print(" | ", end="")
             print(f"{head[1]}", end="")
             print(
-                f"{' ' * (width - (max_key_len + len(head[1]) + 5 ))}",
+                f"{' ' * (width - (max_key_len + len(head[1]) + 5))}",
                 end="")
             print(" |")
         else:
@@ -194,7 +203,6 @@ def list_packages(args: argparse.Namespace):
 
 
 def install_package(args: argparse.Namespace):
-
     def build_alias_cmd(cmd: str, docker_image: str):
         return f'''alias {cmd}="docker run --rm -i {docker_image}"'''
 
@@ -378,7 +386,6 @@ def describe_env(args: argparse.Namespace):
 
 
 def list_environments(args: argparse.Namespace):
-
     base = Path().home().joinpath(".apicheck_manager")
     meta = base.joinpath("meta.json")
 
@@ -415,7 +422,7 @@ def main():
         "activate": activate_env,
         "describe": describe_env,
         "envs": list_environments,
-        "version": lambda x: print(f"\nCurrent version: {VERSION}\n"),
+        "version": lambda x: print(f"\nCurrent version: {_get_version()}\n"),
     }
 
     parser = argparse.ArgumentParser(description='APICheck Manager')

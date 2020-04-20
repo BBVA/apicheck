@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - master
-#    paths:
-#      - "docs/**"
-#      - "tools/**/README.md"
-#      - "tools/**/META"
+    paths:
+      - "docs/**"
+      - "tools/**/README.md"
+      - "tools/**/META"
 
 jobs:
   deploy:
