@@ -39,7 +39,7 @@ layout: default
                     <h4>{{ site.data.tools.menu_title }}</h4>
                     <ul>
                         {% for item in site.data.tools.menu %}
-                            <li><a {% if item.url == page.url %}class="active"{% endif %} href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+                            <li {% if item.url == page.url %}class="active"{% endif %}><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
                         {% endfor %}
                     </ul>
                 </div>
