@@ -9,7 +9,7 @@ layout: default
             <div class="sidebar">
 
                 <div class="docs-menu">
-                    <h4><a {% if "/docs" != page.url %}style="color: #212529"{% endif %} href="{{ "/docs/" | relative_url }}">Documentation home</a></h4>
+                    <h4><a {% if "/docs" != page.url %}style="color: #212529"{% endif %} href="{{ "/docs" | relative_url }}">Documentation home</a></h4>
                     <br>
 
                     <h4 {% if site.data.menu_project.url == page.url %}class="active"{% endif %}>{{ site.data.menu_project.menu_title }}</h4>
@@ -47,9 +47,9 @@ layout: default
             </div>
         </div>
         <div class="col-12 col-md-9">
-
-            {{ content }}
-
+            <div class="content">
+                {{ content }}
+            </div>
         </div>
     </div>
 </div>
