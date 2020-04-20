@@ -84,9 +84,11 @@ def get_catalog() -> List[dict] or CatalogCheckSumError:
             urllib.request.urlopen(CATALOG_CHECK_SUM) as check_sum:
         raw_content = catalog.read()
         remote_catalog_check_sum = check_sum.read()
+        if type(remote_catalog_check_sum) is bytes:
+            remote_catalog_check_sum = remote_catalog_check_sum.decode("UTF-8")
 
         h = hashlib.sha512()
-        h.update(raw_content.encode("UTF-8"))
+        h.update(raw_content)
         check_sum = h.hexdigest()
 
         if check_sum != remote_catalog_check_sum:
