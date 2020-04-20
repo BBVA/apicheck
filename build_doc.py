@@ -114,70 +114,43 @@ def main():
     #
     # Build tools index
     #
-    tools_index_path = os.path.join(DOC_PATH,
-                                    "docs",
-                                    "index")
-    # Build text for index
-    built_index_content = []
-
+    tool_menu_item = []
     for t_name, (t_brief, t_author, t_home_page) in tools_brief.items():
-        built_index_content.append(f"""
-    <div class="summary mb-2">
-        <h2 class="title-summary"><a href="{{{{ "/tools/{t_name}/" | relative_url }}}}">{t_name.capitalize()}</a></h2>
-        <p>{t_brief}</p>
-        <ul>
-            <ol>- Author: <b>{t_author}</b></ol>
-            <ol>- Developer Site: <a target="_blank" href="{t_home_page}">{t_home_page}</a></ol>
-        </ul>
-        <br />
-        <a class="button button-primary mb-2" href="{{{{ "/tools/{t_name}/" | relative_url }}}}">Go to doc &rarr;</a>
-    </div>
-""")
-
-    with open(os.path.join(f"{tools_index_path}.html.template"), "r") as f:
-        index_template_content = f.read()
-
-    with open(os.path.join(f"{tools_index_path}.html"), "w") as f:
-        f.write(index_template_content.format(
-            content="\n".join(built_index_content))
-        )
+        tool_menu_item.append(f"  - title: {t_name}")
+        tool_menu_item.append(f"    author: {t_author}")
+        tool_menu_item.append(f"    home: {t_home_page}")
+        tool_menu_item.append(f"    brief: {t_brief}")
+        tool_menu_item.append(f"    url: /tools/{t_name}")
+        tool_menu_item.append("")
 
     #
     # Build Menu
     #
-    tools_menu_path = os.path.join(DOC_PATH, "_layouts", "doc")
-    # Build text for index
-    tools_menu = []
+    tools_menu_path_data = os.path.join(DOC_PATH, "_data", "tools.yaml")
+    tools_yaml_data = """
+menu_title: Tool list
 
-    for t_name in tools_brief.keys():
-        tools_menu.append(f"""
-                        <li class="active">
-                            <a href="{{{{ "/tools/{t_name}/" | relative_url }}}}">{t_name.capitalize()}</a>
-                        </li>
-""")
+menu:
 
-    with open(os.path.join(f"{tools_menu_path}.html.template"), "r") as f:
-        menu_content = f.read()
+"""
 
-    with open(os.path.join(f"{tools_menu_path}.html"), "w") as f:
-        f.write(menu_content.replace(
-            "##dynamic_content##",
-            "\n".join(tools_menu)
-        ))
+    with open(os.path.join(tools_menu_path_data), "w") as f:
+        f.write(tools_yaml_data)
+        f.write("\n".join(tool_menu_item))
 
-        #
-        # Build catalog
-        #
-        catalog_path = os.path.join(STATIC_PATH, "catalog.json")
-        catalog_path_checksum = os.path.join(STATIC_PATH, "catalog.json.checksum")
-        with open(catalog_path, "w") as f, open(catalog_path_checksum, "w") as c:
-            cat_content = json.dumps(catalog)
+    #
+    # Build catalog
+    #
+    catalog_path = os.path.join(STATIC_PATH, "catalog.json")
+    catalog_path_checksum = os.path.join(STATIC_PATH, "catalog.json.checksum")
+    with open(catalog_path, "w") as f, open(catalog_path_checksum, "w") as c:
+        cat_content = json.dumps(catalog)
 
-            h = hashlib.sha512()
-            h.update(cat_content.encode("UTF-8"))
+        h = hashlib.sha512()
+        h.update(cat_content.encode("UTF-8"))
 
-            f.write(cat_content)
-            c.write(h.hexdigest())
+        f.write(cat_content)
+        c.write(h.hexdigest())
 
 
 if __name__ == '__main__':

@@ -1,0 +1,18 @@
+menu_title: Building new tools
+url: /docs/building-new-tools
+
+menu:
+  - title: Why create a new tool
+    anchor: why-create-new-a-tool
+
+  - title: What do you need
+    anchor: what-do-you-need
+
+  - title: Tool scaffolding
+    anchor: tool-scaffolding
+
+  - title: Tool example
+    anchor: tool-example
+
+  - title: Glossary
+    anchor: glossary
