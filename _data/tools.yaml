@@ -20,3 +20,9 @@ menu:
     home: https://github.com/BBVA/apicheck
     brief: Read request from stdin and send it to proxy
     url: /tools/send-to-proxy
+
+  - title: OpenAPI V2 Linter
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: Lint the endpoint provided using OpenAPI v2 spec
+    url: /tools/OpenAPI V2 Linter
