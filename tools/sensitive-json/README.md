@@ -1,7 +1,5 @@
 # APICheck Sensitive Data Finder
 
-**PYTHON 3.8 needed**
-
 ## Usage through Kapow!
 
 ```bash
