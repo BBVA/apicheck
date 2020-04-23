@@ -199,7 +199,8 @@ def list_packages(args: argparse.Namespace):
     catalog = get_catalog()
 
     print_table(head=("Name", "Version"),
-                content=[(x["name"], x["version"]) for x in catalog])
+                content=[(x["name"], x["version"]) for x in catalog],
+                width=50)
 
 
 def install_package(args: argparse.Namespace):
@@ -353,7 +354,7 @@ def info_package(args: argparse.Namespace):
 
     # Find tool
     tool = search_in_catalog(catalog, tool_name)
-    if tool:
+    if not tool:
         print(f"[!] Can't find tool named '{tool_name}'")
         exit(1)
 
@@ -361,7 +362,7 @@ def info_package(args: argparse.Namespace):
     print_table(content=[
         tuple(y)
         for y in tool.items()
-    ], head=(f"Tool name '{tool_name}'",))
+    ], head=(f"Tool name '{tool_name}'",), width=75)
 
 
 def describe_env(args: argparse.Namespace):
@@ -417,7 +418,8 @@ def list_environments(args: argparse.Namespace):
         )
 
     print_table(content=results,
-                head=(f"Environment Name", "Number of installed tools"))
+                head=(f"Environment Name", "Number of installed tools"),
+                width=50)
 
 
 def main():
