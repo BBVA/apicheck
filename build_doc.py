@@ -17,6 +17,8 @@ STATIC_PATH = os.path.join(HERE, "docs", "assets")
 META_KEYS = ("name", "short-command", "version", "description",
              "home", "author")
 
+OPTIONAL_KEYS = ("short-command", )
+
 
 def main():
 
@@ -68,14 +70,15 @@ def main():
         author = meta["author"]
         tool_name = meta["name"]
         description = meta["description"]
-        short_command = meta["short-command"]
+        short_command = meta.get("short-command", None)
 
-        if short_command in short_commands:
-            print(f"[!] Short-command \"{short_command}\" at tool "
-                  f"'{tool_name}' already exits in another tool")
-            exit(1)
-        else:
-            short_commands.add(short_command)
+        if short_command:
+            if short_command in short_commands:
+                print(f"[!] Short-command \"{short_command}\" at tool "
+                      f"'{tool_name}' already exits in another tool")
+                exit(1)
+            else:
+                short_commands.add(short_command)
 
         if tool_name in tool_names:
             print(f"[!] Tool name '{tool_name}' already exits used "
