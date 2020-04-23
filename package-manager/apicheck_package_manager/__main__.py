@@ -213,7 +213,8 @@ def install_package(args: argparse.Namespace):
     catalog = get_catalog()
 
     # Find tool
-    if not (tool := search_in_catalog(catalog, tool_name)):
+    tool = search_in_catalog(catalog, tool_name)
+    if not tool:
         print(f"[!] Can't find tool named '{tool_name}'")
         exit(1)
 
@@ -232,9 +233,13 @@ def install_package(args: argparse.Namespace):
                             stdout=subprocess.PIPE,
                             shell=True)
 
-    # while line := proc.stdout.poll():
     print("")
-    while line := proc.stdout.readline():
+    while 1:
+        line = proc.stdout.readline()
+
+        if not line:
+            break
+
         print("   ", line.decode("UTF-8"), end="")
     print("")
 
@@ -347,7 +352,8 @@ def info_package(args: argparse.Namespace):
     catalog = get_catalog()
 
     # Find tool
-    if not (tool := search_in_catalog(catalog, tool_name)):
+    tool = search_in_catalog(catalog, tool_name)
+    if tool:
         print(f"[!] Can't find tool named '{tool_name}'")
         exit(1)
 
