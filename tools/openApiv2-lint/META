@@ -1,0 +1,6 @@
+name = OpenAPI V2 Linter
+short-command = oapiv2lint
+version = 1.0.0
+description = Lint the endpoint provided using OpenAPI v2 spec
+home = https://github.com/BBVA/apicheck
+author = BBVA Labs Security
