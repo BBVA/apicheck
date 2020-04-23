@@ -45,12 +45,12 @@ Well, if you're here this mind that you're interested in how to create a new too
 
 In summary we'll need to do these things:
 
-- [ ] Fork APICheck repo
-- [ ] Clone forked repo
-- [ ] Creates a new folder in */tools* directory.
-- [ ] Add files: META, README.md and Dockerfile
-- [ ] Push the repo to our account in Github
-- [ ] Send us a Pull Request
+1. Fork APICheck repo
+2. Clone forked repo
+3. Creates a new folder in */tools* directory.
+4. Add files: META, README.md and Dockerfile
+5. Push the repo to our account in Github
+6. Send us a Pull Request
 
 ## Step 1 - fork Github repo
 
@@ -155,7 +155,7 @@ $ git push
 
 Only "click" in the "New pull request" button at Github:
 
-![Send us a Pull Request](/assets/images/doc_develop_pull_request.png)
+![Send us a Pull Request](/apicheck/assets/images/doc_develop_pull_request.png)
 
 TODO
 
