@@ -122,7 +122,7 @@ Wellcome to the demo tool of APICheck tutorial
 ....
 ```
 
-:warning: Be careful with the name of file, the name must be in upper case and the extension in lower case.
+&#9888; Be careful with the name of file, the name must be in upper case and the extension in lower case.
 
 ## Step 6 - Include the Dockefile
 
