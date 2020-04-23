@@ -83,12 +83,12 @@ Meta information is contained in a file called *META*. Format of this file is a 
 
 You must include **all** of these fields for a valid META file:
 
-- name: tools name. This name will be used for catalog, Docker image and for installing the tool. **Must be unique**.
-- short-command (optional): some times tool name is too long. short command is easy to typing alias. when you'r tool was intalled by the package-manage, it will creates 2 commands name. One of them will be the name of the tool and the other command will be a short command for the tool. **Must be unique**. 
-- version: version of the tool. It's recommendable to follow semantic format, but you're free to put use you're version format
-- description: a description of your tool. Try to be descriptive. There's not limit for description long, but we recommend not more than 150 characters.
-- home: author can include a link of the tool home, their profile os something else. This field is open.
-- author: author name or team
+- *name*: tools name. This name will be used for catalog, Docker image and for installing the tool. **Must be unique**.
+- *short-command* (optional): some times tool name is too long. short command is easy to typing alias. when you'r tool was intalled by the package-manage, it will creates 2 commands name. One of them will be the name of the tool and the other command will be a short command for the tool. **Must be unique**. 
+- *version*: version of the tool. It's recommendable to follow semantic format, but you're free to put use you're version format
+- *description*: a description of your tool. Try to be descriptive. There's not limit for description long, but we recommend not more than 150 characters.
+- *home*: author can include a link of the tool home, their profile os something else. This field is open.
+- *author*: author name or team
 
 You must put the *META* file in the root of the folder we just created for our tool:
 
@@ -122,7 +122,7 @@ Wellcome to the demo tool of APICheck tutorial
 ....
 ```
 
-    Be careful with the name of file, the name must be in upper case and the extesion in lower case.
+:warning: Be careful with the name of file, the name must be in upper case and the extension in lower case.
 
 ## Step 6 - Include the Dockefile
 
@@ -157,7 +157,6 @@ Only "click" in the "New pull request" button at Github:
 
 ![Send us a Pull Request](/apicheck/assets/images/doc_develop_pull_request.png)
 
-TODO
 
 <a id="tool-scaffolding"></a>
 
