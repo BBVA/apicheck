@@ -1,4 +1,4 @@
-name = OpenAPI V3 Linter
+name = openapiv3-lint
 short-command = oapiv3lint
 version = 1.0.0
 description = Lint the endpoint provided using OpenAPI v3 spec
