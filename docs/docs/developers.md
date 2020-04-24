@@ -35,15 +35,15 @@ Once the logic of a tool is inside packaged, it's necessary to provide some info
 
 APICheck was developed following automation mechanism. Each time a tool developer add or modify something in any tool, building process will be raised and build releases the new version for the tool.  
 
-<a id="what-do-you-need"></a>
-<a id="steps-for-creating-a-new-tool"></a>
 
-## APICheck and pipelines
+<a id="apicheck-and-pipelines"></a>
+# APICheck and pipelines
 
 APICheck was made as a small set of tools but they can be interact, borrowing the UNIX pipelines:
 
 ![APICheck UNIX Pipeline](/apicheck/assets/images/apicheck_unix_pipeline.png)
 
+<a id="apicheck-data-format"></a>
 # APICheck data format
 
 As we said APICheck was made with *pipeline* concept in mind. So, to communicate tools between them they must share a common format. This is that we call *APICheck data Format*.
@@ -100,7 +100,6 @@ This mind that *tools that receives the JSON must decode this field*.
 
 So this file must progress between each pipeline step. Each tool can add their results or something else at *_meta* key. This key is a free field that tools can fill.
 
-<a id="one-line-format"></a>
 ### One JSON line format
 
 The above example is not really valid for data for APICheck data format. 
@@ -123,6 +122,7 @@ $ cat 3_apicheck_data.json
 $ cat 3_apicheck_data.json | sensitive-json | pretty-display
 ```  
 
+<a id="steps-for-creating-a-new-tool"></a>
 # Steps for creating a new tool
 
 Well, if you're here this mind that you're interested in how to create a new tool. You must follow these steps:
@@ -244,8 +244,6 @@ Only "click" in the "New pull request" button at Github:
 
 ![Send us a Pull Request](/apicheck/assets/images/doc_develop_pull_request.png)
 
-
-<a id="tool-scaffolding"></a>
 
 <a id="faq"></a>
 # F.A.Q.
