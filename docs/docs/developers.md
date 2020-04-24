@@ -169,8 +169,9 @@ Meta information is contained in a file called *META*. Format of this file is a 
 
 You must include **all** of these fields for a valid META file:
 
-- *name*: tools name. This name will be used for catalog, Docker image and for installing the tool. **Must be unique**.
+- *name*: tools name. This name will be used for catalog, Docker image and for installing the tool. **Must be unique**. *This field only can contains: Letters, numbers and "-" / "_" symbols*. 
 - *short-command* (optional): some times tool name is too long. short command is easy to typing alias. when you'r tool was intalled by the package-manage, it will creates 2 commands name. One of them will be the name of the tool and the other command will be a short command for the tool. **Must be unique**. 
+- *display-name*: text that you want to be displayed in the catalog.
 - *version*: version of the tool. It's recommendable to follow semantic format, but you're free to put use you're version format
 - *description*: a description of your tool. Try to be descriptive. There's not limit for description long, but we recommend not more than 150 characters.
 - *home*: author can include a link of the tool home, their profile os something else. This field is open.
