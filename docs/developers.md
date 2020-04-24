@@ -46,7 +46,82 @@ APICheck was made as a small set of tools but they can be interact, borrowing th
 
 # APICheck data format
 
-TODO
+As we said APICheck was made with *pipeline* concept in mind. So, to communicate tools between them they must share a common format. This is that we call *APICheck data Format*.
+
+The format is very easy: A JSON with these keys:
+
+- request
+- response
+- _meta
+
+The complete JSON format example, as pretty display:
+
+```json
+{
+  "_meta": {
+    "host": "nvd.nist.gov",
+    "schema": "https",
+    "tool1": {
+        "custom_results": "custom results that output from tool 1"
+    } 
+  },
+  "request": {
+    "path": "/",
+    "method": "get",
+    "headers": {
+      "User-Agent": "curl/7.54.0",
+      "Accept": "*/*"
+    },
+    "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"
+  },
+  "response": {
+    "status": 200,
+    "reason": "Ok",
+    "headers": {},
+    "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"
+  }
+}
+```
+&#9888; This is NOT a valid JSON file for APICheck. Check [One line format section](#one-line-format) 
+
+## Important notes about data format
+
+### Progressing data through pipeline
+
+This file must progress through tools pipeline. The idea is that not only the first tool in the pipe receive the information, also the ending tools must receive it.
+
+### Body encoding
+
+The body key is encoded as base64. The reason is to allow to put inside any kind of data, no only text: images, random binary files, JSON...
+
+This mind that *tools that receives the JSON must decode this field*.  
+
+### The '_meta'
+
+So this file must progress between each pipeline step. Each tool can add their results or something else at *_meta* key. This key is a free field that tools can fill.
+
+<a id="one-line-format"></a>
+### One JSON line format
+
+The above example is not really valid for data for APICheck data format. 
+
+To be APICheck compliant the JSON must be represented as: *One JSON per line*. The above example should be represented as:
+
+```json
+{"_meta": null, "request": {"url": "https://nvd.nist.gov/", "method": "get", "headers": {"User-Agent": "curl/7.54.0", "Accept": "*/*"}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}, "response": {"status": 200, "reason": "Ok", "headers": {}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}}
+``` 
+
+The reason to do that is to allow data streaming. JSON is not a format that was designed for streaming. To overcome this limitation and allow to send more than 1 data in a pipeline, and having in count that tools will read from stdin, they will read line by line the standard system input. So, each time they read a line they will be reading a complete data from previous step.
+
+Example of 3 input data:
+
+```console
+$ cat 3_apicheck_data.json
+{"_meta": null, "request": {"url": "https://google.com/", "method": "post", "headers": {"User-Agent": "curl/7.54.0", "Accept": "*/*"}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}, "response": {"status": 200, "reason": "Ok", "headers": {}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}}
+{"_meta": null, "request": {"url": "https://www.skype.com/", "method": "head", "headers": {"User-Agent": "curl/7.54.0", "Accept": "*/*"}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}, "response": {"status": 200, "reason": "Ok", "headers": {}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}}
+{"_meta": null, "request": {"url": "https://nvd.nist.gov/", "method": "get", "headers": {"User-Agent": "curl/7.54.0", "Accept": "*/*"}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}, "response": {"status": 200, "reason": "Ok", "headers": {}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}}
+$ cat 3_apicheck_data.json | sensitive-json | pretty-display
+```  
 
 # Steps for creating a new tool
 
@@ -94,8 +169,9 @@ Meta information is contained in a file called *META*. Format of this file is a 
 
 You must include **all** of these fields for a valid META file:
 
-- *name*: tools name. This name will be used for catalog, Docker image and for installing the tool. **Must be unique**.
+- *name*: tools name. This name will be used for catalog, Docker image and for installing the tool. **Must be unique**. *This field only can contains: Letters, numbers and "-" / "_" symbols*. 
 - *short-command* (optional): some times tool name is too long. short command is easy to typing alias. when you'r tool was intalled by the package-manage, it will creates 2 commands name. One of them will be the name of the tool and the other command will be a short command for the tool. **Must be unique**. 
+- *display-name*: text that you want to be displayed in the catalog.
 - *version*: version of the tool. It's recommendable to follow semantic format, but you're free to put use you're version format
 - *description*: a description of your tool. Try to be descriptive. There's not limit for description long, but we recommend not more than 150 characters.
 - *home*: author can include a link of the tool home, their profile os something else. This field is open.

@@ -3,13 +3,13 @@ menu_title: Tool list
 
 menu:
 
-  - title: replay
+  - title: Re-send HTTP Request
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
     brief: Send the traffic to the same place, in the same order, with the same params
     url: /tools/replay
 
-  - title: sensitive-json
+  - title: Sensitive JSON Finder
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
     brief: Find sensitive data in JSON content in HTTP Request / Response
@@ -21,7 +21,7 @@ menu:
     brief: Lint the endpoint provided using OpenAPI v3 spec
     url: /tools/openapiv3-lint
 
-  - title: send-to-proxy
+  - title: Send data to Proxy
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
     brief: Read request from stdin and send it to proxy
