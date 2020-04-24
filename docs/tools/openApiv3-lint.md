@@ -1,7 +1,7 @@
 ---
 layout: doc
 title: openApiv3-lint
-permalink: /tools/OpenAPI V3 Linter
+permalink: /tools/openapiv3-lint
 ---
 
 # openApiv3-lint

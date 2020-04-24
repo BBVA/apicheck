@@ -15,11 +15,11 @@ menu:
     brief: Find sensitive data in JSON content in HTTP Request / Response
     url: /tools/sensitive-json
 
-  - title: OpenAPI V3 Linter
+  - title: openapiv3-lint
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
     brief: Lint the endpoint provided using OpenAPI v3 spec
-    url: /tools/OpenAPI V3 Linter
+    url: /tools/openapiv3-lint
 
   - title: send-to-proxy
     author: BBVA Labs Security
@@ -27,8 +27,8 @@ menu:
     brief: Read request from stdin and send it to proxy
     url: /tools/send-to-proxy
 
-  - title: OpenAPI V2 Linter
+  - title: openapiv2-lint
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
     brief: Lint the endpoint provided using OpenAPI v2 spec
-    url: /tools/OpenAPI V2 Linter
+    url: /tools/openapiv2-lint
