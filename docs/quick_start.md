@@ -7,23 +7,27 @@ permalink: /docs/quick-start
 <a id="requirements"></a>
 # Requirements
 
-APICheck, under the hoods, runs inside Docker. So you must be installed Docker to run it. 
+APICheck, under the hoods, runs inside Docker. So you must have the Docker
+daemon installed to run it.
 
-Although you can run APICheck tools by running each Docker Image We'll recommend use the **APICheck Package Manager**. This document will explain how to run APICheck by them. 
+Although you can run APICheck tools by directly downloading and running each
+Docker image, We recommend you to use the ***APICheck Package Manager***. This
+document will explain how to use it to run APICheck.
 
 <a id="installation"></a>
 # Installation
 
-To install package manager you need Python >= 3.5. Then installation is easy.
+*Package Manager* needs Python >= 3.5 installed. To install it just type in
+your console:
 
 ```console
 $ pip install apicheck-package-manager
-``` 
+```
 
 <a id="the-first-run"></a>
 # The First Run
 
-The package manager runs after installation by the command *acp*.
+Once installed you can run the *Package Manager* by using the command *acp*.
 
 ```console
 $ acp
@@ -48,13 +52,14 @@ optional arguments:
   -h, --help            show this help message and exit
   -H DOCKER_HOST, --docker-host DOCKER_HOST
                         docker url. default: tcp://127.0.0.1:2375
-``` 
+```
 
-## Listing available tools 
+*Package Manager* allows you to list available tools, install them and so on.
 
-As any other package manager, you can list available tools, install an so on. 
+## Listing available tools
 
-For listing available tools in APICheck repository you can run:
+In order to list all available tools in APICheck repository you can run the list
+subcommand:
 
 ```console
 $ acp list
@@ -68,7 +73,7 @@ $ acp list
 | send-to-proxy  | 1.0.0                           |
 +--------------------------------------------------+
 ````
-If you want more info about some tool you can run:
+If you want more info about some tool use the info subcommand:
 
 ```console
 $ acp info sensitive-json
@@ -92,13 +97,14 @@ $ acp info sensitive-json
 
 ## Installing a new tool
 
-The tool installing process, under the hoods, does the follows:
+In order to use a tool you have to install it by using the install subcommand.
+Under the hoods, the installation process is as follows:
 
-1. Download tool Docker Image
-2. Register installed tool
-3. Create environment with alias
+1. Download the Docker image
+2. Register the tool in the environment
+3. Create the alias
 
-As example will install *sensitive-json* tool:
+As an example, this is how you can install *sensitive-json* tool:
 
 ```console
 $ acp install sensitive-json
@@ -139,15 +145,18 @@ $ acp install sensitive-json
 ```
 
 <a id="apicheck-environments"></a>
-# APICheck environments 
+# APICheck environments
 
-Depending of tests you're doing probability you may want to use different tools and **different version** of them.
+Depending on the projects you're working on, probably you may want to use
+different tools and, even, *different versions* of those tools. In order to help
+coping with this scenarios APICheck has the concept of *Environments*.
 
-APICheck work with the concept of **environments**. An environment can contain a custom list of tools installed and you can *activate* or *move* between different environments.
+An environment contains its own set of tools installed, and you can *activate*
+(move) between the existing environments.
 
 ## List environments
 
-You can list available environments typing: 
+You can list available environments with the *envs* subcommand:
 
 ```console
 $ acp envs
@@ -158,14 +167,35 @@ $ acp envs
 +------------------------------------------------------------+
 ```  
 
-&#9888; The environment *default* is activated if not other choice was indicated.
+&#9888; The *default* environment always exist and it is activated by default.
+
+## Activating an environment
+
+Activating an environment means that you can use all the installed tools will
+as regular commands. To activate an environment use the activate subcommand:
+
+```console
+$ eval $(acp activate myenvironment)
+(APICheck) $
+```
+
+If you want to leave the environment use the deactivate subcommand:
+
+```console
+(APICheck) $ deactivate myenvironment
+$
+```
+
+&#9888; The idea of using *eval* idea was taken from [Docker Machine](https://docs.docker.com/machine/reference/create#specifying-configuration-options-for-the-created-docker-engine)
 
 ## Environments content
 
-You can check tools installed in an environment doing:
+In order to know the tools currently installed iin the environment use the
+describe subcommand:
 
 ```console
 $ acp describe
+
 +------------------------------------------------------------+
 | Environment | default                                      |
 +------------------------------------------------------------+
@@ -177,34 +207,16 @@ $ acp describe
 +------------------------------------------------------------+
 ```
 
-&#9888; If not environment is passed as parameter, default envs will be listed
-
-## Activating an environment
-
-Enter in an environment means that all the tools installed will be available as regular commands. 
-
-To activate an environment you must type:
-
-```console
-$ eval $(acp activate)
-(APICheck) $ 
-``` 
-
-For exit of environment:
-
-```console
-(APICheck) $ deactivate
-$
-```
-
-&#9888; Using eval idea was taken form [Docker Machine](https://docs.docker.com/machine/reference/create/#specifying-configuration-options-for-the-created-docker-engine)
+&#9888; If no environment is given to the command, the *default* environment
+will be used.
 
 <a id="running-tools"></a>
 # Running tools
 
-Once you're in a environment you can run tool (finally!).
+Once you're in an active environment you can run the tools you need (finally!).
 
-Remember that for this *Quickstart* document we were installed *sensitive-json* tool. So we'll available the command: **sensitive-json**:
+Remember that for this *Quickstart* document we have installed the
+*sensitive-json* tool, that it is available as the command: ***sensitive-json***:
 
 ```console
 (APICheck) $ sensitive-json -h
@@ -227,7 +239,7 @@ optional arguments:
   --server SERVER       launch a as server mode at localhost:8000
 ```
 
-Remember that some tools also have short-commands (you can check it with *acp info* command). You also can run it if you want short version of command:
+Some tools can have alias (*short-command*, you can check it with the *acp info* command), so you can also run them by using their alias:
 
 ```console
 (APICheck) $ asej -h
@@ -250,16 +262,17 @@ optional arguments:
   --server SERVER       launch a as server mode at localhost:8000
 ```
 
-For usage of each tool, you can check their documentation at [APICheck documentation](https://bbva.github.io/apicheck/docs).
+For getting usage information about tools, you can check their documentation at [APICheck documentation](https://bbva.github.io/apicheck/docs).
 
 <a id="tools-and-pipelines"></a>
 
 <a id="tools-and-pipelines"></a>
 # Tools & Pipelines
 
-The power of APICheck is the capability to chain tools by using UNIX-like pipelines.
+The power of APICheck resides in its capability of chaining tools by using
+UNIX-like pipelines.
 
-For this example we'll use a **.json** file that contains a message (in APICheck format) for a query with sensitive data at the body of the Request (You can find this file at: [demo .json file](https://github.com/BBVA/apicheck/blob/master/tools/sensitive-json/examples/valid-request-user-password-one-line.json))  
+In this example we'll use a **.json** file that contains a message (in [APICheck format](/docs/developers)) for a query with sensitive data at the body of the Request (You can find this file at: [demo .json file](https://github.com/BBVA/apicheck/blob/master/tools/sensitive-json/examples/valid-request-user-password-one-line.json))  
 
 ```console
 (APICheck) $ cat demo-request.json | asej
