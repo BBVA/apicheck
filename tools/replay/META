@@ -1,4 +1,5 @@
 name = replay
+display-name = Re-send HTTP Request
 short-command = arep
 version = 1.0.0
 description = Send the traffic to the same place, in the same order, with the same params

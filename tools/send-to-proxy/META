@@ -1,4 +1,5 @@
 name = send-to-proxy
+display-name = Send data to Proxy
 short-command = asp
 version = 1.0.0
 description = Read request from stdin and send it to proxy
