@@ -100,6 +100,7 @@ This mind that *tools that receives the JSON must decode this field*.
 
 So this file must progress between each pipeline step. Each tool can add their results or something else at *_meta* key. This key is a free field that tools can fill.
 
+<a id="one-line-format"></a>
 ### One JSON line format
 
 The above example is not really valid for data for APICheck data format. 
