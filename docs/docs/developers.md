@@ -37,6 +37,17 @@ APICheck was developed following automation mechanism. Each time a tool develope
 
 <a id="what-do-you-need"></a>
 <a id="steps-for-creating-a-new-tool"></a>
+
+## APICheck and pipelines
+
+APICheck was made as a small set of tools but they can be interact, borrowing the UNIX pipelines:
+
+![APICheck UNIX Pipeline](/apicheck/assets/images/apicheck_unix_pipeline.png)
+
+# APICheck data format
+
+TODO
+
 # Steps for creating a new tool
 
 Well, if you're here this mind that you're interested in how to create a new tool. You must follow these steps:
