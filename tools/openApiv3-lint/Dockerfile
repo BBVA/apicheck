@@ -7,6 +7,3 @@ RUN apk update && \
 COPY linter.sh /bin
 
 ENTRYPOINT ["linter.sh"]
-
-
-https://raw.githubusercontent.com/GoogleCloudPlatform/endpoints-samples/master/k8s/openapi.yaml
