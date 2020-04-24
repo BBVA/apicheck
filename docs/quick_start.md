@@ -166,7 +166,6 @@ You can check tools installed in an environment doing:
 
 ```console
 $ acp describe
-```
 +------------------------------------------------------------+
 | Environment | default                                      |
 +------------------------------------------------------------+
@@ -176,6 +175,7 @@ $ acp describe
 +------------------------------------------------------------+
 | sensitive-json | 1.0.0                                     |
 +------------------------------------------------------------+
+```
 
 &#9888; If not environment is passed as parameter, default envs will be listed
 
@@ -197,7 +197,7 @@ For exit of environment:
 $
 ```
 
-&#9888; Using eval idea was taken form ![Docker Machine](https://docs.docker.com/machine/reference/create/#specifying-configuration-options-for-the-created-docker-engine)
+&#9888; Using eval idea was taken form [Docker Machine](https://docs.docker.com/machine/reference/create/#specifying-configuration-options-for-the-created-docker-engine)
 
 <a id="running-tools"></a>
 # Running tools
@@ -250,7 +250,7 @@ optional arguments:
   --server SERVER       launch a as server mode at localhost:8000
 ```
 
-For usage of each tool, you can check their documentation at ![APICheck documentation](https://bbva.github.io/apicheck/docs).
+For usage of each tool, you can check their documentation at [APICheck documentation](https://bbva.github.io/apicheck/docs).
 
 <a id="tools-and-pipelines"></a>
 
@@ -259,7 +259,7 @@ For usage of each tool, you can check their documentation at ![APICheck document
 
 The power of APICheck is the capability to chain tools by using UNIX-like pipelines.
 
-For this example we'll use a **.json** file that contains a message (in APICheck format) for a query with sensitive data at the body of the Request (You can find this file at: ![demo .json file](https://github.com/BBVA/apicheck/blob/master/tools/sensitive-json/examples/valid-request-user-password-one-line.json))  
+For this example we'll use a **.json** file that contains a message (in APICheck format) for a query with sensitive data at the body of the Request (You can find this file at: [demo .json file](https://github.com/BBVA/apicheck/blob/master/tools/sensitive-json/examples/valid-request-user-password-one-line.json))  
 
 ```console
 (APICheck) $ cat demo-request.json | asej
