@@ -7,33 +7,46 @@ permalink: /docs/building-new-tools
 <a id="why-create-new-a-tool"></a>
 # Why create a new tool
 
-APICheck is a tool set that working together can be used for many different results.
+APICheck is comprised by a set of tools that combined together can provide a lot
+of different functionality. APICheck can not only integrate self-developed tools,
+but also can leverage on existing tools in order to take advantage of them to
+provide new functionality.
 
-APICheck not only integrates self-developed tools, it's can also integrate existing tools into their ecosystem to take the advantage of the rest of tools.
+Either you wish to develop a new cool tool or integrate an already existing tool
+you need to follow som steps in order to make it available in APICheck. At this
+point this is the document you need to read.
 
-You may want to add a new cool tool (self-developed or already existing) to the tool set. If you're at this point this is the document you need to read.
 
 <a id="tools-philosophy"></a>
 # Tools philosophy
 
-## Tools packaging
+## Packaging
 
-Each tool of APICheck is a packaged Docker Image. This mind that a tools is really a *black box* that receive some information from the standard input and put the results in the standard outputs: console output and console error.
+Each tool in APICheck is a Docker image. This means that tools are a *black box*
+that could receive some information into its standard input and write results
+in the standard output and or error. Aditionally the return code can be used to
+stop the current chain.
 
-Inside the Docker Image the developer are free to install or add any tool they think it's necessary.
+Inside the Docker image developers are free to install any tool they think it's
+necessary.
 
 ## Meta information
 
-Once the logic of a tool is inside packaged, it's necessary to provide some information that helps users to know what our tools does. Needed information are things like:
+Every tool needs to provide some information in order to be properly managed by
+the *Package Manager* and to give information that helps users to know what the
+tools does. Among this information are items such as:
 
-- tool nane
+- Tool nane
 - version
-- description
+- Description
 - ...
 
 ## Automating the integration of new tools
 
-APICheck was developed following automation mechanism. Each time a tool developer add or modify something in any tool, building process will be raised and build releases the new version for the tool.  
+APICheck leverages on build automation to mantatain al publish the set of tools
+currently available. Each time a developer adds or modifies a tool (via a pull
+request), the build process will be launch to generate a new release for the
+tool.
 
 
 <a id="apicheck-and-pipelines"></a>
@@ -63,7 +76,7 @@ The complete JSON format example, as pretty display:
     "schema": "https",
     "tool1": {
         "custom_results": "custom results that output from tool 1"
-    } 
+    }
   },
   "request": {
     "path": "/",
@@ -82,7 +95,7 @@ The complete JSON format example, as pretty display:
   }
 }
 ```
-&#9888; This is NOT a valid JSON file for APICheck. Check [One line format section](#one-line-format) 
+&#9888; This is NOT a valid JSON file for APICheck. Check [One line format section](#one-line-format)
 
 ## Important notes about data format
 
@@ -103,13 +116,13 @@ So this file must progress between each pipeline step. Each tool can add their r
 <a id="one-line-format"></a>
 ### One JSON line format
 
-The above example is not really valid for data for APICheck data format. 
+The above example is not really valid for data for APICheck data format.
 
 To be APICheck compliant the JSON must be represented as: *One JSON per line*. The above example should be represented as:
 
 ```json
 {"_meta": null, "request": {"url": "https://nvd.nist.gov/", "method": "get", "headers": {"User-Agent": "curl/7.54.0", "Accept": "*/*"}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}, "response": {"status": 200, "reason": "Ok", "headers": {}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}}
-``` 
+```
 
 The reason to do that is to allow data streaming. JSON is not a format that was designed for streaming. To overcome this limitation and allow to send more than 1 data in a pipeline, and having in count that tools will read from stdin, they will read line by line the standard system input. So, each time they read a line they will be reading a complete data from previous step.
 
@@ -146,14 +159,14 @@ This step don't need more explanation :)
 ## Step 2 - clone your forked repo
 
 ```console
-$ git clone https://github.com/[YOUR-GITHUB-USER]/apicheck 
+$ git clone https://github.com/[YOUR-GITHUB-USER]/apicheck
 ```
 
 It was the easy part :)
 
 ## Step 3 - create a the tool folder
 
-APICheck tools are inside */tools* folder. Each tool has their own folder. 
+APICheck tools are inside */tools* folder. Each tool has their own folder.
 
 Folders names can contain: numbers, letters and "_" or "-".
 
@@ -170,8 +183,8 @@ Meta information is contained in a file called *META*. Format of this file is a 
 
 You must include **all** of these fields for a valid META file:
 
-- *name*: tools name. This name will be used for catalog, Docker image and for installing the tool. **Must be unique**. *This field only can contains: Letters, numbers and "-" / "_" symbols*. 
-- *short-command* (optional): some times tool name is too long. short command is easy to typing alias. when you'r tool was intalled by the package-manage, it will creates 2 commands name. One of them will be the name of the tool and the other command will be a short command for the tool. **Must be unique**. 
+- *name*: tools name. This name will be used for catalog, Docker image and for installing the tool. **Must be unique**. *This field only can contains: Letters, numbers and "-" / "_" symbols*.
+- *short-command* (optional): some times tool name is too long. short command is easy to typing alias. when you'r tool was intalled by the package-manage, it will creates 2 commands name. One of them will be the name of the tool and the other command will be a short command for the tool. **Must be unique**.
 - *display-name*: text that you want to be displayed in the catalog.
 - *version*: version of the tool. It's recommendable to follow semantic format, but you're free to put use you're version format
 - *description*: a description of your tool. Try to be descriptive. There's not limit for description long, but we recommend not more than 150 characters.
@@ -187,14 +200,14 @@ $ cat META
 name = hello-world-tool
 short-command = ac-hwt
 version = 1.0.0
-description = All good tutorials must include a Hello World example! :) 
+description = All good tutorials must include a Hello World example! :)
 home = https://github.com/BBVA/apicheck
 author = BBVA Labs Security
 ```
 
 ## Step 5 - Include tool documentation
 
-Each tool must include their own documentation file. This is very important part of your tool. 
+Each tool must include their own documentation file. This is very important part of your tool.
 
 Documentation must be write in Markdown format. It must be included in the root of your folder tool and must be called **README.md**:
 
@@ -237,7 +250,7 @@ At this point we only need to commit and push the new plugin to Github:
 $ git add tools/hello-world-tool/
 $ git commit -am "my first APICheck tool!"
 $ git push
-``` 
+```
 
 ### Step 8 - Send us a Pull Request
 
@@ -253,15 +266,15 @@ Only "click" in the "New pull request" button at Github:
 
 Absolutely no! You can develop in your favorite code language. Some member os the APICheck team loves Bash and some tools was integrade without codding any line.
 
-Have in mind that each tool are packaged in a Docker Image. Inside this Docker Image you're the king/Queen. You can install all you need to build your tools. 
+Have in mind that each tool are packaged in a Docker Image. Inside this Docker Image you're the king/Queen. You can install all you need to build your tools.
 
 ## Is there any good practice for building tools?
 
 - Build small docker images as you can
-- Don't use tool name that already exits as part of APICheck ecosystem 
+- Don't use tool name that already exits as part of APICheck ecosystem
 
 ## I updated my tool, but no new release was published
 
-As the building process is automated it only raises if you modify something at the *META* file. 
+As the building process is automated it only raises if you modify something at the *META* file.
 
-If you're releasing a new tool version, be sure you update the version number in *META* file. 
+If you're releasing a new tool version, be sure you update the version number in *META* file.
