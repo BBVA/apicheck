@@ -248,7 +248,7 @@ def server(args: argparse.Namespace):
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Analyze a HTTP Request / Response for sensitive data'
+        description='Analyze a HTTP Request / Response searching for sensitive data'
     )
     parser.add_argument('-F', '--ignore-file',
                         action="append",
@@ -267,7 +267,7 @@ def main():
                         help="quiet mode")
     parser.add_argument('--server',
                         default=None,
-                        help="launch a as server mode at localhost:8000")
+                        help="launch in server mode listening at localhost:8000")
 
     parsed_cli = parser.parse_args()
 

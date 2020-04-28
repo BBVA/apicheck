@@ -1,5 +1,19 @@
 # APICheck Sensitive Data Finder
 
+Analyzes a HTTP Request / Response searching for sensitive data.
+
+The following options flags are supported:
+- -F, --ignore-file&nbsp;&nbsp;&nbsp;&nbsp;path to file containing ignores rules
+- -i,--ignore-rule&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rule ID to ignore
+- -r,--rules-file&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path to rules file. One rule ID per line
+- -o,--output-file&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path to output file
+- -q,--quiet&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run in quiet mode
+- --server&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run in server mode listening at localhost:8000
+
+If not in quiet mode and no output file specified it outputs the list of
+findings in standard output.
+
+
 ## Usage through Kapow!
 
 ```bash
@@ -11,7 +25,7 @@
 
 ## Usage cli
 
-For the following examples *data.json* is a APICheck format file with a Request / Response info.
+In the following examples *data.json* is an APICheck file with Request / Response info.
 
 ### With remote rules
 

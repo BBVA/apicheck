@@ -1,9 +1,11 @@
 FROM cr0hn/docker-python-async-deps
 
 RUN apk update \
+    && apk upgrade \
     && apk add --no-cache build-base
 
 COPY ./requirements.txt /app/sensitive_json/requirements.txt
+
 RUN pip install -U -r /app/sensitive_json/requirements.txt \
     && rm -rf /var/cache/apk/* /var/tmp/* /tmp/* /root/.cache/*
 

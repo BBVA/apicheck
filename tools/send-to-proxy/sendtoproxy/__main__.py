@@ -170,12 +170,12 @@ def run(args: argparse.Namespace):
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Read request from stdin and send it to proxy'
+        description='Read requests from stdin and send them to a remote proxy'
     )
-    parser.add_argument('PROXY', help="proxy in format: SCHEME://HOST:PORT")
-    parser.add_argument('-q', '--quiet',
+    parser.add_argument("PROXY", help="proxy in format: SCHEME://HOST:PORT")
+    parser.add_argument("-q", "--quiet",
                         dest="QUIET_MODE",
-                        help='do not display any information in stdout',
+                        help="don't display any information in stdout",
                         action="store_true",
                         default=False)
     parsed_cli = parser.parse_args()

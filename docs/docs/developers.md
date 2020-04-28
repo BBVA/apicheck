@@ -37,7 +37,7 @@ the *Package Manager* and to give information that helps users to know what the
 tools does. Among this information are items such as:
 
 - Tool nane
-- version
+- versionapicheck/
 - Description
 - ...
 
