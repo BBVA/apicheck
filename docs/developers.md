@@ -43,31 +43,34 @@ tools does. Among this information are items such as:
 
 ## Automating the integration of new tools
 
-APICheck leverages on build automation to mantatain al publish the set of tools
-currently available. Each time a developer adds or modifies a tool (via a pull
-request), the build process will be launch to generate a new release for the
-tool.
+APICheck leverages on build automation to mantain and publish the set of tools
+currently available. Every time a developer adds or modifies a tool (via a pull
+request, for example), the build process will be launch to generate a new
+release for the tool.
 
 
 <a id="apicheck-and-pipelines"></a>
 # APICheck and pipelines
 
-APICheck was made as a small set of tools but they can be interact, borrowing the UNIX pipelines:
+The main idea behind APICheck is to have a set of small independent tools that
+can be combined to create complex tests, and this can be made by borrowing the
+UNIX pipeline paradigm.
 
-![APICheck UNIX Pipeline](/apicheck/assets/images/apicheck_unix_pipeline.png)
+![Pipeline model](/apicheck/assets/images/apicheck_unix_pipeline.png)
+
 
 <a id="apicheck-data-format"></a>
 # APICheck data format
 
-As we said APICheck was made with *pipeline* concept in mind. So, to communicate tools between them they must share a common format. This is that we call *APICheck data Format*.
+APICheck defines a simple format for information interchange between tools. It
+is a JSON document with the following keys:
 
-The format is very easy: A JSON with these keys:
+- request, contains data related with an HTTP request
+- response, contains data related with an HTTP response
+- \_meta, contains data related to the process done by the tool or associated
+to the HTTP stream
 
-- request
-- response
-- _meta
-
-The complete JSON format example, as pretty display:
+Here is a complete example:
 
 ```json
 {
@@ -101,32 +104,43 @@ The complete JSON format example, as pretty display:
 
 ### Progressing data through pipeline
 
-This file must progress through tools pipeline. The idea is that not only the first tool in the pipe receive the information, also the ending tools must receive it.
+The information must progress through all the tools involved in the processing
+pipeline. Eventually each tool can add or modify information as it is processing
+it.
 
 ### Body encoding
 
-The body key is encoded as base64. The reason is to allow to put inside any kind of data, no only text: images, random binary files, JSON...
+The content of the body key should be encoded as base64, this way all kind of
+data such as images, binary content, formatted text ... could be included.
 
-This mind that *tools that receives the JSON must decode this field*.  
+This means that *tools that receives and/or produces this JSON format must
+decode/encode this field*.
 
-### The '_meta'
+### The '\_meta'
 
-So this file must progress between each pipeline step. Each tool can add their results or something else at *_meta* key. This key is a free field that tools can fill.
+As the information goes down through the pipeline tools can add some metadata
+to the JSON document by using the *_meta* key. This key is a container in wich
+tools can add information by adding they own keys.
+
 
 <a id="one-line-format"></a>
-### One JSON line format
+### One line JSON
 
-The above example is not really valid for data for APICheck data format.
-
-To be APICheck compliant the JSON must be represented as: *One JSON per line*. The above example should be represented as:
+The preceding examples are not directly usable as they include special
+characters. In order to be used in APICheck the JSON document must be written
+as *One JSON per line*. In the above example the document will be transformed
+to:
 
 ```json
 {"_meta": null, "request": {"url": "https://nvd.nist.gov/", "method": "get", "headers": {"User-Agent": "curl/7.54.0", "Accept": "*/*"}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}, "response": {"status": 200, "reason": "Ok", "headers": {}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}}
 ```
 
-The reason to do that is to allow data streaming. JSON is not a format that was designed for streaming. To overcome this limitation and allow to send more than 1 data in a pipeline, and having in count that tools will read from stdin, they will read line by line the standard system input. So, each time they read a line they will be reading a complete data from previous step.
+The reason of using this format is to allow data streaming. JSON was not
+designed for streaming, so to overcome this limitation and allow to send more
+than 1 data unit (or document) in a pipeline, this way tools reading from stdin
+can read line by line obtaining each time a whole information unit.
 
-Example of 3 input data:
+An example for a stream 3 input data itmes could be:
 
 ```console
 $ cat 3_apicheck_data.json
@@ -134,127 +148,137 @@ $ cat 3_apicheck_data.json
 {"_meta": null, "request": {"url": "https://www.skype.com/", "method": "head", "headers": {"User-Agent": "curl/7.54.0", "Accept": "*/*"}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}, "response": {"status": 200, "reason": "Ok", "headers": {}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}}
 {"_meta": null, "request": {"url": "https://nvd.nist.gov/", "method": "get", "headers": {"User-Agent": "curl/7.54.0", "Accept": "*/*"}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}, "response": {"status": 200, "reason": "Ok", "headers": {}, "body": "ewogICAgInVzZXJuYW1lIjogIm1lQG1lLmNvbSIsCiAgICAicGFzc3dvcmQiOiAia3NrbGFzZGYiCn0K"}}
 $ cat 3_apicheck_data.json | sensitive-json | pretty-display
-```  
+```
+
 
 <a id="steps-for-creating-a-new-tool"></a>
 # Steps for creating a new tool
 
-Well, if you're here this mind that you're interested in how to create a new tool. You must follow these steps:
+Well, if you got here, this means that you're interested in how to create and
+publish a new tool.
 
-## Steps summary:
+To creatye a new tool you have to follow the following steps:
 
-In summary we'll need to do these things:
+## Step 1 - Fork APICheck repository
 
-1. Fork APICheck repo
-2. Clone forked repo
-3. Creates a new folder in */tools* directory.
-4. Add files: META, README.md and Dockerfile
-5. Push the repo to our account in Github
-6. Send us a Pull Request
+This step don't need more explanation :) [but just in case](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) ...
 
-## Step 1 - fork Github repo
-
-This step don't need more explanation :)
-
-## Step 2 - clone your forked repo
+## Step 2 - Clone the forked repo
 
 ```console
 $ git clone https://github.com/[YOUR-GITHUB-USER]/apicheck
 ```
 
-It was the easy part :)
+Here finish easy part :)
 
-## Step 3 - create a the tool folder
+## Step 3 - Create a folder for the tool
 
-APICheck tools are inside */tools* folder. Each tool has their own folder.
-
-Folders names can contain: numbers, letters and "_" or "-".
-
-Then, we create a new folder for your tool:
+APICheck tools live in its own folder inside the */tools* folder which holds
+all the code and documentation. Folders names can contain numbers, lowercase
+letters, "\_" and "-".
 
 ```console
 $ cd tools/
 $ mkdir hello-world-tool
 ```
 
-## Step 4 - Include Meta information
+## Step 4 - Create tool's meta-information
 
-Meta information is contained in a file called *META*. Format of this file is a key, value with a "=" symbol.
+As a convention meta-information is stored in a file called *META* in the tool's
+root folder. Format of this file is a key, value with a "=" symbol.
 
-You must include **all** of these fields for a valid META file:
+Following is a list of the metadata items, Unless otherwise said are required:
 
-- *name*: tools name. This name will be used for catalog, Docker image and for installing the tool. **Must be unique**. *This field only can contains: Letters, numbers and "-" / "_" symbols*.
-- *short-command* (optional): some times tool name is too long. short command is easy to typing alias. when you'r tool was intalled by the package-manage, it will creates 2 commands name. One of them will be the name of the tool and the other command will be a short command for the tool. **Must be unique**.
-- *display-name*: text that you want to be displayed in the catalog.
-- *version*: version of the tool. It's recommendable to follow semantic format, but you're free to put use you're version format
-- *description*: a description of your tool. Try to be descriptive. There's not limit for description long, but we recommend not more than 150 characters.
-- *home*: author can include a link of the tool home, their profile os something else. This field is open.
-- *author*: author name or team
-
-You must put the *META* file in the root of the folder we just created for our tool:
+- *name*: Corresponds to the tool's name. This name will be used for the
+catalog, Docker image and the command name when installing the tool, so it has
+some restrictions: *can only contains lowercase letters, numbers, "-" and "_"*.
+ **Must be unique**.
+- *short-command* (optional): some times tool name is too long. Short command
+is an easy to type alternative for invoking the tool. Once the tool is intalled
+by the **Package Manager**, two 2 commands will be created. One using the tool's
+name and the other, if provided, will be the short command. As the name **Must
+be unique**.
+- *display-name*: A friendly name for the tool to be shown in the catalog.
+- *version*: Tool's version. We recommend to follow semantic versioning, but
+you're free to use your own schema.
+- *description*: A description of your tool. Try to be descriptive. There's not
+limit for description's length, but we recommend not more than 150 characters.
+- *home*: Authors can include a link for the tool home page, their profile or
+something else. This field is open.
+- *author*: Author's name or team.
 
 ```console
 $ cd tools/
 $ cd hello-world-tool/
-$ cat META
+$ cat <<EOF > META
 name = hello-world-tool
 short-command = ac-hwt
 version = 1.0.0
 description = All good tutorials must include a Hello World example! :)
 home = https://github.com/BBVA/apicheck
 author = BBVA Labs Security
+EOF
 ```
 
-## Step 5 - Include tool documentation
+## Step 5 - Provide tool's documentation
 
-Each tool must include their own documentation file. This is very important part of your tool.
-
-Documentation must be write in Markdown format. It must be included in the root of your folder tool and must be called **README.md**:
+Each tool must include a documentation file. This is a very important part of
+your tool, so we encourage to include a detailed documentation to help users use
+the tool. Documentation must be stored in a file called **README.md** inside the
+root folder and using Markdown format.
 
 ```console
 $ cd tools/
 $ cd hello-world-tool/
-$ cat README.md
+$ cat <<EOF > README.md
 # Hello Word Tool Documentation
 
 Wellcome to the demo tool of APICheck tutorial
 
 ## How to install
 ....
+EOF
 ```
 
-&#9888; Be careful with the name of file, the name must be in upper case and the extension in lower case.
+&#9888; Be careful with the name of file, the name must be in uppercase and the
+extension in lower case.
 
 ## Step 6 - Include the Dockefile
 
-As we said a tool will be packed as a Docker Image, so we need a Dockerfile.
+As we said tools will be packed into a Docker Image, so we need you to provide
+a Dockerfile to generate the image. The tool directory is the context used to
+build the image, so if the build process generate temporary files or you have
+files not to be included in the final image, please include a `.dockerignore`
+file too in order to speed-up the build.
 
-You can write the Dockerfile you need to package your tool but if you minimize the resulting Docker Image will be useful for users.
+Only one last tip, try to maintain your image size as small as possible to make
+it more usable
 
 ```console
 $ cd tools/
 $ cd hello-world-tool/
-$ cat Dockerfile
+$ cat << EOF > Dockerfile
 FROM python:3.8-alpine
 
 RUN apk update \
     && apk add --no-cache build-base
 ...
+EOF
 ```
 
-## Step 7 - Push your new plugin to Github
+## Step 7 - Commit and push your new plugin to Github
 
-At this point we only need to commit and push the new plugin to Github:
+At this point we only need to commit and push the new tool to Github:
 
 ```console
 $ git add tools/hello-world-tool/
-$ git commit -am "my first APICheck tool!"
+$ git commit -m "my first APICheck tool!"
 $ git push
 ```
 
 ### Step 8 - Send us a Pull Request
 
-Only "click" in the "New pull request" button at Github:
+Only remains to create the pull request. [Here](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) you have some documentation about Pull requests.
 
 ![Send us a Pull Request](/apicheck/assets/images/doc_develop_pull_request.png)
 
@@ -262,19 +286,28 @@ Only "click" in the "New pull request" button at Github:
 <a id="faq"></a>
 # F.A.Q.
 
-## I need to develop in a specific language?
+## Do I need to develop in a specific language?
 
-Absolutely no! You can develop in your favorite code language. Some member os the APICheck team loves Bash and some tools was integrade without codding any line.
+Absolutely no! You can develop in your favorite programming language, For
+example some members of the APICheck team love Bash and others want to work as
+less as possible, so some tools was created only with a simple Bash script or
+even without codding any line.
 
-Have in mind that each tool are packaged in a Docker Image. Inside this Docker Image you're the king/Queen. You can install all you need to build your tools.
+In case you choose to use a specific programming language, surely, the build
+environment won't have the tools needed for your language, but you can leverage
+on [multi-stage builds](https://docs.docker.com/develop/develop-images/multistage-build/)
+for building your tool.
 
 ## Is there any good practice for building tools?
 
-- Build small docker images as you can
-- Don't use tool name that already exits as part of APICheck ecosystem
+- Try to keep your docker images as small as you can.
+- Choose carefully your tool's name so it don't collide with an already existing
+one in the APICheck ecosystem.
 
 ## I updated my tool, but no new release was published
 
-As the building process is automated it only raises if you modify something at the *META* file.
+The building process is automated and it only fires if you modify something inside
+the `META` file.
 
-If you're releasing a new tool version, be sure you update the version number in *META* file.
+If you're releasing a new tool version, be sure you update the version number
+in the `META` file.
