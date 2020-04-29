@@ -1,0 +1,3 @@
+#!/bin/bash
+
+curl --silent --trace >(awk '$1 == "==" || $1 == "<=" || $1 == "=>" { close("xxd -r"); next }; { print $0 | "xxd -r" }') "$@" > /dev/null
