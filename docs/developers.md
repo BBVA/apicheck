@@ -227,6 +227,17 @@ your tool, so we encourage to include a detailed documentation to help users use
 the tool. Documentation must be stored in a file called **README.md** inside the
 root folder and using Markdown format.
 
+In order to help APICheck users it is convenient that you provide, aside the
+description of your tool, with some info about how it works:
+- You should indicate, for example, what are the expected input (what it expects
+  as standard input) and ouput (what can others expect as output and error) of
+  your tool.
+- As a best practice your tool should return and error code of '0' if it finish
+  without error and any other value if it encounter any error condition, It
+  should be great if you explain the meaning of this error codes.
+- At last, you should provide with some examples about your tool to help the
+  other users to get the most of it.
+
 ```console
 $ cd tools/
 $ cd hello-world-tool/
