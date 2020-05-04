@@ -6,5 +6,6 @@ permalink: /tools/replay
 
 # Replay
 
-Will send the traffic to the same place, in the same order, with the same
-params.
+This tool re-sends the requests read from stdin again capturing the new responses.
+
+It outputs the same pair but sustituting the old responses with the new ones.
