@@ -5,6 +5,8 @@ import httptools
 import hexdump
 
 from gurl.RequestResponseCallbacks import RequestResponseCallbacks
+import gurl.curlparse as cp
+import gurl.hexdealer as hd
 
 
 def _parse_raw_http(parser_builder, raw_http, parser_extract=None):
@@ -48,22 +50,15 @@ def _dict_reducer(x, acc):
     return acc
 
 
-def parse_binary(raw_request):
+def parse_binary(raw_request, raw_response):
     """
     Parse need binary string input from burl to parse
     """
-    if not raw_request:
+    if not raw_request or not raw_response:
         return None
 
-    parts = raw_request.split(b"\r\n\r\n")
-    if len(parts) < 3:
-        return None
-    
-    request_raw = parts[0]+b"\r\n\r\n"
-    response_raw = b"\r\n\r\n".join(parts[1:])
-
-    request_data, request_meta = _request(request_raw)
-    response_data, response_meta = _response(response_raw)
+    request_data, request_meta = _request(raw_request)
+    response_data, response_meta = _response(raw_response)
     meta = reduce(_dict_reducer, [request_meta, response_meta], {})
 
     return {
@@ -76,51 +71,28 @@ def parse_binary(raw_request):
 def parse_curl_trace(curl_trace_content):
     if not curl_trace_content:
         return None
+    
+    def block_to_bytes(block):
+        no_header = b'\n'.join(block.split(b'\n')[1:])
+        hex_part = hd.extract_hex_from_curl(no_header)
+        return bytes.fromhex(hex_part.decode("utf-8"))
 
-    buffers = [io.BytesIO(), io.BytesIO()]
-    current = None
-    content = io.BytesIO()
-    for line in curl_trace_content.read().split(b'\n'):
-        if line.startswith(b'=> Send header'): #Send header
-            if current:
-                h = hexdump.restore(content.getvalue().decode("utf-8"))
-                buffers[current].write(h+b'\n')
-                content = io.BytesIO()
-            current = 1
-        elif line.startswith(b'=> Send data'): #Send data
-            if current:
-                h = hexdump.restore(content.getvalue().decode("utf-8"))
-                buffers[current].write(h+b'\n')
-                content = io.BytesIO()
-            current = 1
-        elif line.startswith(b'<= Recv header'): #Recv header
-            if current:
-                h = hexdump.restore(content.getvalue().decode("utf-8"))
-                buffers[current].write(h+b'\n')
-                content = io.BytesIO()
-            current = 2
-        elif line.startswith(b'<= Recv data'): #Recv data
-            if current:
-                h = hexdump.restore(content.getvalue().decode("utf-8"))
-                buffers[current].write(h+b'\n')
-                content = io.BytesIO()
-            current = 2
-        elif line.startswith(b'=>'): #Send other stuff
-            if current:
-                h = hexdump.restore(content.getvalue().decode("utf-8"))
-                buffers[current].write(h+b'\n')
-                content = io.BytesIO()
-            current = None
-        elif line.startswith(b'<='): #Recv other stuff
-            if current:
-                h = hexdump.restore(content.getvalue().decode("utf-8"))
-                buffers[current].write(h+b'\n')
-                content = io.BytesIO()
-            current = None
-        elif line.startswith(b'=='): #Meta info
-            continue
-        elif current is not None:
-            content.write(line+b'\n')
-    request = hexdump.restore(buffers[0].getvalue().decode("utf-8"))
-    response = hexdump.restore(buffers[1].getvalue().decode("utf-8"))
-    print(buffers[0].getvalue())
+    log = []
+    req = bytearray()
+    res = bytearray()
+    
+    for block in cp.curl_trace_block_iterator(curl_trace_content.read()):
+        if block.startswith(b"=="):
+            log.append(block.decode("utf-8"))
+        elif block.startswith(b'=> Send header'): #Send header
+            req.extend(block_to_bytes(block))
+        elif block.startswith(b'=> Send data'): #Send data
+            req.extend(block_to_bytes(block))
+        elif block.startswith(b'<= Recv header'): #Recv header
+            res.extend(block_to_bytes(block))
+        elif block.startswith(b'<= Recv data'): #Recv data
+            res.extend(block_to_bytes(block))
+        else: # not my bussiness
+            pass
+    
+    return parse_binary(req, res)
