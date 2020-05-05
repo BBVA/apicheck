@@ -14,7 +14,7 @@ def test_empty():
 
 def test_google():
     with open(os.path.join(HERE, "tracefiles", "google"), "rb") as f:
-        res = gurl.parse_curl_trace(f)
+        res = gurl.parse_curl_trace(f.read())
     print(res)
     assert res is not None
     assert "_meta" in res
@@ -46,3 +46,11 @@ def test_google():
     assert res["response"]["headers"]["Accept-Ranges"] == "none"
     assert res["response"]["headers"]["Vary"] == "Accept-Encoding"
     assert res["response"]["headers"]["Transfer-Encoding"] == "chunked"
+
+
+def test_https_google():
+    try:
+        with open(os.path.join(HERE, "tracefiles", "httpsgoogle"), "rb") as f:
+            res = gurl.parse_curl_trace(f.read())
+    except Exception as e:
+        pass # TODO: add http2 support

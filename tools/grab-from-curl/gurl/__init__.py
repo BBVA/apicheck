@@ -51,9 +51,6 @@ def _dict_reducer(x, acc):
 
 
 def parse_binary(raw_request, raw_response):
-    """
-    Parse need binary string input from burl to parse
-    """
     if not raw_request or not raw_response:
         return None
 

@@ -7,9 +7,7 @@ def curl_trace_block_iterator(curl_content):
     content = []
     yil = False
     for line in curl_content.strip().split(b'\n'):
-        if line.startswith(b'=='): # meta block
-            yield line
-        elif line.startswith(b'=') or line.startswith(b'<'): # any block
+        if line.startswith(b'=') or line.startswith(b'<'): # any block
             if content:
                 yield b'\n'.join(content)
                 content = []
