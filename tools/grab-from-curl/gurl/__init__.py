@@ -81,9 +81,11 @@ def parse_curl_trace(curl_trace_content):
     req = bytearray()
     res = bytearray()
     
-    for block in cp.curl_trace_block_iterator(curl_trace_content.read()):
+    for block in cp.curl_trace_block_iterator(curl_trace_content):
         if block.startswith(b"=="):
-            log.append(block.decode("utf-8"))
+            msg = block.decode("utf-8")
+            msg = msg.replace("== ", "")
+            log.append(msg)
         elif block.startswith(b'=> Send header'): #Send header
             req.extend(block_to_bytes(block))
         elif block.startswith(b'=> Send data'): #Send data
@@ -94,5 +96,7 @@ def parse_curl_trace(curl_trace_content):
             res.extend(block_to_bytes(block))
         else: # not my bussiness
             pass
-    
-    return parse_binary(req, res)
+
+    reqres = parse_binary(req, res)
+    reqres["_meta"]["curl_log"] = log
+    return reqres
