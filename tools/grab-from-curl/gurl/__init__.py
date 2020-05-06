@@ -2,7 +2,6 @@ from functools import reduce
 import io
 
 import httptools
-import hexdump
 
 from gurl.RequestResponseCallbacks import RequestResponseCallbacks
 import gurl.curlparse as cp

@@ -1,3 +1,4 @@
 #!/bin/bash
 
-curl --silent --http1.1 --trace >(python gurl/__main__.py) "$@" > /dev/null
+curl --silent --http1.1 --trace /tmp/trace "$@" > /dev/null
+python gurl/__main__.py -f /tmp/trace
