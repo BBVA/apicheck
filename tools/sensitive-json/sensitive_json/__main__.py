@@ -15,6 +15,7 @@ from sanic import Sanic, response, request
 
 HERE = os.path.dirname(__file__)
 
+
 class FormatErrorException(Exception):
     pass
 
@@ -135,7 +136,6 @@ def _check_input_data(data: dict) -> bool or FormatErrorException:
 
 
 def search_issues(content_json: dict, rules: list, ignores: set) -> List[dict]:
-
     issues = []
 
     # Matching
@@ -191,8 +191,7 @@ def search_issues(content_json: dict, rules: list, ignores: set) -> List[dict]:
 
 
 def cli_analyze(args: argparse.Namespace):
-
-    found_issues = []
+    quiet = args.quiet or False
 
     # -------------------------------------------------------------------------
     # Read info by stdin or parameter
@@ -204,20 +203,40 @@ def cli_analyze(args: argparse.Namespace):
         # line
         #
         for content in sys.stdin.readlines():
-
             rules = _load_rules(args)
             ignores = set(_load_ignore_ids(args))
 
             # this var contains JSON data in APICheck format
             content_json: dict = json.loads(content)
 
-            found_issues.extend(search_issues(content_json, rules, ignores))
+            #
+            # Dump content as APICheck format
+            #
+            if not hasattr(content_json, "_meta"):
+                content_json["_meta"] = {}
+
+            if type(content_json["_meta"]) is not dict:
+                content_json["_meta"] = {}
+
+            content_json["_meta"]["sensitive-json"] = search_issues(
+                content_json,
+                rules,
+                ignores
+            )
+
+            new_content_json = json.dumps(content_json)
+
+            sys.stdout.write(new_content_json)
+            sys.stdout.flush()
+
+            if not sys.stdout.isatty() and not quiet:
+                sys.stderr.write(new_content_json)
+                sys.stderr.flush()
 
     else:
-        raise FileNotFoundError("Input data must be entered as a UNIX "
-                                "pipeline")
-
-    return found_issues
+        raise FileNotFoundError(
+            "Input data must be entered as a UNIX pipeline. For example: "
+            "'cat info.json | sensitive-json'")
 
 
 def server(args: argparse.Namespace):
@@ -243,57 +262,40 @@ def server(args: argparse.Namespace):
 
     listen_addr, listen_port = args.server.split(":")
 
-    app.run(host=listen_addr, port=int(listen_port), debug=False, access_log=False)
+    app.run(host=listen_addr, port=int(listen_port), debug=False,
+            access_log=False)
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Analyze a HTTP Request / Response searching for sensitive data'
+        description='Analyze a HTTP Request / Response searching for '
+                    'sensitive data'
     )
     parser.add_argument('-F', '--ignore-file',
                         action="append",
                         help="file with ignores rules")
+    parser.add_argument('-q', '--quiet',
+                        action="store_true",
+                        help="quiet mode")
     parser.add_argument('-i', '--ignore-rule',
                         action="append",
                         help="rule to ignore")
     parser.add_argument('-r', '--rules-file',
                         action="append",
                         help="rules file. One rule ID per line")
-    parser.add_argument('-o', '--output-file',
-                        help="output file path")
-    parser.add_argument('-q', '--quiet',
-                        action="store_true",
-                        default=False,
-                        help="quiet mode")
     parser.add_argument('--server',
                         default=None,
-                        help="launch in server mode listening at localhost:8000")
+                        help="launch in server mode listening at "
+                             "localhost:8000")
 
     parsed_cli = parser.parse_args()
 
     if not parsed_cli.server:
-        res = cli_analyze(parsed_cli)
-
-        # Export results
-        if parsed_cli.output_file:
-            with open(parsed_cli.output_file, "w") as f:
-                json.dump(res, f)
-
-        if not parsed_cli.quiet:
-            json_res = json.dumps(res)
-
-            if sys.stdout.isatty():
-                # We're in terminal
-                print(json_res)
-            else:
-                try:
-                    sys.stdout.write(json_res)
-                    sys.stdout.flush()
-                except (BrokenPipeError, IOError) as e:
-                    # Piped command doesn't support data input as pipe
-                    sys.stderr.write(e)
-                except Exception as e:
-                    pass
+        try:
+            cli_analyze(parsed_cli)
+        except Exception as e:
+            print("\n", f"[!!] {e}", "\n")
+            exit(1)
     else:
         server(parsed_cli)
 
