@@ -24,7 +24,7 @@ def test_google():
     assert res["_meta"]["status_text"] == "OK"
 
     assert res["request"]["method"] == "GET"
-    assert res["request"]["url"] == "/"
+    assert res["request"]["url"] == "http://www.google.com/"
     assert res["request"]["version"] == "1.1"
     assert "headers" in res["request"]
     assert res["request"]["headers"]["Host"] == "www.google.com"
