@@ -16,6 +16,6 @@ ENV PATH="/venv/bin:$PATH"
 
 WORKDIR /app
 COPY . /app
-RUN chmod +x curl
+RUN chmod +x gcurl
 
-ENTRYPOINT ["/app/curl"] 
+ENTRYPOINT ["/app/gcurl"]
