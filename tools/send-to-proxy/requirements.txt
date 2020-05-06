@@ -1,2 +1,2 @@
-jsonschema
+python-pipes
 requests[socks]

@@ -294,7 +294,7 @@ def main():
         try:
             cli_analyze(parsed_cli)
         except Exception as e:
-            print("\n", f"[!!] {e}", "\n")
+            print("\n", f"[!!] {e}", "\n", file=sys.stderr)
             exit(1)
     else:
         server(parsed_cli)

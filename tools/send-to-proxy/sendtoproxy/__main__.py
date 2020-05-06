@@ -1,14 +1,14 @@
-import json
 import os
-import select
 import sys
+import json
+import select
 
 import requests
 import argparse
-import jsonschema
 
 from urllib.parse import urlparse
 from dataclasses import dataclass
+from python_pipes import read_stdin_lines
 
 # Disable SSL Warnings
 requests.packages.urllib3.disable_warnings()
@@ -41,21 +41,6 @@ class Request:
             loaded_json = json.loads(json_data)
         except json.decoder.JSONDecodeError:
             raise InvalidJsonFormat("Input value doesn't has valid JSON")
-
-        # Check json format
-        try:
-            # Load json-schema for validation
-            with open(os.path.join(os.path.dirname(__file__),
-                                   "json-schema.json"), "r") as f:
-                json_schema = json.load(f)
-
-            jsonschema.validate(loaded_json, schema=json_schema)
-        except jsonschema.ValidationError as e:
-            raise InvalidJsonFormat(
-                f"JSON data doesn't have correct format: {e}"
-            )
-        except Exception as e:
-            raise UnknownException(e)
 
         return cls(**loaded_json["request"])
 
@@ -96,11 +81,10 @@ def parse_proxy(proxy: str) -> str or InvalidProxyFormat:
     return scheme, proxy
 
 
-def send_one_input_data(input_data, args: argparse.Namespace):
+def send_one_input_data(input_data, args: argparse.Namespace) -> str:
     #
     # Load json request
     #
-    print("[*] Validating JSON format", file=sys.stderr)
     req = Request.from_json(input_data)
 
     # Prepare input proxy
@@ -133,39 +117,39 @@ def send_one_input_data(input_data, args: argparse.Namespace):
     # Remove SSL Verification
     params["verify"] = False
 
-    print("[*] Sending request to proxy", file=sys.stderr)
     response = method(**params)
 
-    return response
+    return req.url, response
 
 
 def run(args: argparse.Namespace):
+    quiet = args.quiet or False
+
     # -------------------------------------------------------------------------
     # Read info by stdin or parameter
     # -------------------------------------------------------------------------
-    if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+    for has_stdin_pipe, has_stdout_pipe, json_line in read_stdin_lines():
+        if not has_stdin_pipe:
+            raise FileNotFoundError(
+                "Input data must be entered as a UNIX pipeline. For example: "
+                "'cat info.json | tool-name'")
 
-        #
-        # APICheck input JSON format line by line. The JSON will be one per
-        # line
-        #
-        for content in sys.stdin.readlines():
+        request_url, response = send_one_input_data(json_line, args)
 
-            response = send_one_input_data(content, args)
+        if not quiet:
+            message = f"[*] Request sent: '{request_url}'"
 
-            if not args.QUIET_MODE:
-                print(
-                    json.dumps({
-                        "source": "sendtoproxy",
-                        "outputStatus": 0,
-                        "outputMessage": response.content.decode("UTF-8")
-                    }),
-                    file=sys.stdout
-                )
+            if has_stdout_pipe:
+                sys.stderr.write(message)
+                sys.stderr.flush()
 
-    else:
-        raise FileNotFoundError("Input data must be entered as a UNIX "
-                                "pipeline")
+            else:
+                # You're being piped or redirected
+                sys.stdout.write(json.dumps(json_line))
+                sys.stdout.flush()
+
+                sys.stdout.write(message)
+                sys.stdout.flush()
 
 
 def main():
@@ -174,7 +158,6 @@ def main():
     )
     parser.add_argument("PROXY", help="proxy in format: SCHEME://HOST:PORT")
     parser.add_argument("-q", "--quiet",
-                        dest="QUIET_MODE",
                         help="don't display any information in stdout",
                         action="store_true",
                         default=False)
@@ -183,14 +166,7 @@ def main():
     try:
         run(parsed_cli)
     except Exception as e:
-        print(
-            json.dumps({
-                "source": "sendtoproxy",
-                "outputStatus": 1,
-                "outputMessage": str(e)
-            }),
-            file=sys.stdout
-        )
+        print(f"[!!] {e}", file=sys.stderr)
         exit(1)
 
 
