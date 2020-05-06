@@ -32,6 +32,7 @@ class Request:
     url: str
     body: str = None
     method: str = "GET"
+    version: str = "1.1"
     headers: dict = None
 
     @classmethod
@@ -134,6 +135,7 @@ def run(args: argparse.Namespace):
                 "Input data must be entered as a UNIX pipeline. For example: "
                 "'cat info.json | tool-name'")
 
+        print(json_line)
         request_url, response = send_one_input_data(json_line, args)
 
         if not quiet:
