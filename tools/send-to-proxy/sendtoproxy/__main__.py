@@ -135,21 +135,20 @@ def run(args: argparse.Namespace):
                 "Input data must be entered as a UNIX pipeline. For example: "
                 "'cat info.json | tool-name'")
 
-        print(json_line)
         request_url, response = send_one_input_data(json_line, args)
 
         if not quiet:
             message = f"[*] Request sent: '{request_url}'"
 
             if has_stdout_pipe:
-                sys.stderr.write(message)
-                sys.stderr.flush()
-
-            else:
                 # You're being piped or redirected
                 sys.stdout.write(json.dumps(json_line))
                 sys.stdout.flush()
 
+                sys.stdout.write(message)
+                sys.stdout.flush()
+
+            else:
                 sys.stdout.write(message)
                 sys.stdout.flush()
 

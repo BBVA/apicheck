@@ -3,7 +3,6 @@ import re
 import sys
 import json
 import base64
-import select
 
 from typing import List, Tuple, Any
 
@@ -11,6 +10,7 @@ import yaml
 import requests
 import argparse
 
+from python_pipes import read_stdin_lines
 from sanic import Sanic, response, request
 
 HERE = os.path.dirname(__file__)
@@ -191,52 +191,51 @@ def search_issues(content_json: dict, rules: list, ignores: set) -> List[dict]:
 
 
 def cli_analyze(args: argparse.Namespace):
-    quiet = args.quiet or False
 
     # -------------------------------------------------------------------------
     # Read info by stdin or parameter
     # -------------------------------------------------------------------------
-    if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+    for has_stdin_pipe, has_stdout_pipe, json_line in read_stdin_lines():
+        if not has_stdin_pipe:
+            raise FileNotFoundError(
+                "Input data must be entered as a UNIX pipeline. For example: "
+                "'cat info.json | tool-name'")
+
+        rules = _load_rules(args)
+        ignores = set(_load_ignore_ids(args))
+
+        # this var contains JSON data in APICheck format
+        content_json: dict = json.loads(json_line)
 
         #
-        # APICheck input JSON format line by line. The JSON will be one per
-        # line
+        # Dump content as APICheck format
         #
-        for content in sys.stdin.readlines():
-            rules = _load_rules(args)
-            ignores = set(_load_ignore_ids(args))
+        if not hasattr(content_json, "_meta"):
+            content_json["_meta"] = {}
 
-            # this var contains JSON data in APICheck format
-            content_json: dict = json.loads(content)
+        if type(content_json["_meta"]) is not dict:
+            content_json["_meta"] = {}
 
-            #
-            # Dump content as APICheck format
-            #
-            if not hasattr(content_json, "_meta"):
-                content_json["_meta"] = {}
+        content_json["_meta"]["sensitive-json"] = search_issues(
+            content_json,
+            rules,
+            ignores
+        )
 
-            if type(content_json["_meta"]) is not dict:
-                content_json["_meta"] = {}
+        new_content_json = json.dumps(content_json)
 
-            content_json["_meta"]["sensitive-json"] = search_issues(
-                content_json,
-                rules,
-                ignores
-            )
-
-            new_content_json = json.dumps(content_json)
+        if has_stdout_pipe:
+            # You're being piped or redirected
+            sys.stdout.write(json.dumps(json_line))
+            sys.stdout.flush()
 
             sys.stdout.write(new_content_json)
             sys.stdout.flush()
 
-            if not sys.stdout.isatty() and not quiet:
-                sys.stderr.write(new_content_json)
-                sys.stderr.flush()
+        else:
+            sys.stdout.write(new_content_json)
+            sys.stdout.flush()
 
-    else:
-        raise FileNotFoundError(
-            "Input data must be entered as a UNIX pipeline. For example: "
-            "'cat info.json | sensitive-json'")
 
 
 def server(args: argparse.Namespace):
@@ -274,9 +273,6 @@ def main():
     parser.add_argument('-F', '--ignore-file',
                         action="append",
                         help="file with ignores rules")
-    parser.add_argument('-q', '--quiet',
-                        action="store_true",
-                        help="quiet mode")
     parser.add_argument('-i', '--ignore-rule',
                         action="append",
                         help="rule to ignore")
