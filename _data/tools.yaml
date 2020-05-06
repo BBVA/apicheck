@@ -9,6 +9,12 @@ menu:
     brief: Replays a HTTP conversation capturing the new responses obtained
     url: /tools/replay
 
+  - title: curl
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: curl with reqres output
+    url: /tools/curl
+
   - title: Detector of sensitive data in JSON
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
