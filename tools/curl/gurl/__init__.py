@@ -57,6 +57,9 @@ def parse_binary(raw_request, raw_response):
     response_data, response_meta = _response(raw_response)
     meta = reduce(_dict_reducer, [request_meta, response_meta], {})
 
+    # rebuild original url to be compilance with reqres format
+    request_data["url"] = request_data["headers"]["Host"] + request_data["url"]
+
     return {
         "_meta": meta,
         "request": request_data,
@@ -76,6 +79,8 @@ def parse_curl_trace(curl_trace_content):
     log = []
     req = bytearray()
     res = bytearray()
+
+    is_https = False
     
     for block in cp.curl_trace_block_iterator(curl_trace_content):
         if block.startswith(b"=="):
@@ -90,9 +95,15 @@ def parse_curl_trace(curl_trace_content):
             res.extend(block_to_bytes(block))
         elif block.startswith(b'<= Recv data'): #Recv data
             res.extend(block_to_bytes(block))
+        elif block.startswith(b'=> Send SSL'): #Is https
+            is_https = True
         else: # not my bussiness
             pass
 
     reqres = parse_binary(req, res)
     reqres["_meta"]["curl_log"] = log
+    if is_https:
+        reqres["request"]["url"] = "https://"+reqres["request"]["url"]
+    else:
+        reqres["request"]["url"] = "http://"+reqres["request"]["url"]
     return reqres

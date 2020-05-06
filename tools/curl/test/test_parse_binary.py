@@ -21,7 +21,7 @@ def test_complete_result():
     current = gurl.parse_binary(request, response)
 
     assert current is not None
-    assert current["request"]["url"] == "/"
+    assert current["request"]["url"] == "www.google.es/"
     assert current["request"]["method"] == "GET"
     assert current["request"]["version"] == "1.1"
     assert "headers" in current["request"]
