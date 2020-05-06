@@ -16,6 +16,6 @@ ENV PATH="/venv/bin:$PATH"
 
 WORKDIR /app
 COPY . /app
-RUN chmod +x burl
+RUN chmod +x curl
 
-ENTRYPOINT ["/app/burl"] 
+ENTRYPOINT ["/app/curl"] 

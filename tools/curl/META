@@ -1,5 +1,5 @@
-name = gurl
-short-command = gurl
+name = curl
+short-command = curl
 version = 1.0.0
 description = curl with reqres output
 home = https://github.com/BBVA/apicheck
