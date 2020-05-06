@@ -5,14 +5,17 @@ menu:
   - title: Why create a new tool
     anchor: why-create-new-a-tool
 
-  - title: What do you need
-    anchor: what-do-you-need
+  - title: Tools philosophy
+    anchor: tools-philosophy
 
-  - title: Tool scaffolding
-    anchor: tool-scaffolding
+  - title: APICheck and pipelines
+    anchor: apicheck-and-pipelines
 
-  - title: Tool example
-    anchor: tool-example
+  - title: APICheck data format
+    anchor: apicheck-data-format
 
-  - title: Glossary
-    anchor: glossary
+  - title: Steps for creating a new tool
+    anchor: steps-for-creating-a-new-tool
+
+  - title: F.A.Q.
+    anchor: faq

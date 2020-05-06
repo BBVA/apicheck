@@ -2,6 +2,7 @@
 This file build the docker images
 """
 import os
+import re
 import sys
 import uuid
 import configparser
@@ -14,6 +15,7 @@ META_KEYS = ("name", "short-command", "version", "description",
              "home", "author")
 
 DOCKER_HUB_REPO = "bbvalabs"
+NAME_FORMAT_REGEX = r"([A-Za_-z0-9]+)"
 
 
 def main():
@@ -45,6 +47,15 @@ def main():
                 # Check that 'name' and 'short-command' are unique
                 #
                 name = meta["name"]
+
+                #
+                # Check name format it's ok
+                #
+                if not re.match(NAME_FORMAT_REGEX, name):
+                    print(f"Invalid name format for: '{name}'. "
+                          f"Only allowed : A-Za_-z0-9")
+                    exit(1)
+
                 version = meta["version"]
                 docker_file_path = os.path.join(
                     TOOLS_PATH,

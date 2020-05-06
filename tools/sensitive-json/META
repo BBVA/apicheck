@@ -1,6 +1,7 @@
 name = sensitive-json
+display-name = Detector of sensitive data in JSON
 short-command = asej
 version = 1.0.0
-description = Find sensitive data in JSON content in HTTP Request / Response
+description = Find sensitive data in JSON content in a HTTP Request / Response
 home = https://github.com/BBVA/apicheck
 author = BBVA Labs Security

@@ -1,34 +1,9 @@
 # Send to proxy
 
-This tool send stdin request to a remote proxy.
+This tool sends the requests read from stdin to a remote proxy.
 
-## Install
+Accepts a parameter containing the URL of the proxy to send requests to and an
+option flag -q (--quiet) to supress standadr output.
 
-### Generic
-
-```bash
-> ./INSTALL
-```
-
-### Python mode
-
-
-```bash
-> python setup.py install
-```
-
-## Usage
-
-### Getting help
-
-After install you can type this to use:
-
-```bash
-> ac-sentoproxy -h
-```
-
-### Usage example
-
-```bash
-> cat examples/valid-request.json | ac-sendtoproxy -q http://127.0.0.1:9999
-```
+If not in quiet mode it outputs the requests with the outputs obtained from the
+proxy.

@@ -1,18 +1,21 @@
-menu_title: The Project
+menu_title: Quick start
 url: /docs/quick-start
 
 menu:
-  - title: Installation
-    anchor: installation
-
   - title: Requirements
     anchor: requirements
+
+  - title: Installation
+    anchor: installation
 
   - title: First run
     anchor: the-first-run
 
-  - title: Managing tools
-    anchor: managing-tools
+  - title: APICheck environments
+    anchor: apicheck-environments
+
+  - title: Running tools
+    anchor: running-tools
 
   - title: Tools & Pipelines
     anchor: tools-and-pipelines

@@ -2,7 +2,7 @@
 This file build the documentation for APICheck
 """
 import os
-import csv
+import re
 import json
 import hashlib
 import configparser
@@ -16,6 +16,10 @@ STATIC_PATH = os.path.join(HERE, "docs", "assets")
 
 META_KEYS = ("name", "short-command", "version", "description",
              "home", "author")
+
+OPTIONAL_KEYS = ("short-command", )
+NAME_FORMAT_REGEX = r"([A-Za_-z0-9]+)"
+
 
 
 def main():
@@ -64,18 +68,26 @@ def main():
         #
         # Check that 'name' and 'short-command' are unique
         #
+        tool_name = meta["name"]
+
+        if not re.match(NAME_FORMAT_REGEX, tool_name):
+            print(f"Invalid name format for: '{tool_name}'. "
+                  f"Only allowed : A-Za_-z0-9")
+            exit(1)
+
         home = meta["home"]
         author = meta["author"]
-        tool_name = meta["name"]
         description = meta["description"]
-        short_command = meta["short-command"]
+        display_name = meta.get("display-name", "") or tool_name
+        short_command = meta.get("short-command", None)
 
-        if short_command in short_commands:
-            print(f"[!] Short-command \"{short_command}\" at tool "
-                  f"'{tool_name}' already exits in another tool")
-            exit(1)
-        else:
-            short_commands.add(short_command)
+        if short_command:
+            if short_command in short_commands:
+                print(f"[!] Short-command \"{short_command}\" at tool "
+                      f"'{tool_name}' already exits in another tool")
+                exit(1)
+            else:
+                short_commands.add(short_command)
 
         if tool_name in tool_names:
             print(f"[!] Tool name '{tool_name}' already exits used "
@@ -85,7 +97,7 @@ def main():
             tool_names.add(tool_name)
 
         catalog.append(meta)
-        tools_brief[tool_name] = (description, author, home)
+        tools_brief[tool_name] = (description, author, home, display_name)
 
         #
         # Build tools documentation
@@ -115,8 +127,8 @@ def main():
     # Build tools index
     #
     tool_menu_item = []
-    for t_name, (t_brief, t_author, t_home_page) in tools_brief.items():
-        tool_menu_item.append(f"  - title: {t_name}")
+    for t_name, (t_brief, t_author, t_home_page, display_name) in tools_brief.items():
+        tool_menu_item.append(f"  - title: {display_name}")
         tool_menu_item.append(f"    author: {t_author}")
         tool_menu_item.append(f"    home: {t_home_page}")
         tool_menu_item.append(f"    brief: {t_brief}")
