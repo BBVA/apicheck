@@ -173,7 +173,7 @@ func main() {
 
 	flag.Parse()
 
-	if programOptions.helpRequested {
+	if programOptions.helpRequested || (flag.NArg() == 0 && flag.NFlag() == 0) {
 		flag.Usage()
 		os.Exit(0)
 	}
