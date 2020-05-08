@@ -21,6 +21,12 @@ menu:
     brief: Find sensitive data in JSON content in a HTTP Request / Response
     url: /tools/sensitive-json
 
+  - title: APICheck proxy
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: launch a local proxy and intercept request / responses a perform some actions
+    url: /tools/apicheck-proxy
+
   - title: OpenAPI v3 Linter
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
