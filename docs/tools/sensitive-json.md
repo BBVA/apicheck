@@ -1,134 +1,361 @@
 ---
 layout: doc
-title: APICheck Sensitive Data Finder
+title: APICheck Sensitive JSON
 permalink: /tools/sensitive-json
 ---
 
-# APICheck Sensitive Data Finder
+# APICheck Sensitive JSON
 
-Analyzes a HTTP Request / Response searching for sensitive data.
+This tool analyzes a Request / Response HTTP and try to find sensitive data.
 
-The following options flags are supported:
-- -F, --ignore-file&nbsp;&nbsp;&nbsp;&nbsp;path to file containing ignores rules
-- -i,--ignore-rule&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rule ID to ignore
-- -r,--rules-file&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path to rules file. One rule ID per line
-- -o,--output-file&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path to output file
-- -q,--quiet&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run in quiet mode
-- --server&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run in server mode listening at localhost:8000
+**Tool type**: action
 
-If not in quiet mode and no output file specified it outputs the list of
-findings in standard output.
+## Tools description
 
+Some times APIs can return sensitive data in some entry-points. Sensitive data could be user information, some data of bossiness logic, internal IPs or os on.
 
-## Usage through Kapow!
+Detect this data is complicated and depends of the bossiness application logic. So with `APICheck Sensitive JSON` you can configure a set of rules for analyzing the Request / Response of an application.
 
-```bash
-> docker build -t ac-sd .
-> docker run -p 8080:8080 --rm -d ac-sd
-> curl --data-raw '{"password": "sss"}' -v http://localhost:8080/apicheck/sensitive-data
-[{"where": "response", "path": "/", "keyOrValue": "key", "sensitiveData": "password"}]
+Rules is a simple `YAML` file that could be hosted in a remote place or in a local.
+
+## Quick start
+
+## Using `APICheck Package Manager`
+
+Installing `APICheck Package Manager`:
+
+```console
+$ pip install apicheck-package-manager
+Collecting apicheck-package-manager
+  Using cached apicheck_package_manager-0.0.14-py3-none-any.whl (5.7 kB)
+Installing collected packages: apicheck-package-manager
+Successfully installed apicheck-package-manager-0.0.14
 ```
 
-## Usage cli
+Install APICheck tools: 
 
-In the following examples *data.json* is an APICheck file with Request / Response info.
+- sensitive-json
+- apicheck-curl
+
+```bash
+$ acp install sensitive-json
+[*] Fetching Docker image for tool 'sensitive-json'
+
+    Using default tag: latest
+    latest: Pulling from bbvalabs/sensitive-json
+    cbdbe7a5bc2a: Already exists
+    26ebcd19a4e3: Already exists
+    35acdcbeccf1: Already exists
+    ...
+    Status: Downloaded newer image for bbvalabs/sensitive-json:latest
+    docker.io/bbvalabs/sensitive-json:latest
+
+[*] filling environment alias file
+$
+$ acp install apicheck-curl
+[*] Fetching Docker image for tool 'apicheck-curl'
+
+    Using default tag: latest
+    latest: Pulling from bbvalabs/apicheck-curl
+    cbdbe7a5bc2a: Already exists
+    26ebcd19a4e3: Already exists
+    35acdcbeccf1: Already exists
+    ...
+    Status: Downloaded newer image for bbvalabs/apicheck-curl:latest
+    docker.io/bbvalabs/apicheck-curl:latest
+
+[*] filling environment alias file
+```
+
+Activate default environment and running the tool:
+
+```bash
+$ eval $(acp activate)
+(APICheck) $ acurl http://my-company.com/api/entry-point | sensitive-json
+
+http://my-company.com/api/entry-point
+-------------------------------------
+
+ > rule           -> core-001
+ > where          -> request
+ > path           -> /
+ > keyOrValue     -> key
+ > sensitiveData  -> password
+
+```
+
+## Using Docker
+
+Get Docker images for tools:
+
+- sensitive-json
+- apicheck-curl
+
+```bash
+$ docker pull bbvalabs/sensitive-json
+Using default tag: latest
+latest: Pulling from bbvalabs/sensitive-json
+cbdbe7a5bc2a: Already exists
+26ebcd19a4e3: Already exists
+...
+Status: Image is up to date for bbvalabs/sensitive-json:latest
+docker.io/bbvalabs/sensitive-json:latest
+$
+$ docker pull bbvalabs/apicheck-curl
+Using default tag: latest
+latest: Pulling from bbvalabs/apicheck-curl
+cbdbe7a5bc2a: Already exists
+26ebcd19a4e3: Already exists
+35acdcbeccf1: Already exists
+...
+Status: Downloaded newer image for bbvalabs/apicheck-curl:latest
+docker.io/bbvalabs/apicheck-curl:latest
+```
+
+Running launching Docker:
+
+```console
+
+$ docker run --rm -i bbvalabs/apicheck-curl http://my-company.com/api/entry-point | docker run --rm -i bbvalabs/sensitive-json
+
+http://my-company.com/api/entry-point
+-------------------------------------
+
+ > rule           -> core-001
+ > where          -> request
+ > path           -> /
+ > keyOrValue     -> key
+ > sensitiveData  -> password
+
+```
+
+# Running as Service
+
+`APIcheck Sensitive JSON` can runs as a service. Only Docker mode currently allow to run this way:
+
+```bash
+$ docker run --rm -p 9000:9000 bbvalabs/sensitive-json --server 0.0.0.0:9000
+[2020-05-08 10:18:01 +0000] [1] [INFO] Goin' Fast @ http://0.0.0.0:9000
+[2020-05-08 10:18:01 +0000] [1] [INFO] Starting worker [1]
+```
+
+There's only one entry-point: `/apicheck/sensitive-data` and accept HTTP POST method.
+
+POST data is a valid APICheck data object.
+
+Example of calling:
+
+```bash
+$ acurl http://myservice.com > query.json
+$ curl -X POST -H "Content-Type: application/json" -X POST --d @query.json http://localhost:9000/apicheck/sensitive-data
+```
+
+# Examples
+
+## Common examples
+
+This examples could be used when you have been installed by `APICheck Package Manager` or running directly with Docker
+
+### Core rules
+
+By default, the tool has a set of embedded rules: **core rules**. If you omit `-r` parameters, these core rules will be used:
+
+```bash
+$ apicheck-curl http://my-company.com/api/entry-point | ac-sensitive
+
+http://my-company.com/api/entry-point
+-------------------------------------
+
+ > rule           -> core-001
+ > where          -> request
+ > path           -> /
+ > keyOrValue     -> key
+ > sensitiveData  -> password
+
+```
 
 ### With remote rules
 
-```bash
-> cat data.json | ac-sensitive -r http://127.0.0.1:9999/rules/rules.yaml
-```
-
-### With local rules
-
-Using core rules:
+You also can set rules files by remote files. `APICheck Sensitive JSON` will download rules file.
 
 ```bash
-> cat data.json | ac-sensitive
+$ apicheck-curl http://my-company.com/api/entry-point | ac-sensitive -r http://127.0.0.1:9999/rules/rules.yaml
+
+http://my-company.com/api/entry-point
+-------------------------------------
+ 
+ > rule           -> myrules-001
+ > where          -> request
+ > path           -> /
+ > keyOrValue     -> key
+ > sensitiveData  -> password
+
 ```
 
 ### With many rules files
 
 ```bash
-> cat data.json | ac-sensitive -r rules/java.yaml -r rules/credentials.yaml
-```
+$ apicheck-curl http://my-company.com/api/entry-point | ac-sensitive -r http://127.0.0.1:9999/rules/java.yaml -r http://127.0.0.1:9999/rules/credentials.yaml
 
-### Passing rules by Environment var
+http://my-company.com/api/entry-point
+-------------------------------------
 
-```bash
-> export RULES=/home/john/rules.yaml
-> cat data.json | ac-sensitive -r rules/java.yaml -r rules/credentials.yaml
-```
+ > rule           -> java-001
+ > where          -> request
+ > path           -> /
+ > keyOrValue     -> key
+ > sensitiveData  -> password
 
-**Environ var must named 'RULES'**
-
-### Export results as json
-
-```bash
-> cat data.json | ac-sensitive -o results.json -r rules/java.yaml -r rules/credentials.yaml
-```
-
-### Quiet mode
-
-Don't output nothing into console
-
-```bash
-> cat data.json | ac-sensitive -q
 ```
 
 ### Filtering false positives
 
-**By ignore file**
+Some times rules and alert for issues but it could be a false positive. In these cases we can remove it by using the `rule ID`:
 
-Dockerfile-sec allows to ignore rules by using a file that contains the rules you want to ignore.
+For the example:
 
 ```bash
-> cat data.json | ac-sensitive -F ignore-rules
+$ apicheck-curl http://my-company.com/api/entry-point | ac-sensitive -r http://127.0.0.1:9999/rules/rules2.yaml
+
+http://my-company.com/api/entry-point
+-------------------------------------
+ 
+ > rule           -> core-001
+ > where          -> request
+ > path           -> /
+ > keyOrValue     -> key
+ > sensitiveData  -> password
+
+http://my-company.com/api/entry-point
+-------------------------------------
+ 
+ > rule           -> myrules2-001
+ > where          -> request
+ > path           -> /
+ > keyOrValue     -> value
+ > sensitiveData  -> creditcard
+
+http://my-company.com/api/entry-point
+-------------------------------------
+ 
+ > rule           -> myrules2-002
+ > where          -> response
+ > path           -> /
+ > keyOrValue     -> value
+ > sensitiveData  -> other-password
+
 ```
 
-Ignore file format contains the *IDs* of rules you want to ignore. **one ID per line**. Example:
+You can remove the second rules **myrules2-002** and **core-001** inline:
 
 ```bash
+$ apicheck-curl http://my-company.com/api/entry-point | ac-sensitive -r http://127.0.0.1:9999/rules/rules2.yaml -i core-001,myrules2-002
+
+http://my-company.com/api/entry-point
+-------------------------------------
+ 
+ > rule           -> core-001
+ > where          -> request
+ > path           -> /
+ > keyOrValue     -> key
+ > sensitiveData  -> password
+
+```
+
+Or using a ignore file:
+
+```bash
+$ cat ignore-file
 core-001
-core-007
+myrules2-002
+$
+$ apicheck-curl http://my-company.com/api/entry-point | ac-sensitive -r http://127.0.0.1:9999/rules/rules2.yaml -F ignore-file
+
+http://my-company.com/api/entry-point
+-------------------------------------
+ 
+ > rule           -> core-001
+ > where          -> request
+ > path           -> /
+ > keyOrValue     -> key
+ > sensitiveData  -> password
+
 ```
 
-**By cli**
+## Running with Docker
 
-You also can use cli to ignore specific *IDs*:
+You also can call `APICheck Sensitive JSON` by running manually with Docker:
+
+### Running without parameters 
+
+```console
+
+$ apicheck-curl http://my-company.com/api/entry-point | docker run --rm -i bbvalabs/sensitive-json
+
+http://my-company.com/api/entry-point
+-------------------------------------
+
+ > rule           -> core-001
+ > where          -> request
+ > path           -> /
+ > keyOrValue     -> key
+ > sensitiveData  -> password
+
+```
+
+### Running with parameters 
+
+```console
+
+$ apicheck-curl http://my-company.com/api/entry-point | docker run --rm -i bbvalabs/sensitive-json -r http://127.0.0.1:9999/rules/credentials.yaml 
+
+http://my-company.com/api/entry-point
+-------------------------------------
+
+ > rule           -> credentials-001
+ > where          -> request
+ > path           -> /
+ > keyOrValue     -> key
+ > sensitiveData  -> password
+
+```
+
+### Defining rules in env vars
+
+```console
+
+$ apicheck-curl http://my-company.com/api/entry-point | docker run --rm -i -e RULES=/home/john/rules.yaml bbvalabs/sensitive-json 
+
+http://my-company.com/api/entry-point
+-------------------------------------
+
+ > rule           -> john-001
+ > where          -> request
+ > path           -> /
+ > keyOrValue     -> key
+ > sensitiveData  -> password
+
+```
+
+## Mixing with other APICheck tools
+
+When `APICheck Sensitive JSON` detect an output pipe, it send the a compatible APICheck data to allow to connect with other APICheck tools.
 
 ```bash
-> cat data.json | ac-sensitive -i core-001,core007
+$ apicheck-curl http://my-company.com/api/entry-point | ac-sensitive | send-to-proxy http://my-proxy-addr:9000
+
+http://my-company.com/api/entry-point
+-------------------------------------
+
+ > rule           -> core-001
+ > where          -> request
+ > path           -> /
+ > keyOrValue     -> key
+ > sensitiveData  -> password
 ```
 
-### Using as pipeline
-
-You also can use ac-sensitive as UNIX pipeline.
-
-Loading Dockerfile from stdin:
+In this case is useful the `quiet` param:
 
 ```bash
-> cat data.json | ac-sensitive -i core-001,core007
-```
-
-Exposing results via pipe:
-
-```bash
-> cat data.json | ac-sensitive -i core-001,core007 | jq
-```
-
-### Output formats
-
-JSON Output format
-++++++++++++++++++
-
-```json
-[
-  {
-    "where": "response",
-    "path": "/",
-    "keyOrValue": "key",
-    "sensitiveData": "password"
-  }
-]
+$ apicheck-curl http://my-company.com/api/entry-point | ac-sensitive -q | send-to-proxy http://my-proxy-addr:9000
 ```
