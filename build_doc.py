@@ -14,12 +14,11 @@ DOC_PATH = os.path.join(HERE, "docs")
 TOOLS_PATH = os.path.join(HERE, "tools")
 STATIC_PATH = os.path.join(HERE, "docs", "assets")
 
-META_KEYS = ("name", "short-command", "version", "description",
+META_KEYS = ("name", "version", "description",
              "home", "author")
 
 OPTIONAL_KEYS = ("short-command", )
 NAME_FORMAT_REGEX = r"([A-Za_-z0-9]+)"
-
 
 
 def main():
@@ -34,6 +33,9 @@ def main():
     # Getting README from plugin
     #
     for d in os.listdir(TOOLS_PATH):
+
+        if d.startswith("."):
+            continue
 
         # Get README.md file
         tools_path = os.path.join(TOOLS_PATH, d)
