@@ -14,7 +14,7 @@ Rules is a simple `YAML` file that could be hosted in a remote place or in a loc
 
 ## Quick start
 
-## Using `APICheck Package Manager`
+## Using APICheck Package Manager
 
 Installing `APICheck Package Manager`:
 
@@ -45,7 +45,7 @@ $ acp install sensitive-json
     docker.io/bbvalabs/sensitive-json:latest
 
 [*] filling environment alias file
-$
+
 $ acp install apicheck-curl
 [*] Fetching Docker image for tool 'apicheck-curl'
 
@@ -94,7 +94,7 @@ cbdbe7a5bc2a: Already exists
 ...
 Status: Image is up to date for bbvalabs/sensitive-json:latest
 docker.io/bbvalabs/sensitive-json:latest
-$
+
 $ docker pull bbvalabs/apicheck-curl
 Using default tag: latest
 latest: Pulling from bbvalabs/apicheck-curl
@@ -122,6 +122,25 @@ http://my-company.com/api/entry-point
  > sensitiveData  -> password
 
 ```
+
+# Rules format
+
+Rules are an YAML file with this format:
+
+Core rules file: `core.yaml`:
+
+```yaml
+- id: core-001
+  description: Find plain text password in HTTP responses
+  regex: '([pP][aA][sS][sS][wW][oO][rR][dD])'
+  severity: Medium
+  searchIn: Both  # Allowed values: Response, Request, Both
+  includeKeys: true  # Search in Json keys. Values always are inspected
+```
+
+- Severity values allowed are: High, Medium, Low
+- searchIn: Set if you want to search in HTTP Request, in Response or Both.
+- includeKeys: Set if you want to search also in JSON keys.
 
 # Running as Service
 
@@ -262,7 +281,6 @@ Or using a ignore file:
 $ cat ignore-file
 core-001
 myrules2-002
-$
 $ apicheck-curl http://my-company.com/api/entry-point | ac-sensitive -r http://127.0.0.1:9999/rules/rules2.yaml -F ignore-file
 
 http://my-company.com/api/entry-point
