@@ -33,10 +33,7 @@ Documentation
 Authors
 -------
 
-APICheck is being developed by BBVA-Labs Security team members:
-
-- `César Gallego <https://github.com/CesarGallego>`_
-- `Daniel García (cr0hn) <https://github.com/cr0hn>`_
+APICheck is being developed by `BBVA Innovation Security Labs <https://www.bbva.com/en/welcome-bbva-labs/>`_ team.
 
 License
 -------

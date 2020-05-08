@@ -127,9 +127,9 @@ def _load_ignore_ids(args: argparse.Namespace) -> List[str]:
 
 
 def _check_input_data(data: dict) -> bool or FormatErrorException:
-    if not "request" in data:
+    if "request" not in data:
         raise FormatErrorException("Missing key 'request'")
-    if not "response" in data:
+    if "response" not in data:
         raise FormatErrorException("Missing key 'request'")
 
     return True
@@ -181,6 +181,7 @@ def search_issues(content_json: dict, rules: list, ignores: set) -> List[dict]:
                 for (key_or_value, v) in values:
                     if regex := re.search(rule["regex"], v):
                         issues.append({
+                            "rule": rule["id"],
                             "where": where,
                             "path": ".".join(path or "/"),
                             "keyOrValue": key_or_value,
@@ -191,6 +192,9 @@ def search_issues(content_json: dict, rules: list, ignores: set) -> List[dict]:
 
 
 def cli_analyze(args: argparse.Namespace):
+    quiet = args.quiet
+
+    console_results = []
 
     # -------------------------------------------------------------------------
     # Read info by stdin or parameter
@@ -207,35 +211,50 @@ def cli_analyze(args: argparse.Namespace):
         # this var contains JSON data in APICheck format
         content_json: dict = json.loads(json_line)
 
-        #
-        # Dump content as APICheck format
-        #
-        if not hasattr(content_json, "_meta"):
-            content_json["_meta"] = {}
+        found_issues = search_issues(content_json, rules, ignores)
 
-        if type(content_json["_meta"]) is not dict:
-            content_json["_meta"] = {}
-
-        content_json["_meta"]["sensitive-json"] = search_issues(
-            content_json,
-            rules,
-            ignores
-        )
-
-        new_content_json = json.dumps(content_json)
-
+        # You're being piped or redirected
         if has_stdout_pipe:
-            # You're being piped or redirected
-            sys.stdout.write(json.dumps(json_line))
+
+            #
+            # Dump content as APICheck format
+            #
+            if not hasattr(content_json, "_meta"):
+                content_json["_meta"] = {}
+
+            if type(content_json["_meta"]) is not dict:
+                content_json["_meta"] = {}
+
+            content_json["_meta"]["sensitive-json"] = found_issues
+
+            output_apicheck_data = json.dumps(content_json)
+
+            # Info for next pip command
+            sys.stdout.write(output_apicheck_data)
             sys.stdout.flush()
 
-            sys.stdout.write(new_content_json)
-            sys.stdout.flush()
-
+        # If not quiet also display in console. If has output pipe -> write
+        # console into stderr, otherwise write in stdout
+        if has_stdout_pipe:
+            console_print = sys.stderr.write
+            console_flush = sys.stderr.flush
         else:
-            sys.stdout.write(new_content_json)
-            sys.stdout.flush()
+            console_print = sys.stdout.write
+            console_flush = sys.stdout.flush
 
+        if not quiet:
+            console_print(f"\n")
+
+            for issue in found_issues:
+                url = content_json['request']['url']
+                console_print(f"{url}\n")
+                console_print(f"{'-' * len(url)}\n\n")
+
+                for x, y in issue.items():
+                    console_print(f" > {x.ljust(15)}-> {y}\n")
+
+                console_print(f"\n")
+                console_flush()
 
 
 def server(args: argparse.Namespace):
@@ -270,6 +289,10 @@ def main():
         description='Analyze a HTTP Request / Response searching for '
                     'sensitive data'
     )
+    parser.add_argument('-q', '--quiet',
+                        default=False,
+                        action="store_true",
+                        help="quiet mode")
     parser.add_argument('-F', '--ignore-file',
                         action="append",
                         help="file with ignores rules")
