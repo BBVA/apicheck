@@ -4,7 +4,7 @@ This tool analyzes a Request / Response HTTP and try to find sensitive data.
 
 **Tool type**: action
 
-## Tools description
+## Tool description
 
 Some times APIs can return sensitive data in some entry-points. Sensitive data could be user information, some data of bossiness logic, internal IPs or os on.
 

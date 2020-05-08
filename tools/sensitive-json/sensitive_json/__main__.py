@@ -194,8 +194,6 @@ def search_issues(content_json: dict, rules: list, ignores: set) -> List[dict]:
 def cli_analyze(args: argparse.Namespace):
     quiet = args.quiet
 
-    console_results = []
-
     # -------------------------------------------------------------------------
     # Read info by stdin or parameter
     # -------------------------------------------------------------------------
@@ -230,7 +228,7 @@ def cli_analyze(args: argparse.Namespace):
             output_apicheck_data = json.dumps(content_json)
 
             # Info for next pip command
-            sys.stdout.write(output_apicheck_data)
+            sys.stdout.write(f"{output_apicheck_data}\n")
             sys.stdout.flush()
 
         # If not quiet also display in console. If has output pipe -> write

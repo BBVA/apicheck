@@ -5,7 +5,7 @@ the file passed as first parameter otherwise it will read the endpoint
 definition to lint from standard input.
 
 This tool accepts an endpoint definition written using OpenAPI v3 as input and
-will output the same definition, if no erros are encounterd, or the list of
+will output the same definition, if no errors are encountered, or the list of
 errors detected.
 
 In case of error a code of 1 is returned, 0 otherwise.
