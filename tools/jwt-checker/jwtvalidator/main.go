@@ -11,7 +11,7 @@ import (
 
 	"github.com/BBVA/apicheck/tools/jwt-checker/jwtvalidator/headerval"
 
-	"github.com/cristalhq/jwt"
+	jwt "github.com/cristalhq/jwt/v2"
 )
 
 const (

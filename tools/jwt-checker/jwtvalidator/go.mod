@@ -2,4 +2,4 @@ module github.com/BBVA/apicheck/tools/jwt-checker/jwtvalidator
 
 go 1.13
 
-require github.com/cristalhq/jwt v1.2.0
+require github.com/cristalhq/jwt/v2 v2.0.0

@@ -3,7 +3,7 @@ package headerval
 import (
 	"fmt"
 
-	"github.com/cristalhq/jwt"
+	"github.com/cristalhq/jwt/v2"
 )
 
 type Check func(header *jwt.Header) error
