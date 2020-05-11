@@ -15,7 +15,7 @@ This tool sends the APICheck Request to a remote proxy.
 
 ## Using APICheck Package Manager
 
-Installing `APICheck Package Manager`:
+First install `APICheck Package Manager`:
 
 ```console
 $ pip install apicheck-package-manager
@@ -25,7 +25,7 @@ Installing collected packages: apicheck-package-manager
 Successfully installed apicheck-package-manager-0.0.14
 ```
 
-Install APICheck tools: 
+Then install the APICheck tools:
 
 - send-to-proxy
 - apicheck-curl
@@ -60,7 +60,7 @@ $ acp install apicheck-curl
 [*] filling environment alias file
 ```
 
-Activate default environment and running the tool:
+Finally activate default environment and running the tool:
 
 ```bash
 $ eval $(acp activate)
@@ -70,7 +70,7 @@ $ eval $(acp activate)
 
 ## Using Docker
 
-Get Docker images for tools:
+Pull the Docker images for the tools:
 
 - sensitive-json
 - apicheck-curl
@@ -96,7 +96,7 @@ Status: Downloaded newer image for bbvalabs/apicheck-curl:latest
 docker.io/bbvalabs/send-to-proxy:latest
 ```
 
-Running launching Docker:
+And then launch the Docker containers:
 
 ```console
 
@@ -106,7 +106,7 @@ $ docker run --rm -i bbvalabs/apicheck-curl http://my-company.com/api/entry-poin
 
 ## Using the quiet mode
 
-`Send-to-proxy` accepts a parameter containing the URL of the proxy to send requests to and and the `-q` (`--quiet`).
+`Send-to-proxy` accepts a parameter containing the URL of the proxy to send requests to and the `-q` (`--quiet`) option to supress output data.
 
 ```bash
 (APICheck) $ acurl http://my-company.com/api/entry-point | send-to-proxy -q http://localproxy:9000

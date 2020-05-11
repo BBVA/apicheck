@@ -6,15 +6,14 @@ permalink: /tools/apicheck-proxy
 
 # APICheck Proxy
 
-With `APICheck proxy` launch a local proxy.
+This tool launches a local proxy.
 
 **Tool type**: generator
 
 ## Tool description
 
-APICheck Proxy tool under the hoods runs the popular `MITM Proxy` with a custom *addon* to add APICheck functionality.
-
-
+APICheck Proxy tool runs the popular `MITM Proxy` under the hoods with a custom
+*addon* to add APICheck functionality.
 
 ## Quick start
 
