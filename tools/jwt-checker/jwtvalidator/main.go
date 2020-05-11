@@ -9,9 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/BBVA/apicheck/tools/jwt-checker/jwtvalidator/headerval"
-
-	jwt "github.com/cristalhq/jwt/v2"
+	jwt2 "github.com/cristalhq/jwt/v2"
 )
 
 const (
@@ -45,128 +43,6 @@ type options struct {
 var programOptions options
 
 var base64Decode = base64.RawURLEncoding.Decode
-
-func ValidateToken(rawToken []byte, headVal *headerval.Validator, claimVal *jwt.Validator, secret string) []error {
-	valError := []error{}
-
-	token, errParse := jwt.Parse(rawToken)
-	if errParse != nil {
-		panic(errParse)
-	}
-
-	// fmt.Printf("Algorithm %v\n", token.Header().Algorithm)
-	// fmt.Printf("Type      %v\n", token.Header().Type)
-	// fmt.Printf("Claims    %v\n", string(token.RawClaims()))
-	// fmt.Printf("Payload   %v\n", string(token.Payload()))
-	// fmt.Printf("Token     %v\n", string(token.Raw()))
-
-	// Validate signature
-	// token, errSign := jwt.ParseAndVerify(rawToken, getSignValidator(token.Header().Algorithm, secret))
-	// if errSign != nil {
-	// 	panic(errSign)
-	// }
-
-	// Validate header
-	header := &jwt.Header{}
-	_ = json.Unmarshal(token.RawHeader(), header)
-	errValHeader := headVal.ValidateAll(header)
-	if errValHeader != nil {
-		valError = append(valError, errValHeader...)
-	}
-
-	// Validate claims
-	claims := &jwt.StandardClaims{}
-	_ = json.Unmarshal(token.RawClaims(), claims)
-
-	errValClaims := claimVal.ValidateAll(claims)
-	if errValClaims != nil {
-		valError = append(valError, errValClaims...)
-	}
-
-	return valError
-	// Output:
-	// Algorithm HS256
-	// Type      JWT
-	// Claims    {"aud":"admin","jti":"random-unique-string"}
-	// Payload   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhZG1pbiIsImp0aSI6InJhbmRvbS11bmlxdWUtc3RyaW5nIn0
-	// Token     eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhZG1pbiIsImp0aSI6InJhbmRvbS11bmlxdWUtc3RyaW5nIn0.dv9-XpY9P8ypm1uWQwB6eKvq3jeyodLA7brhjsf4JVs
-}
-
-func getSignValidator(alg jwt.Algorithm, secret string) (jwt.Signer, error) {
-
-	switch alg {
-	//	case jwt.EdDSA:
-	//		var publicKey ed25519.PublicKey
-	//		if s, err := jwt.NewEdDSA(publicKey, nil); err != nil {
-	//			return s, nil
-	//		} else {
-	//			return nil, err
-	//		}
-	//	case jwt.ES256, jwt.ES384, jwt.ES512:
-	//    if s, err := jwt.; err != nil {
-	//			return s, nil
-	//		} else {
-	//			return nil, err
-	//		}
-	case jwt.HS256:
-		buf := make([]byte, len(secret))
-		var (
-			n   = 0
-			err error
-		)
-		if n, err = base64Decode(buf, []byte(secret)); err != nil {
-			return nil, err
-		}
-		if s, err := jwt.NewHS256(buf[:n]); err != nil {
-			return s, nil
-		} else {
-			return nil, err
-		}
-	case jwt.HS384:
-		buf := make([]byte, len(secret))
-		var (
-			n   = 0
-			err error
-		)
-		if n, err = base64Decode(buf, []byte(secret)); err != nil {
-			return nil, err
-		}
-		if s, err := jwt.NewHS384(buf[:n]); err != nil {
-			return s, nil
-		} else {
-			return nil, err
-		}
-	case jwt.HS512:
-		buf := make([]byte, len(secret))
-		var (
-			n   = 0
-			err error
-		)
-		if n, err = base64Decode(buf, []byte(secret)); err != nil {
-			return nil, err
-		}
-		if s, err := jwt.NewHS512(buf[:n]); err != nil {
-			return s, nil
-		} else {
-			return nil, err
-		}
-		//	case jwt.PS256, jwt.PS384, jwt.PS512:
-		//    if s, err := jwt.; err != nil {
-		//			return s, nil
-		//		} else {
-		//			return nil, err
-		//		}
-		//	case jwt.RS256, jwt.RS384, jwt.RS512:
-		//    if s, err := jwt.; err != nil {
-		//			return s, nil
-		//		} else {
-		//			return nil, err
-		//		}
-	default:
-		return nil, fmt.Errorf("Unsupported Algorithm: %s", alg)
-	}
-
-}
 
 func main() {
 	initOptions()
@@ -206,11 +82,122 @@ func main() {
 
 	switch flag.NArg() {
 	case 1:
-		ValidateToken(([]byte)(flag.Arg(0)), generateHeaderValidator(programOptions), generateClaimsValidator(programOptions), programOptions.secret)
+		if err := validateToken(([]byte)(flag.Arg(0)), programOptions); err != nil {
+			for _, e := range err {
+				fmt.Println(e)
+			}
+			os.Exit(1)
+		}
+		os.Exit(0)
 	default: /*Only one token must be provided or - to read from standard input*/
-		fmt.Fprint(os.Stderr, "Only one token must be provided\n")
+		fmt.Fprint(os.Stderr, "One and only one token must be provided\n")
 		os.Exit(1)
 	}
+}
+
+func validateToken(rawToken []byte, opt options) []error {
+	valError := []error{}
+
+	token, errParse := jwt2.Parse(rawToken)
+	if errParse != nil {
+		panic(errParse)
+	}
+
+	// fmt.Printf("Algorithm %v\n", token.Header().Algorithm)
+	// fmt.Printf("Type      %v\n", token.Header().Type)
+	// fmt.Printf("Claims    %v\n", string(token.RawClaims()))
+	// fmt.Printf("Payload   %v\n", string(token.Payload()))
+	// fmt.Printf("Token     %v\n", string(token.Raw()))
+
+	// Validate signature
+	if v, err := getSignValidator(token.Header().Algorithm, opt.secret); err != nil {
+		panic(err)
+	} else {
+		token, errSign := jwt2.ParseAndVerify(rawToken, v)
+		if errSign != nil {
+			valError = append(valError, errSign)
+		} else {
+			// Validate header
+			if err := validateJWTHeader(token.Header(), opt); err != nil {
+				valError = append(valError, err...)
+			}
+
+			// Validate claims
+			claims := &jwt2.StandardClaims{}
+			_ = json.Unmarshal(token.RawClaims(), claims)
+			if err := validateJWTStdClaims(*claims, opt); err != nil {
+				valError = append(valError, err...)
+			}
+		}
+	}
+
+	if len(valError) > 0 {
+		return valError
+	} else {
+		return nil
+	}
+	// Output:
+	// Algorithm HS256
+	// Type      JWT
+	// Claims    {"aud":"admin","jti":"random-unique-string"}
+	// Payload   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhZG1pbiIsImp0aSI6InJhbmRvbS11bmlxdWUtc3RyaW5nIn0
+	// Token     eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhZG1pbiIsImp0aSI6InJhbmRvbS11bmlxdWUtc3RyaW5nIn0.dv9-XpY9P8ypm1uWQwB6eKvq3jeyodLA7brhjsf4JVs
+}
+
+func getSignValidator(alg jwt2.Algorithm, secret string) (jwt2.Verifier, error) {
+
+	//buf := []byte(secret)
+	// Base64 decode secret
+	buf := make([]byte, len(secret))
+	if n, err := base64Decode(buf, []byte(secret)); err != nil {
+		return nil, err
+	} else {
+		buf = buf[:n-1]
+	}
+
+	switch alg {
+	//	case jwt2.EdDSA:
+	//		// Create public key from byte array
+	//		var pubKey ed25519.PrivateKey
+	//		if , err := jwt2.NewVerifierEdDSA(pubKey); err != nil {
+	//			return v, nil
+	//		} else {
+	//			return nil, err
+	//		}
+	//	case jwt2.ES256, jwt2.ES384, jwt2.ES512:
+	//		// Create public key from byte array
+	//		var pubKey *ecdsa.PublicKey
+	//    if s, err := jwt2.NewVerifierES(alg, ); err != nil {
+	//			return s, nil
+	//		} else {
+	//			return nil, err
+	//		}
+	case jwt2.HS256, jwt2.HS384, jwt2.HS512:
+		if v, err := jwt2.NewVerifierHS(alg, buf); err == nil {
+			return v, nil
+		} else {
+			return nil, err
+		}
+	//	case jwt2.PS256, jwt2.PS384, jwt2.PS512:
+	//		// Create public key from byte array
+	//		var pubKey *rsa.PublicKey
+	//    if v, err := jwt2.NewVerifierPS(alg, pubKey); err != nil {
+	//			return v, nil
+	//		} else {
+	//			return nil, err
+	//		}
+	//	case jwt2.RS256, jwt2.RS384, jwt2.RS512:
+	//		// Create public key from byte array
+	//		var pubKey *rsa.PublicKey
+	//		if v, err := jwt2.NewVerifierRS(alg, pubKey); err != nil {
+	//			return s, nil
+	//		} else {
+	//			return nil, err
+	//		}
+	default:
+		return nil, fmt.Errorf("Unsupported Algorithm: %s", alg)
+	}
+
 }
 
 func initOptions() {
@@ -228,63 +215,64 @@ func initOptions() {
 
 }
 
-func generateClaimsValidator(opt options) *jwt.Validator {
-	checks := make([]jwt.Check, 0)
+func validateJWTHeader(header jwt2.Header, opt options) []error {
+	errors := []error{}
 
-	checks = append(checks, func(claims *jwt.StandardClaims) error {
-		if claims.Issuer == "" {
-			return fmt.Errorf("No issuer claim found")
-		}
-		return nil
-	})
-	if opt.issuer != "" {
-		checks = append(checks, jwt.IssuerChecker(opt.issuer))
+	if header.Type != "JWT" || (header.ContentType != "" && header.ContentType != "JWT") {
+		errors = append(errors, fmt.Errorf("JWT type (%s, %s) not supported", header.Type, header.ContentType))
 	}
-	checks = append(checks, func(claims *jwt.StandardClaims) error {
-		if claims.Subject == "" {
-			return fmt.Errorf("No subject claim found")
-		}
-		return nil
-	})
-	if opt.subject != "" {
-		checks = append(checks, jwt.SubjectChecker(opt.subject))
-	}
-	checks = append(checks, func(claims *jwt.StandardClaims) error {
-		if len(claims.Audience) == 0 {
-			return fmt.Errorf("No audience claim found")
-		}
-		return nil
-	})
-	if opt.permittedFor != "" {
-		checks = append(checks, jwt.AudienceChecker([]string{opt.permittedFor}))
-	}
-	if opt.issuedBefore != "" {
-		checks = append(checks, jwt.NotBeforeChecker(opt.timeIssuedBefore))
-	}
-	if opt.expiresAt != "" {
-		checks = append(checks, jwt.ExpirationTimeChecker(opt.timeExpiresAt))
-	}
-
-	validator := jwt.NewValidator(checks...)
-	//  jwt.AudienceChecker([]string{"admin"}),
-	//  jwt.IDChecker("random-unique-string"),
-
-	return validator
-}
-
-func generateHeaderValidator(opt options) *headerval.Validator {
-	checks := []headerval.Check{headerval.TokenTypeChecker()}
-
-	if !opt.allowUnsignedTokens {
-		checks = append(checks, headerval.SignedTokenChecker())
+	if !opt.allowUnsignedTokens && header.Algorithm == "none" {
+		errors = append(errors, fmt.Errorf("JWT is unsigned"))
 	}
 	if len(opt.allowedSignAlgs) > 0 {
-		checks = append(checks, headerval.AllowedSignAlgorithmChecker(opt.allowedSignAlgs))
+		found := false
+		for _, alg := range opt.allowedSignAlgs {
+			if header.Algorithm == jwt2.Algorithm(alg) {
+				found = true
+				break
+			}
+		}
+		if !found {
+			errors = append(errors, fmt.Errorf("JWT signing algorithm (%s) is not allowed", header.Algorithm))
+		}
 	}
 
-	return headerval.NewValidator(checks...)
+	return errors
 }
 
+func validateJWTStdClaims(claims jwt2.StandardClaims, opt options) []error {
+	errors := make([]error, 0)
+
+	if claims.Issuer == "" {
+		errors = append(errors, fmt.Errorf("No issuer claim found"))
+	} else if opt.issuer != "" && !claims.IsIssuer(opt.issuer) {
+		errors = append(errors, fmt.Errorf("Issuer claim doesn't match. Expected: %s, got: %s", opt.issuer, claims.Issuer))
+	}
+	if claims.Subject == "" {
+		errors = append(errors, fmt.Errorf("No subject claim found"))
+	} else if opt.subject != "" && !claims.IsSubject(opt.subject) {
+		errors = append(errors, fmt.Errorf("Subject claim doesn't match. Expected: %s, got: %s", opt.subject, claims.Subject))
+	}
+	if len(claims.Audience) == 0 {
+		errors = append(errors, fmt.Errorf("No audience claim found"))
+	} else if opt.permittedFor != "" && !claims.IsForAudience(opt.permittedFor) {
+		errors = append(errors, fmt.Errorf("Audience claim doesn't match. Expected: %s, got: %s", opt.permittedFor, strings.Join(claims.Audience, ",")))
+	}
+	if opt.issuedBefore != "" && !claims.IsValidNotBefore(opt.timeIssuedBefore) {
+		errors = append(errors, fmt.Errorf("NotBefore claim doesn't match. Expected: %s, got: %v", opt.issuedBefore, claims.NotBefore))
+	}
+	if opt.expiresAt != "" && !claims.IsValidExpiresAt(opt.timeExpiresAt) {
+		errors = append(errors, fmt.Errorf("ExpiresAt claim doesn't match. Expected: %s, got: %v", opt.expiresAt, claims.ExpiresAt))
+	}
+
+	//  jwt2.AudienceChecker([]string{"admin"}),
+	//  jwt2.IDChecker("random-unique-string"),
+
+	return errors
+}
+
+// mySecretPassword = bXlTZWNyZXRQYXNzd29yZAo=
+// mySecretPasswordmySecretPassword = bXlTZWNyZXRQYXNzd29yZG15U2VjcmV0UGFzc3dvcmQK
 /*******************************************************************************
 /* header.typ === "JWT"
 /* header.alg !=="none" except Options.allowUnsignedTokens
