@@ -3,6 +3,12 @@ menu_title: Tool list
 
 menu:
 
+  - title: OpenAPI v2 Linter
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: Lint the endpoint specification provided using OpenAPI v2 spec
+    url: /tools/openapiv2-lint
+
   - title: Replay HTTP Requests
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
@@ -21,26 +27,26 @@ menu:
     brief: Find sensitive data in JSON content in a HTTP Request / Response
     url: /tools/sensitive-json
 
-  - title: APICheck proxy
-    author: BBVA Labs Security
-    home: https://github.com/BBVA/apicheck
-    brief: launch a local proxy and intercept request / responses a perform some actions
-    url: /tools/apicheck-proxy
-
   - title: OpenAPI v3 Linter
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
     brief: Lint the endpoint specification provided using OpenAPI v3 spec
     url: /tools/openapiv3-lint
 
+  - title: APICheck proxy
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: launch a local proxy and intercept request / responses a perform some actions
+    url: /tools/apicheck-proxy
+
+  - title: JWT token validator
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: Validates issued JWT tokens to check for common pitfalls
+    url: /tools/jwt-checker
+
   - title: Send data to a proxy server
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
     brief: Read a request from stdin and send it to a proxy
     url: /tools/send-to-proxy
-
-  - title: OpenAPI v2 Linter
-    author: BBVA Labs Security
-    home: https://github.com/BBVA/apicheck
-    brief: Lint the endpoint specification provided using OpenAPI v2 spec
-    url: /tools/openapiv2-lint
