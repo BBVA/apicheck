@@ -30,6 +30,8 @@ url: "https://bbva.github.io" # the base hostname & protocol for your site, e.g.
 plugins:
   - jekyll-feed
 
+excerpt_separator: <!--more-->
+
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to

@@ -8,6 +8,7 @@ class Counter:
     def request(self, flow: http.HTTPFlow):
         self.num = self.num + 1
         ctx.log.info("XXXXXX")
+        ctx.log.error("XXXXXX")
 
 
 addons = [

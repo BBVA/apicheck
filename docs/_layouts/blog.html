@@ -1,0 +1,28 @@
+---
+layout: default
+title: APICheck News and Blog
+---
+
+<div class="container pt-2 pt-md-6 pb-3 pb-md-6">
+    <div class="row">
+        <div class="col-12 col-md-3 mb-3">
+            <div class="sidebar">
+
+                <div class="docs-menu">
+                    <h4>Post history</h4>
+                    <ul>
+                        {% for post in site.posts %}
+                        <li {% if post.url == page.url %}class="active"{% endif %}><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-9">
+            <div class="content">
+                {{ content }}
+            </div>
+        </div>
+    </div>
+</div>
+

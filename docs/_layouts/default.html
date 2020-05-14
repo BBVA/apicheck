@@ -14,39 +14,45 @@
     <meta property="og:image" content="https://bbva.github.io/apicheck/assets/images/apicheck-logo.png" />
     <meta property="og:description" content="APICheck Project user documentations and tools developers guides" />
 
-    <link rel="apple-touch-icon" sizes="57x57" href="{{ "/images/favicon/apple-icon-57x57.png" | relative_url }}" >
-    <link rel="apple-touch-icon" sizes="60x60" href="{{ "/images/favicon/apple-icon-60x60.png" | relative_url }}" >
-    <link rel="apple-touch-icon" sizes="72x72" href="{{ "/images/favicon/apple-icon-72x72.png" | relative_url }}" >
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ "/images/favicon/apple-icon-76x76.png" | relative_url }}" >
-    <link rel="apple-touch-icon" sizes="114x114" href="{{ "/images/favicon/apple-icon-114x114.png" | relative_url }}" >
-    <link rel="apple-touch-icon" sizes="120x120" href="{{ "/images/favicon/apple-icon-120x120.png" | relative_url }}" >
-    <link rel="apple-touch-icon" sizes="144x144" href="{{ "/images/favicon/apple-icon-144x144.png" | relative_url }}" >
-    <link rel="apple-touch-icon" sizes="152x152" href="{{ "/images/favicon/apple-icon-152x152.png" | relative_url }}" >
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ "/images/favicon/apple-icon-180x180.png" | relative_url }}" >
-    <link rel="icon" type="image/png" sizes="192x192"  href="{{ "/images/favicon/android-icon-192x192.png" | relative_url }}" >
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ "/images/favicon/favicon-32x32.png" | relative_url }}" >
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ "/images/favicon/favicon-96x96.png" | relative_url }}" >
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ "/images/favicon/favicon-16x16.png" | relative_url }}" >
-    <link rel="manifest" href="{{ "/images/favicon/manifest.json" | relative_url }}" >
+    <link rel="apple-touch-icon" sizes="57x57" href="{{ "/assets/images/favicon/apple-icon-57x57.png" | relative_url }}" >
+    <link rel="apple-touch-icon" sizes="60x60" href="{{ "/assets/images/favicon/apple-icon-60x60.png" | relative_url }}" >
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ "/assets/images/favicon/apple-icon-72x72.png" | relative_url }}" >
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ "/assets/images/favicon/apple-icon-76x76.png" | relative_url }}" >
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ "/assets/images/favicon/apple-icon-114x114.png" | relative_url }}" >
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ "/assets/images/favicon/apple-icon-120x120.png" | relative_url }}" >
+    <link rel="apple-touch-icon" sizes="144x144" href="{{ "/assets/images/favicon/apple-icon-144x144.png" | relative_url }}" >
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ "/assets/images/favicon/apple-icon-152x152.png" | relative_url }}" >
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ "/assets/images/favicon/apple-icon-180x180.png" | relative_url }}" >
+    <link rel="icon" type="image/png" sizes="192x192"  href="{{ "/assets/images/favicon/android-icon-192x192.png" | relative_url }}" >
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ "/assets/images/favicon/favicon-32x32.png" | relative_url }}" >
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ "/assets/images/favicon/favicon-96x96.png" | relative_url }}" >
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ "/assets/images/favicon/favicon-16x16.png" | relative_url }}" >
+    <link rel="manifest" href="{{ "/assets/images/favicon/manifest.json" | relative_url }}" >
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="{{ "/images/favicon/ms-icon-144x144.png" | relative_url }}" >
+    <meta name="msapplication-TileImage" content="{{ "/assets/images/favicon/ms-icon-144x144.png" | relative_url }}" >
     <meta name="theme-color" content="#ffffff">
 
     <link rel="stylesheet" href="{{ "/assets/style.css" | relative_url }}">
 </head>
 
-<body class='page '>
+<body class='page'>
 <div id="main-menu-mobile" class="main-menu-mobile">
     <ul>
         <li class="menu-item-home active">
             <a href="{{ "/" | relative_url }}">
-                <span>Home</span>
+            <span>Home</span>
             </a>
         </li>
 
         <li class="menu-item-docs">
             <a href="{{ "/docs/" | relative_url }}">
-                <span>Doc</span>
+            <span>Doc</span>
+            </a>
+        </li>
+
+        <li class="menu-item-docs">
+            <a href="{{ "/blog" | relative_url }}">
+            <span>News & blog</span>
             </a>
         </li>
 
@@ -67,28 +73,33 @@
 
                     <li class="menu-item-home active">
                         <a href="{{ "/" | relative_url }}">
-                            <span>Home</span>
+                        <span>Home</span>
                         </a>
                     </li>
 
                     <li class="menu-item-docs">
                         <a href="{{ "/docs" | relative_url }}">
-                            <span>Docs</span>
+                        <span>Docs</span>
+                        </a>
+                    </li>
+
+                    <li class="menu-item-docs">
+                        <a href="{{ "/blog" | relative_url }}">
+                        <span>News & blog</span>
                         </a>
                     </li>
 
                 </ul>
             </div>
             <button id="toggle-main-menu-mobile" class="hamburger hamburger--slider" type="button">
-  <span class="hamburger-box">
-    <span class="hamburger-inner"></span>
-  </span>
+              <span class="hamburger-box">
+                <span class="hamburger-inner"></span>
+              </span>
             </button>
         </div>
     </div>
 
     {{ content }}
-
 
 </div>
 
