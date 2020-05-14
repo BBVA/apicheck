@@ -1,7 +1,8 @@
 ---
 layout: doc
 title: OpenAPI V3 Linter
-permalink: /tools/openapiv3-lint
+type: edge
+permalink: /tools/edge/openapiv3-lint
 ---
 
 # OpenAPI V3 Linter

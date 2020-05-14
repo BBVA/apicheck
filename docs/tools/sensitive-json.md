@@ -1,7 +1,8 @@
 ---
 layout: doc
 title: APICheck Sensitive JSON
-permalink: /tools/sensitive-json
+type: apicheck
+permalink: /tools/apicheck/sensitive-json
 ---
 
 # APICheck Sensitive JSON

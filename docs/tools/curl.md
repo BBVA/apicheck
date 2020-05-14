@@ -1,7 +1,8 @@
 ---
 layout: doc
 title: Grab from CURL
-permalink: /tools/curl
+type: apicheck
+permalink: /tools/apicheck/curl
 ---
 
 Grab from CURL

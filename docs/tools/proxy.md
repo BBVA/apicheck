@@ -1,7 +1,8 @@
 ---
 layout: doc
 title: APICheck Proxy
-permalink: /tools/apicheck-proxy
+type: apicheck
+permalink: /tools/apicheck/apicheck-proxy
 ---
 
 # APICheck Proxy

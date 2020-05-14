@@ -1,7 +1,8 @@
 ---
 layout: doc
 title: APICheck Send to proxy
-permalink: /tools/send-to-proxy
+type: apicheck
+permalink: /tools/apicheck/send-to-proxy
 ---
 
 # APICheck Send to proxy

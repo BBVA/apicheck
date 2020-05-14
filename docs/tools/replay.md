@@ -1,7 +1,8 @@
 ---
 layout: doc
 title: Replay
-permalink: /tools/replay
+type: apicheck
+permalink: /tools/apicheck/replay
 ---
 
 # Replay

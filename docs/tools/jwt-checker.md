@@ -1,7 +1,8 @@
 ---
 layout: doc
 title: jwt-checker
-permalink: /tools/jwt-checker
+type: apicheck
+permalink: /tools/apicheck/jwt-checker
 ---
 
 # jwt-checker
