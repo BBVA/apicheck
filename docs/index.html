@@ -12,18 +12,15 @@ title: APICheck Sensitive Data Finder
         <p>APICheck is comprised of a set of tools that can can be connected among them to achieve different functionalities, depending on how are connected.</p>
         <p>This page contains a list of currently available tools with a brief description of them.</p>
     </div>
-
-    {% for item in site.data.tools.menu %}
-    <div class="summary mb-2">
-        <h2 class="title-summary"><a href="{{ item.url | relative_url }}">{{ item.title | capitalize }}</a></h2>
-        <p>{{ item.brief }}</p>
+    <div class="content">
+        <h2>News & blog</h2>
+        <p>You can find some usage examples, releases, new published tools and so on at blog section. Latest entries:</p>
         <ul>
-            <ol>- Author: <b>{{ item.author }}</b></ol>
-            <ol>- Developer Site: <a target="_blank" href="{{ item.home }}">{{ item.home }}</a></ol>
+        {% for post in site.posts %}
+            <li><a target="_blank" href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+        {% endfor %}
         </ul>
-        <br />
-        <a class="button button-primary mb-2" href="{{ item.url | relative_url }}">Go to doc &rarr;</a>
     </div>
-    {% endfor %}
+
 
 </div>
