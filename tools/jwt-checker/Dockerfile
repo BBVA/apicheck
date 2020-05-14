@@ -6,12 +6,12 @@ COPY jwtvalidator/ /jwtvalidator
 
 WORKDIR /jwtvalidator
 
-RUN go build -o jwtchk
+RUN go build -o jwt-checker
 
 FROM alpine:3.11.6
 
 WORKDIR /root/
 
-COPY --from=build /jwtvalidator/jwtchk .
+COPY --from=build /jwtvalidator/jwt-checker .
 
 ENTRYPOINT ["./jwtchk"]
