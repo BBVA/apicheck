@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Banco Bilbao Vizcaya Argentaria, S.A.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package validations_test
 
 import (
@@ -11,7 +27,6 @@ var (
 	badSecret                   = "bXlTZWNyZXRQYXNzd29yZA"
 	secret                      = "bXlTZWNyZXRQYXNzd29yZG15U2VjcmV0UGFzc3dvcmQK"
 	noClaimsSignedToken         = []byte("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncm91cHMiOiJncnB1cDEsZ3JvdXAyIiwiZW1haWwiOiJ1bmVtYWlsQGNvbXBhbnkuY29tIn0.UEyAkQeusnw18O0tNnT3UL1VweE1uITHPUIrL3MYFyc")
-	unsupportedSignedToken      = []byte("")
 	unsignedToken               = []byte("eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJpc3MiOiJiYnZhLWlhbSIsInN1YiI6InN1YmplY3QtaWQifQ.UEyAkQeusnw18O0tNnT3UL1VweE1uITHPUIrL3MYFyc")
 	unsignedBadTypeToken        = []byte("eyJhbGciOiJub25lIiwidHlwIjoiSldTIiwiY3R5IjoiSldTIn0.eyJpc3MiOiJiYnZhLWlhbSIsInN1YiI6InN1YmplY3QtaWQifQ.UEyAkQeusnw18O0tNnT3UL1VweE1uITHPUIrL3MYFyc")
 	unsignedBadContenttypeToken = []byte("eyJhbGciOiJub25lIiwidHlwIjoiSldUIiwiY3R5IjoiSldTIn0.eyJpc3MiOiJiYnZhLWlhbSIsInN1YiI6InN1YmplY3QtaWQifQ.UEyAkQeusnw18O0tNnT3UL1VweE1uITHPUIrL3MYFyc")
