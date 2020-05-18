@@ -27,11 +27,14 @@ import (
 func main() {
 	programOptions := ParseOptions()
 
-	if e := cmd.Run(programOptions); e.Code == 2 {
+	if e := cmd.Run(programOptions); e.Code == 2 { // Print help message
 		flag.Usage()
 		os.Exit(e.Code)
-	} else {
+	} else if e.Code == 1 { // Print error messages
 		fmt.Fprintln(os.Stderr, e.Error())
+		os.Exit(e.Code)
+	} else {
+		fmt.Fprintln(os.Stdin, e.Error())
 		os.Exit(e.Code)
 	}
 }
