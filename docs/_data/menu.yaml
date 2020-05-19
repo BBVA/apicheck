@@ -1,0 +1,13 @@
+menu:
+
+  - menu_title: Doc home
+    url: /docs
+
+  - menu_title: The Project
+    url: /docs/about-project
+
+  - menu_title: Quick start
+    url: /docs/quick-start
+
+  - menu_title: Building new tools
+    url: /docs/building-new-tools

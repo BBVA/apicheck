@@ -36,18 +36,17 @@ Every tool needs to provide some information in order to be properly managed by
 the *Package Manager* and to give information that helps users to know what the
 tools does. Among this information are items such as:
 
-- Tool nane
-- versionapicheck/
+- Tool name
+- version
 - Description
 - ...
 
 ## Automating the integration of new tools
 
-APICheck leverages on build automation to mantain and publish the set of tools
+APICheck leverages on build automation to maintain and publish the set of tools
 currently available. Every time a developer adds or modifies a tool (via a pull
 request, for example), the build process will be launch to generate a new
 release for the tool.
-
 
 <a id="apicheck-and-pipelines"></a>
 # APICheck and pipelines
@@ -57,7 +56,6 @@ can be combined to create complex tests, and this can be made by borrowing the
 UNIX pipeline paradigm.
 
 ![Pipeline model](/apicheck/assets/images/apicheck_unix_pipeline.png)
-
 
 <a id="apicheck-data-format"></a>
 # APICheck data format
@@ -82,7 +80,8 @@ Here is a complete example:
     }
   },
   "request": {
-    "path": "/",
+    "url": "https://nvd.nist.gov/",
+    "version": "1.1",
     "method": "get",
     "headers": {
       "User-Agent": "curl/7.54.0",
@@ -150,6 +149,27 @@ $ cat 3_apicheck_data.json
 $ cat 3_apicheck_data.json | sensitive-json | pretty-display
 ```
 
+<a id="apicheck-tool-types"></a>
+# Tool types
+
+`APICheck` has two type of tools, depending of how it works:
+
+- **APICheck tools**: understand and uses with `APICheck-data` format.
+- **Edge tools**: useful and great tools, but don't use `APICheck-data` format.  
+
+## APICheck tools
+
+An `APICheck` could be some of these: 
+
+- **Actions**: reads `APICheck-data` from stdin (standard input).
+- **Generators**: writes `APICheck-data` to stdout (standard output).
+- **Transformers**: reads `APICheck-data` from stdin and writes a new `APICheck-data` to stdout with some transformation or additional data.
+
+Using these 3 types of tools users can identify easily how a tool works.
+
+## Edge tools
+
+If the tools is useful but don't use `APICheck-data` format, then it's a `edge-tool`.
 
 <a id="steps-for-creating-a-new-tool"></a>
 # Steps for creating a new tool
@@ -173,6 +193,8 @@ Here finish easy part :)
 
 ## Step 3 - Create a folder for the tool
 
+### APICheck tool
+
 APICheck tools live in its own folder inside the */tools* folder which holds
 all the code and documentation. Folders names can contain numbers, lowercase
 letters, "\_" and "-".
@@ -180,6 +202,17 @@ letters, "\_" and "-".
 ```console
 $ cd tools/
 $ mkdir hello-world-tool
+```
+
+### Edge tool
+
+Edge tools live in its own folder inside the */tools-edge* folder which holds
+all the code and documentation. Folders names can contain numbers, lowercase
+letters, "\_" and "-".
+
+```console
+$ cd tools-edge/
+$ mkdir hello-world-edge-tool
 ```
 
 ## Step 4 - Create tool's meta-information
@@ -230,7 +263,7 @@ root folder and using Markdown format.
 In order to help APICheck users it is convenient that you provide, aside the
 description of your tool, with some info about how it works:
 - You should indicate, for example, what are the expected input (what it expects
-  as standard input) and ouput (what can others expect as output and error) of
+  as standard input) and output (what can others expect as output and error) of
   your tool.
 - As a best practice your tool should return and error code of '0' if it finish
   without error and any other value if it encounter any error condition, It
@@ -242,14 +275,33 @@ description of your tool, with some info about how it works:
 $ cd tools/
 $ cd hello-world-tool/
 $ cat <<EOF > README.md
-# Hello Word Tool Documentation
+# [tool type image] [TOOL TITLE]
 
-Wellcome to the demo tool of APICheck tutorial
+[TOOL DESCRIPTION]
 
-## How to install
-....
+# Quick start
+
+...
+
+# Usage
+
+...
+
+# Examples
+
+...
+
 EOF
 ```
+
+README file must have, at least these sections:
+
+- TOOL TITLE
+- Quick start
+- Usage
+- Examples
+
+Each tool is different and need doesnt need the same documentation. Tool developer can decide the long of doc.
 
 &#9888; Be careful with the name of file, the name must be in uppercase and the
 extension in lower case.

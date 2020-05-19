@@ -1,0 +1,14 @@
+---
+layout: blog
+permalink: /blog
+title: APICheck News and Blog
+---
+
+{% for post in site.posts %}
+<div class="summary mb-2">
+  <h2 class="title-summary">{{ post.title }}</h2>
+  <p>{{ post.excerpt }}</p>
+  <br />
+  <a class="button button-primary mb-2" href="{{ post.url | relative_url }}">More &rarr;</a>
+</div>
+{% endfor %}

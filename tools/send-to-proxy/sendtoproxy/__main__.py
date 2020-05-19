@@ -32,6 +32,7 @@ class Request:
     url: str
     body: str = None
     method: str = "GET"
+    version: str = "1.1"
     headers: dict = None
 
     @classmethod
@@ -136,20 +137,24 @@ def run(args: argparse.Namespace):
 
         request_url, response = send_one_input_data(json_line, args)
 
+        # You're being piped or redirected
+        if has_stdout_pipe:
+
+            # Info for next piped command
+            sys.stdout.write(f"{json_line}\n")
+            sys.stdout.flush()
+
         if not quiet:
-            message = f"[*] Request sent: '{request_url}'"
 
             if has_stdout_pipe:
-                sys.stderr.write(message)
-                sys.stderr.flush()
-
+                console_print = sys.stderr.write
+                console_flush = sys.stderr.flush
             else:
-                # You're being piped or redirected
-                sys.stdout.write(json.dumps(json_line))
-                sys.stdout.flush()
+                console_print = sys.stdout.write
+                console_flush = sys.stdout.flush
 
-                sys.stdout.write(message)
-                sys.stdout.flush()
+            console_print(f"[*] Request sent: '{request_url}'\n")
+            console_flush()
 
 
 def main():

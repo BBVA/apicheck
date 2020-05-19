@@ -10,8 +10,9 @@ import configparser
 HERE = os.path.abspath(os.path.dirname(__file__))
 
 TOOLS_PATH = os.path.join(HERE, "tools")
+EDGE_TOOLS_PATH = os.path.join(HERE, "tools-edge")
 
-META_KEYS = ("name", "short-command", "version", "description",
+META_KEYS = ("name", "version", "description",
              "home", "author")
 
 DOCKER_HUB_REPO = "bbvalabs"
@@ -24,66 +25,74 @@ def main():
     #
     # Getting README from plugin
     #
-    for d in os.listdir(TOOLS_PATH):
+    for t in (TOOLS_PATH, EDGE_TOOLS_PATH):
 
-        # Get META file
-        meta_path = os.path.join(TOOLS_PATH, d, "META")
+        is_edge_tool = "tools-edge" in t
 
-        try:
-            with open(meta_path, "r") as meta_handler:
-                cf = configparser.ConfigParser()
-                cf.read_string(f"[DEFAULT]\n {meta_handler.read()}")
+        for d in os.listdir(t):
 
-                meta = dict(cf["DEFAULT"])
+            if d.startswith("."):
+                continue
 
-                # Check that META contains all needed keys
-                if not all(x in meta.keys() for x in META_KEYS):
-                    print(f"[!] Missing keys in META \"{d}\". "
-                          f"Needed keys: \"{', '.join(META_KEYS)}\"",
-                          file=sys.stderr)
-                    exit(1)
+            # Get META file
+            meta_path = os.path.join(t, d, "META")
+            tool_type = 'edge' if is_edge_tool else 'apicheck'
 
-                #
-                # Check that 'name' and 'short-command' are unique
-                #
-                name = meta["name"]
+            try:
+                with open(meta_path, "r") as meta_handler:
+                    cf = configparser.ConfigParser()
+                    cf.read_string(f"[DEFAULT]\n {meta_handler.read()}")
 
-                #
-                # Check name format it's ok
-                #
-                if not re.match(NAME_FORMAT_REGEX, name):
-                    print(f"Invalid name format for: '{name}'. "
-                          f"Only allowed : A-Za_-z0-9")
-                    exit(1)
+                    meta = dict(cf["DEFAULT"])
 
-                version = meta["version"]
-                docker_file_path = os.path.join(
-                    TOOLS_PATH,
-                    d,
-                    meta.get("docker-file", "Dockerfile"))
+                    # Check that META contains all needed keys
+                    if not all(x in meta.keys() for x in META_KEYS):
+                        print(f"[!] Missing keys in META \"{d}\". "
+                              f"Needed keys: \"{', '.join(META_KEYS)}\"",
+                              file=sys.stderr)
+                        exit(1)
 
-                if not os.path.exists(docker_file_path):
-                    print(f"[!] Can't Dockerfile for tool '{name}'",
-                          file=sys.stderr)
-                    continue
+                    #
+                    # Check that 'name' and 'short-command' are unique
+                    #
+                    name = meta["name"]
 
-                if name in docker_images.keys():
-                    print(f"[!] Tool name '{name}' already exits used "
-                          f"for other tool",
-                          file=sys.stderr)
-                    exit(1)
-                else:
+                    #
+                    # Check name format it's ok
+                    #
+                    if not re.match(NAME_FORMAT_REGEX, name):
+                        print(f"Invalid name format for: '{name}'. "
+                              f"Only allowed : A-Za_-z0-9")
+                        exit(1)
 
-                    docker_images[name] = (
-                        version,
-                        os.path.join(TOOLS_PATH, d),
-                        f'./{meta.get("docker-file", "Dockerfile")}'
-                    )
+                    version = meta["version"]
+                    docker_file_path = os.path.join(
+                        t,
+                        d,
+                        meta.get("docker-file", "Dockerfile"))
 
-        except OSError:
-            print(f"[!] Tool \"{d}\" doesnt has README.md file",
-                  file=sys.stderr)
-            continue
+                    if not os.path.exists(docker_file_path):
+                        print(f"[!] Can't Dockerfile for tool '{name}'",
+                              file=sys.stderr)
+                        continue
+
+                    if name in docker_images.keys():
+                        print(f"[!] Tool name '{name}' already exits used "
+                              f"for other tool",
+                              file=sys.stderr)
+                        exit(1)
+                    else:
+
+                        docker_images[name] = (
+                            version,
+                            os.path.join(TOOLS_PATH, d),
+                            f'./{meta.get("docker-file", "Dockerfile")}'
+                        )
+
+            except OSError:
+                print(f"[!] Tool \"{d}\" doesnt has README.md file",
+                      file=sys.stderr)
+                continue
 
     try:
         docker_user = os.environ["DOCKER_USERNAME"]

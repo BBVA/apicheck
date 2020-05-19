@@ -3,7 +3,6 @@ import re
 import sys
 import json
 import base64
-import select
 
 from typing import List, Tuple, Any
 
@@ -11,6 +10,7 @@ import yaml
 import requests
 import argparse
 
+from python_pipes import read_stdin_lines
 from sanic import Sanic, response, request
 
 HERE = os.path.dirname(__file__)
@@ -127,9 +127,9 @@ def _load_ignore_ids(args: argparse.Namespace) -> List[str]:
 
 
 def _check_input_data(data: dict) -> bool or FormatErrorException:
-    if not "request" in data:
+    if "request" not in data:
         raise FormatErrorException("Missing key 'request'")
-    if not "response" in data:
+    if "response" not in data:
         raise FormatErrorException("Missing key 'request'")
 
     return True
@@ -181,6 +181,7 @@ def search_issues(content_json: dict, rules: list, ignores: set) -> List[dict]:
                 for (key_or_value, v) in values:
                     if regex := re.search(rule["regex"], v):
                         issues.append({
+                            "rule": rule["id"],
                             "where": where,
                             "path": ".".join(path or "/"),
                             "keyOrValue": key_or_value,
@@ -191,23 +192,27 @@ def search_issues(content_json: dict, rules: list, ignores: set) -> List[dict]:
 
 
 def cli_analyze(args: argparse.Namespace):
-    quiet = args.quiet or False
+    quiet = args.quiet
 
     # -------------------------------------------------------------------------
     # Read info by stdin or parameter
     # -------------------------------------------------------------------------
-    if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+    for has_stdin_pipe, has_stdout_pipe, json_line in read_stdin_lines():
+        if not has_stdin_pipe:
+            raise FileNotFoundError(
+                "Input data must be entered as a UNIX pipeline. For example: "
+                "'cat info.json | tool-name'")
 
-        #
-        # APICheck input JSON format line by line. The JSON will be one per
-        # line
-        #
-        for content in sys.stdin.readlines():
-            rules = _load_rules(args)
-            ignores = set(_load_ignore_ids(args))
+        rules = _load_rules(args)
+        ignores = set(_load_ignore_ids(args))
 
-            # this var contains JSON data in APICheck format
-            content_json: dict = json.loads(content)
+        # this var contains JSON data in APICheck format
+        content_json: dict = json.loads(json_line)
+
+        found_issues = search_issues(content_json, rules, ignores)
+
+        # You're being piped or redirected
+        if has_stdout_pipe:
 
             #
             # Dump content as APICheck format
@@ -218,25 +223,36 @@ def cli_analyze(args: argparse.Namespace):
             if type(content_json["_meta"]) is not dict:
                 content_json["_meta"] = {}
 
-            content_json["_meta"]["sensitive-json"] = search_issues(
-                content_json,
-                rules,
-                ignores
-            )
+            content_json["_meta"]["sensitive-json"] = found_issues
 
-            new_content_json = json.dumps(content_json)
+            output_apicheck_data = json.dumps(content_json)
 
-            sys.stdout.write(new_content_json)
+            # Info for next pip command
+            sys.stdout.write(f"{output_apicheck_data}\n")
             sys.stdout.flush()
 
-            if not sys.stdout.isatty() and not quiet:
-                sys.stderr.write(new_content_json)
-                sys.stderr.flush()
+        # If not quiet also display in console. If has output pipe -> write
+        # console into stderr, otherwise write in stdout
+        if has_stdout_pipe:
+            console_print = sys.stderr.write
+            console_flush = sys.stderr.flush
+        else:
+            console_print = sys.stdout.write
+            console_flush = sys.stdout.flush
 
-    else:
-        raise FileNotFoundError(
-            "Input data must be entered as a UNIX pipeline. For example: "
-            "'cat info.json | sensitive-json'")
+        if not quiet:
+            console_print(f"\n")
+
+            for issue in found_issues:
+                url = content_json['request']['url']
+                console_print(f"{url}\n")
+                console_print(f"{'-' * len(url)}\n\n")
+
+                for x, y in issue.items():
+                    console_print(f" > {x.ljust(15)}-> {y}\n")
+
+                console_print(f"\n")
+                console_flush()
 
 
 def server(args: argparse.Namespace):
@@ -271,12 +287,13 @@ def main():
         description='Analyze a HTTP Request / Response searching for '
                     'sensitive data'
     )
+    parser.add_argument('-q', '--quiet',
+                        default=False,
+                        action="store_true",
+                        help="quiet mode")
     parser.add_argument('-F', '--ignore-file',
                         action="append",
                         help="file with ignores rules")
-    parser.add_argument('-q', '--quiet',
-                        action="store_true",
-                        help="quiet mode")
     parser.add_argument('-i', '--ignore-rule',
                         action="append",
                         help="rule to ignore")

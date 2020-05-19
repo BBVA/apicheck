@@ -9,37 +9,28 @@ layout: default
             <div class="sidebar">
 
                 <div class="docs-menu">
-                    <h4><a {% if "/docs" != page.url %}style="color: #212529"{% endif %} href="{{ "/docs" | relative_url }}">Documentation home</a></h4>
-                    <br>
+                    <h4 style="margin-bottom: 30px"><a {% if "/blog" != page.url %}style="color: #212529"{% endif %} href="{{ "/blog" | relative_url }}">News and blog &rarr;</a></h4>
 
-                    <h4 {% if site.data.menu_project.url == page.url %}class="active"{% endif %}>{{ site.data.menu_project.menu_title }}</h4>
-                    <ul>
-                        {% for item in site.data.menu_project.menu %}
-                            <li><a href="{{ site.data.menu_project.url | relative_url }}#{{ item.anchor }}">{{ item.title }}</a></li>
-                        {% endfor %}
-                    </ul>
-                    <br>
+                    {% for item in site.data.menu.menu %}
+                    <h4><a {% if item.url != page.url %}style="color: #212529"{% endif %} href="{{ item.url | relative_url }}">{{ item.menu_title }}</a></h4>
+                    {% endfor %}
 
-                    <h4 {% if site.data.menu_quickstart.url == page.url %}class="active"{% endif %}>{{ site.data.menu_quickstart.menu_title }}</h4>
-                    <ul>
-                        {% for item in site.data.menu_quickstart.menu %}
-                            <li><a href="{{ site.data.menu_quickstart.url | relative_url }}#{{ item.anchor }}">{{ item.title }}</a></li>
-                        {% endfor %}
-                    </ul>
-                    <br>
 
-                    <h4 {% if site.data.menu_developers.url == page.url %}class="active"{% endif %}>{{ site.data.menu_developers.menu_title }}</h4>
-                    <ul>
-                        {% for item in site.data.menu_developers.menu %}
-                            <li><a href="{{ site.data.menu_developers.url | relative_url }}#{{ item.anchor }}">{{ item.title }}</a></li>
-                        {% endfor %}
-                    </ul>
-                    <br>
-
-                    <h4>{{ site.data.tools.menu_title }}</h4>
+                    <h4 style="margin-top: 30px">APICheck tools</h4>
                     <ul>
                         {% for item in site.data.tools.menu %}
+                            {% if item.type == "apicheck" %}
                             <li {% if item.url == page.url %}class="active"{% endif %}><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+
+                    <h4 style="margin-top: 30px">Edge tools</h4>
+                    <ul>
+                        {% for item in site.data.tools.menu %}
+                        {% if item.type == "edge" %}
+                        <li {% if item.url == page.url %}class="active"{% endif %}><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+                        {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
@@ -52,6 +43,4 @@ layout: default
             </div>
         </div>
     </div>
-</div>
-
 </div>
