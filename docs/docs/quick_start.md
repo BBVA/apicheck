@@ -7,11 +7,11 @@ permalink: /docs/quick-start
 <a id="requirements"></a>
 # Requirements
 
-APICheck, under the hoods, runs inside Docker. So you must have the Docker
-daemon installed to run it.
+APICheck uses heavily Docker, so you must have the Docker daemon installed in
+order to use it.
 
-Although you can run APICheck tools by directly downloading and running each
-Docker image, We recommend you to use the ***APICheck Package Manager***. This
+Although you can run APICheck tools by directly pulling and running each Docker
+image, We recommend you to use the ***APICheck Package Manager***. This
 document will explain how to use it to run APICheck.
 
 <a id="installation"></a>
@@ -54,12 +54,12 @@ optional arguments:
                         docker url. default: tcp://127.0.0.1:2375
 ```
 
-*Package Manager* allows you to list available tools, install them and so on.
+*Package Manager* allows you to list the available tools, install them and so on.
 
 ## Listing available tools
 
-In order to list all available tools in APICheck repository you can run the list
-subcommand:
+The *list* subcommand shows what are the available tools in the APICheck
+repository:
 
 ```console
 $ acp list
@@ -73,7 +73,7 @@ $ acp list
 | send-to-proxy  | 1.0.0                           |
 +--------------------------------------------------+
 ````
-If you want more info about some tool use the info subcommand:
+To get more info about some tool use the *info* subcommand:
 
 ```console
 $ acp info sensitive-json
@@ -97,14 +97,15 @@ $ acp info sensitive-json
 
 ## Installing a new tool
 
-In order to use a tool you have to install it by using the install subcommand.
-Under the hoods, the installation process is as follows:
+In order to use a tool you have to first install it by using the *install*
+subcommand. Under the hoods, the installation process is as follows:
 
 1. Download the Docker image
 2. Register the tool in the environment
 3. Create the alias
 
-As an example, this is how you can install *sensitive-json* tool:
+As an example, we'll use the *sensitive-json*, a tool that allows you to search
+for sensitive data in requests and responses:
 
 ```console
 $ acp install sensitive-json
@@ -148,11 +149,11 @@ $ acp install sensitive-json
 # APICheck environments
 
 Depending on the projects you're working on, probably you may want to use
-different tools and, even, *different versions* of those tools. In order to help
-coping with this scenarios APICheck has the concept of *Environments*.
+different tools and, even, *different versions* of those tools. In order to cope
+with this scenarios APICheck has the concept of *Environments*.
 
-An environment contains its own set of tools installed, and you can *activate*
-(move) between the existing environments.
+An environment contains its own set of tools installed, and you can (move) among
+the existing environments by using the *activate* subcommand.
 
 ## List environments
 
@@ -171,27 +172,28 @@ $ acp envs
 
 ## Activating an environment
 
-Activating an environment means that you can use all the installed tools will
-as regular commands. To activate an environment use the activate subcommand:
+Activating an environment means that you select all the tools installed in that
+environmentcan and that you can use them as regular commands. To activate an
+environment use the *activate* subcommand:
 
 ```console
 $ eval $(acp activate myenvironment)
 (APICheck) $
 ```
 
-If you want to leave the environment use the deactivate subcommand:
+If you want to leave the environment use the *deactivate* subcommand:
 
 ```console
 (APICheck) $ deactivate myenvironment
 $
 ```
 
-&#9888; The idea of using *eval* idea was taken from [Docker Machine](https://docs.docker.com/machine/reference/create#specifying-configuration-options-for-the-created-docker-engine)
+&#9888; The idea of using *eval* was taken from [Docker Machine](https://docs.docker.com/machine/reference/create#specifying-configuration-options-for-the-created-docker-engine)
 
 ## Environments content
 
-In order to know the tools currently installed iin the environment use the
-describe subcommand:
+In order to know the tools currently installed in an environment use the
+*describe* subcommand:
 
 ```console
 $ acp describe
@@ -213,9 +215,10 @@ will be used.
 <a id="running-tools"></a>
 # Running tools
 
-Once you're in an active environment you can run the tools you need (finally!).
+Once you're in the environment you want to use you can run the tools you need
+(finally!).
 
-Remember that for this *Quickstart* document we have installed the
+Remember that for this *Quickstart* document we have only installed the
 *sensitive-json* tool, that it is available as the command: ***sensitive-json***:
 
 ```console
@@ -239,7 +242,8 @@ optional arguments:
   --server SERVER       launch a as server mode at localhost:8000
 ```
 
-Some tools can have alias (*short-command*, you can check it with the *acp info* command), so you can also run them by using their alias:
+Some tools can have alias (*short-command*, you can see it with the *acp info*
+command), so you can also run the command by using its alias:
 
 ```console
 (APICheck) $ asej -h
@@ -262,9 +266,9 @@ optional arguments:
   --server SERVER       launch a as server mode at localhost:8000
 ```
 
-For getting usage information about tools, you can check their documentation at [APICheck documentation](https://bbva.github.io/apicheck/docs).
-
-<a id="tools-and-pipelines"></a>
+APICheck has a repository of tools from which you can download them and access
+to their documentation in order to get usage information,
+[APICheck documentation](https://bbva.github.io/apicheck/docs).
 
 <a id="tools-and-pipelines"></a>
 # Tools & Pipelines
@@ -272,7 +276,10 @@ For getting usage information about tools, you can check their documentation at 
 The power of APICheck resides in its capability of chaining tools by using
 UNIX-like pipelines.
 
-In this example we'll use a **.json** file that contains a message (in [APICheck format](/docs/developers)) for a query with sensitive data at the body of the Request (You can find this file at: [demo .json file](https://github.com/BBVA/apicheck/blob/master/tools/sensitive-json/examples/valid-request-user-password-one-line.json))  
+In this example we'll use a **.json** file that contains a message
+(in [APICheck format](/docs/developers)) for searching sensitive data within the
+body of the Request (You can find this file at
+[demo .json file](https://github.com/BBVA/apicheck/blob/master/tools/sensitive-json/examples/valid-request-user-password-one-line.json))  
 
 ```console
 (APICheck) $ cat demo-request.json | asej
