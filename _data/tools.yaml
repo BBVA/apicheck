@@ -8,12 +8,12 @@ menu:
     type: apicheck
     url: /tools/apicheck/replay
 
-  - title: curl
+  - title: acurl
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
     brief: curl with reqres output
     type: apicheck
-    url: /tools/apicheck/curl
+    url: /tools/apicheck/acurl
 
   - title: Detector of sensitive data in JSON
     author: BBVA Labs Security
