@@ -6,7 +6,8 @@ COPY jwtvalidator/ /jwtvalidator
 
 WORKDIR /jwtvalidator
 
-RUN go build -o jwt-checker
+RUN go test ./... && \
+    go build -o jwt-checker
 
 FROM alpine:3.11.6
 

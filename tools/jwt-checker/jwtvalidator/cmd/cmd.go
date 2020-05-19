@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Banco Bilbao Vizcaya Argentaria, S.A.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package cmd
 
 import (
@@ -21,12 +37,12 @@ func (c CommandError) Error() string {
 	b := bytes.Buffer{}
 
 	if c.Code > 0 {
-		b.WriteString("Errors: ")
+		b.WriteString("Errors: \n")
 	}
 
 	for _, e := range c.errors {
-		b.WriteString("\n")
 		b.WriteString(e)
+		b.WriteString("\n")
 	}
 
 	return b.String()
@@ -58,6 +74,7 @@ type ProgramOptions struct {
 	Arguments        []string
 	FlagsProcessed   int
 	StdIn            io.Reader
+	jsDoc            []byte
 	validations.Options
 }
 
@@ -105,7 +122,7 @@ func Run(opt ProgramOptions) CommandError {
 			err      error
 		)
 		if opt.Arguments[0] == "-" {
-			if tokenArg, err = readTokenFromReqResp(opt.StdIn); err != nil {
+			if tokenArg, err = readTokenFromReqResp(&opt); err != nil {
 				return CommandError{1, []string{err.Error()}}
 			}
 		} else {
@@ -119,19 +136,26 @@ func Run(opt ProgramOptions) CommandError {
 			}
 			return er
 		}
+
+		// If called with a json document attach it to be printed
+		if len(opt.jsDoc) > 0 {
+			return CommandError{0, []string{string(opt.jsDoc)}}
+		}
 		return CommandError{0, []string{}}
 	default: /*Only one token must be provided or - to read from standard input*/
 		return CommandError{1, []string{fmt.Sprint("One and only one token must be provided")}}
 	}
 }
 
-func readTokenFromReqResp(r io.Reader) (string, error) {
+func readTokenFromReqResp(opt *ProgramOptions) (string, error) {
 	rr := ReqResp{}
 
-	if jsonStr, err := ioutil.ReadAll(r); err != nil || len(jsonStr) == 0 {
+	if jsonStr, err := ioutil.ReadAll(opt.StdIn); err != nil || len(jsonStr) == 0 {
 		return "", fmt.Errorf("Error reading standard Input (bytes readed: %d; error: %v)", len(jsonStr), err)
 	} else if err := json.Unmarshal(jsonStr, &rr); err != nil {
 		return "", fmt.Errorf("JSON Error: %v", err)
+	} else {
+		opt.jsDoc = jsonStr
 	}
 
 	if val, ok := rr.Request.Headers["Authorization"]; ok {
