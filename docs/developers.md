@@ -80,7 +80,8 @@ Here is a complete example:
     }
   },
   "request": {
-    "path": "/",
+    "url": "https://nvd.nist.gov/",
+    "version": "1.1",
     "method": "get",
     "headers": {
       "User-Agent": "curl/7.54.0",
