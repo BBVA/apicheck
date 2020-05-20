@@ -3,6 +3,7 @@ import re
 import sys
 import json
 import base64
+import binascii
 
 from typing import List, Tuple, Any
 
@@ -20,8 +21,8 @@ class FormatErrorException(Exception):
     pass
 
 
-def _recurse(target: Any,
-             path=None) -> Tuple[Tuple[str], str, str or int or bool]:
+def flatten_dict(target: Any,
+                 path=None) -> Tuple[Tuple[str], str, str or int or bool]:
     """
     This function flatten a dictionary.
 
@@ -54,14 +55,15 @@ def _recurse(target: Any,
         return item,
 
     if not target:
-        yield None
+        yield None, None, None
+
     elif target.__class__.__name__ == "dict":
         for k, v in target.items():
-            for res in _recurse(v, _path_add(k)):
+            for res in flatten_dict(v, _path_add(k)):
                 yield res
     elif target.__class__.__name__ == "list":
         for i, v in enumerate(target):
-            for res in _recurse(v, _path_add(i)):
+            for res in flatten_dict(v, _path_add(i)):
                 yield res
     elif len(path) == 0:
         # error, this can't happen
@@ -135,6 +137,52 @@ def _check_input_data(data: dict) -> bool or FormatErrorException:
     return True
 
 
+def decode_body(data: str) -> Tuple[str, dict]:
+    """
+    This function try to decode body and return the type of body
+
+    :return: tuple("text|dict", content)
+    """
+    try:
+        _data = data.encode("UTF-8")
+    except AttributeError:
+        _data = data
+
+    # Try to decode base64 body
+    try:
+        _body = base64.decodebytes(_data).decode("UTF-8")
+    except binascii.Error:
+        _body = _data
+
+    # Try con convert to json
+    try:
+        return "dict", json.loads(_body)
+    except json.decoder.JSONDecodeError:
+        return "text", _body
+
+
+def search_in_dict(body: dict, rule, where, url) -> list:
+    issues = []
+
+    if not body:
+        return issues
+
+    for (path, key, value) in flatten_dict(body):
+
+        for v in (key, value):
+            if regex := re.search(rule["regex"], v):
+
+                issues.append({
+                    "rule": rule["id"],
+                    "where": where,
+                    "url": url,
+                    "description": rule["description"],
+                    "sensitiveData": regex.group()
+                })
+
+    return issues
+
+
 def search_issues(content_json: dict, rules: list, ignores: set) -> List[dict]:
     issues = []
 
@@ -149,44 +197,60 @@ def search_issues(content_json: dict, rules: list, ignores: set) -> List[dict]:
         #
         content_to_search = {}
         include_keys = rule.get("includeKeys", False)
-        where_to_find = {"Request", "Response"} \
-            if rule["searchIn"] == "Both" else rule["searchIn"]
 
+        where_to_find_location = {"Headers", "Request", "Response"}
+        where_to_find = set()
+
+        #
+        # Check and set places where search
+        #
+        if rule["searchIn"] == "All":
+            where_to_find.update(where_to_find_location)
+        elif rule["searchIn"] in where_to_find_location:
+            where_to_find.add(rule["searchIn"])
+        else:
+            raise FormatErrorException(
+                f"Invalid 'searchIn' value. Allowed values are: "
+                f"'{','.join(where_to_find_location)}'"
+            )
+
+        #
+        # Collecting data
+        #
         if "Request" in where_to_find:
             if body := content_json["request"].get("body", None):
-                try:
-                    content_to_search["request"] = json.loads(body)
-                except json.decoder.JSONDecodeError:
-                    content_to_search["request"] = json.loads(
-                        base64.decodebytes(body.encode("UTF-8"))
-                    )
+                content_to_search["request"] = decode_body(body)
 
         if "Response" in where_to_find:
             if body := content_json["response"].get("body", None):
-                try:
-                    content_to_search["response"] = json.loads(body)
-                except json.decoder.JSONDecodeError:
-                    content_to_search["response"] = json.loads(
-                        base64.decodebytes(body.encode("UTF-8"))
-                    )
+                content_to_search["response"] = decode_body(body)
 
-        for where, body in content_to_search.items():
-            for (path, key, value) in _recurse(body):
+        if "Headers" in where_to_find:
+            _headers_request = content_json["request"].get("headers", {})
+            _headers_response = content_json["response"].get("headers", {})
 
-                if include_keys:
-                    values = [("key", key), ("value", value)]
-                else:
-                    values = [("value", value)]
+            content_to_search["requestHeaders"] = "dict", _headers_request
+            content_to_search["responseHeaders"] = "dict", _headers_response
 
-                for (key_or_value, v) in values:
-                    if regex := re.search(rule["regex"], v):
-                        issues.append({
-                            "rule": rule["id"],
-                            "where": where,
-                            "path": ".".join(path or "/"),
-                            "keyOrValue": key_or_value,
-                            "sensitiveData": regex.group()
-                        })
+        url = content_json["request"]['url']
+
+        for where, (body_type, body_content) in content_to_search.items():
+
+            if body_type == "dict":
+                issues.extend(
+                    search_in_dict(body_content, rule, where, url)
+                )
+            else:
+
+                if regex := re.search(rule["regex"], body_content):
+
+                    issues.append({
+                        "rule": rule["id"],
+                        "where": where,
+                        "url": content_json[where],
+                        "description": rule["description"],
+                        "sensitiveData": regex.group()
+                    })
 
     return issues
 

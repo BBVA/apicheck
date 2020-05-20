@@ -19,6 +19,6 @@ COPY ./requirements.txt /app/requirements.txt
 RUN python -m pip install --no-cache --no-index --find-links=/root/wheels -r /app/requirements.txt
 RUN rm -rf /root/wheels
 
-COPY ./sensitive_json /app/sensitive_json
+COPY ./sensitive_data /app/sensitive_data
 EXPOSE 8080
-ENTRYPOINT ["python", "/app/sensitive_json/__main__.py"]
+ENTRYPOINT ["python", "/app/sensitive_data/__main__.py"]
