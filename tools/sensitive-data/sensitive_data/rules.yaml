@@ -4,7 +4,12 @@
   severity: Medium  # Allowed values: Low, Medium, High
   searchIn: All  # Allowed values: Response, Request, Headers, All
 - id: core-002
-  description: HTTP Headers contains information about backedn
-  regex: '([Xx]-[Pp][Oo][Ww][Ee][Rr][Ee][Dd]-[Bb][Yy])'
+  description: HTTP Headers contains information about backend
+  regex: '([Xx]-[Pp][Oo][Ww][Ee][Rr][Ee][Dd]-[Bb][Yy][\s]*:)'
+  severity: Low  # Allowed values: Low, Medium, High
+  searchIn: Headers  # Allowed values: Response, Request, Headers, All
+- id: core-003
+  description: HTTP Headers contains information about running server
+  regex: '([Ss][Ee][Rr][Vv][Ee][Rr][\s]*:)'
   severity: Low  # Allowed values: Low, Medium, High
   searchIn: Headers  # Allowed values: Response, Request, Headers, All

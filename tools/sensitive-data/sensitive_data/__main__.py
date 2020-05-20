@@ -83,7 +83,7 @@ def _load_rules(args: argparse.Namespace) -> List[dict]:
 
     rules_files = []
 
-    if env_rules := os.environ.get("RULES", None):
+    if env_rules := os.environ.get("SENSITIVE_RULES", None):
         rules.append(env_rules)
 
     if args.rules_file:
@@ -113,8 +113,12 @@ def _load_ignore_ids(args: argparse.Namespace) -> List[str]:
         for x in args.ignore_rule:
             ignores.extend(x.split(","))
 
-    if args.ignore_file:
-        for rule_file in args.ignore_file:
+    ignore_file = args.ignore_file or []
+    if env_ignore := os.environ.get("SENSITIVE_IGNORES", None):
+        ignore_file.append(env_ignore)
+
+    if ignore_file:
+        for rule_file in ignore_file:
             if rule_file.startswith("http"):
                 # Load from remote URL
                 ignores.extend(requests.get(rule_file).content.splitlines())
@@ -324,21 +328,30 @@ def server(args: argparse.Namespace):
 
     @app.route("/apicheck/sensitive-data", methods=["POST"])
     def home_analyze(_request: request.Request):
-        input_data = _request.json
+        _config = _request.app.config
+        _input_data = _request.json
 
         try:
-            _check_input_data(input_data)
+            _check_input_data(_input_data)
         except FormatErrorException as e:
             return response.json({"message": str(e)}, status=400)
 
-        issues = search_issues(input_data,
+        issues = search_issues(_input_data,
                                app.config.RULES,
                                app.config.IGNORES)
 
-        return response.json(issues)
+        if _config.CONSOLE_MODE:
+            print(issues, flush=True)
+
+        if _config.DONT_CHECK:
+            return response.json({"message": "Ok"})
+        else:
+            return response.json(issues)
 
     app.config.RULES = _load_rules(args)
     app.config.IGNORES = set(_load_ignore_ids(args))
+    app.config.CONSOLE_MODE = args.show_in_console
+    app.config.DONT_CHECK = args.dont_check
 
     listen_addr, listen_port = args.server.split(":")
 
@@ -368,6 +381,16 @@ def main():
                         default=None,
                         help="launch in server mode listening at "
                              "localhost:8000")
+
+    group = parser.add_argument_group('Server mode options')
+    group.add_argument("-C", "--show-in-console",
+                       default=False,
+                       action="store_true",
+                       help="show results in console")
+    group.add_argument("-D", "--dont-check",
+                       default=False,
+                       action="store_true",
+                       help="always returns OK although a rule matches")
 
     parsed_cli = parser.parse_args()
 

@@ -292,11 +292,15 @@ http://my-company.com
 
 ```
 
-### Defining rules in env vars
+### Defining rules and ignore files via env vars
+
+You can set these environment vars to set rule file or ignore file:
+
+- SENSITIVE_RULES
+- SENSITIVE_IGNORES
 
 ```bash
-
-$ apicheck-curl http://my-company.com/api/entry-point | docker run --rm -it -e RULES=/home/john/rules.yaml bbvalabs/sensitive-data
+$ apicheck-curl http://my-company.com/api/entry-point | docker run --rm -it -e SENSITIVE_RULES=/home/john/rules.yaml -e SENSITIVE_IGNORES=http://myserver.com/ignores bbvalabs/sensitive-data
 
 http://my-company.com
 ---------------------

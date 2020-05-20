@@ -6,19 +6,21 @@ RUN apk update && \
 
 FROM base as builder
 
-RUN apk add --no-cache build-base gcc musl-dev python3-dev libffi-dev openssl-dev libcurl curl-dev
-COPY ./requirements.txt /app/requirements.txt
+RUN apk add --no-cache build-base gcc musl-dev python3-dev libffi-dev openssl-dev libcurl curl-dev && \
+    python -m pip install --no-cache-dir -U pip wheel
 
-RUN python -m pip install --no-cache-dir -U pip wheel && \
-    python -m pip wheel --no-cache-dir --wheel-dir=/root/wheels -r /app/requirements.txt
+COPY ./ /app/
+RUN python -m pip wheel --no-cache-dir --wheel-dir=/root/wheels -r /app/requirements.txt
+
+FROM builder as installer
+RUN python -m pip wheel --no-cache-dir --wheel-dir=/root/wheels -f /root/wheels /app/
 
 FROM base
-COPY --from=builder /root/wheels /root/wheels
-COPY ./requirements.txt /app/requirements.txt
+COPY --from=installer /root/wheels /root/wheels
 
-RUN python -m pip install --no-cache --no-index --find-links=/root/wheels -r /app/requirements.txt
+RUN python -m pip install --no-cache --no-index /root/wheels/*
 RUN rm -rf /root/wheels
 
-COPY ./sensitive_data /app/sensitive_data
 EXPOSE 8080
-ENTRYPOINT ["python", "/app/sensitive_data/__main__.py"]
+ENTRYPOINT ["sensitive-data"]
+
