@@ -15,13 +15,6 @@ menu:
     type: apicheck
     url: /tools/apicheck/acurl
 
-  - title: Detector of sensitive data in JSON
-    author: BBVA Labs Security
-    home: https://github.com/BBVA/apicheck
-    brief: Find sensitive data in JSON content in a HTTP Request / Response
-    type: apicheck
-    url: /tools/apicheck/sensitive-json
-
   - title: APICheck proxy
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
@@ -35,6 +28,13 @@ menu:
     brief: Validates issued JWT tokens to check for common pitfalls
     type: apicheck
     url: /tools/apicheck/jwt-checker
+
+  - title: Sensitive data detector
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: Find sensitive data in HTTP Request / Response / Headers
+    type: apicheck
+    url: /tools/apicheck/sensitive-data
 
   - title: Send data to a proxy server
     author: BBVA Labs Security
