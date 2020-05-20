@@ -52,11 +52,15 @@ const doIt = flatMap( (reqres:any) => {
                 url: request["url"],
                 method: request["method"]
             }).then(res => {
+                if(reqres["response"] != null){
+                    reqres["_meta"]["original"] = reqres["response"]
+                }
+                let buf = Buffer.from(res.data);
                 reqres["response"] = {
                     "status": res.status,
                     "reason": res.statusText,
                     "headers": res.headers,
-                    "body": res.data
+                    "body": buf.toString("base64")
                 };
                 observer.next(reqres);
                 observer.complete();
