@@ -1,7 +1,6 @@
 name = apicheck-proxy
 display-name = APICheck proxy
-short-command = aproxy
-version = 1.0.0
+version = 1.0.1
 description = launch a local proxy and intercept request / responses a perform some actions
 home = https://github.com/BBVA/apicheck
 author = BBVA Labs Security
