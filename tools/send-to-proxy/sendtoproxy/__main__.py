@@ -7,7 +7,7 @@ import requests
 import argparse
 
 from urllib.parse import urlparse
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from python_pipes import read_stdin_lines
 
 # Disable SSL Warnings
@@ -33,7 +33,7 @@ class Request:
     body: str = None
     method: str = "GET"
     version: str = "1.1"
-    headers: dict = None
+    headers: dict = field(default_factory=dict)
 
     @classmethod
     def from_json(cls, json_data: str) -> object or InvalidJsonFormat:
@@ -45,11 +45,13 @@ class Request:
 
         return cls(**loaded_json["request"])
 
-    # def __str__(self):
-    #     return pprint.pprint(self.__dict__)
-
     def __post_init__(self):
         self.method = self.method.lower()
+
+        # Filter headers
+        self.headers = {
+            x: y for x, y in self.headers.items() if x[0].isalpha()
+        }
 
 
 def parse_proxy(proxy: str) -> str or InvalidProxyFormat:
@@ -98,7 +100,10 @@ def send_one_input_data(input_data, args: argparse.Namespace) -> str:
     #
     # Get request method
     #
-    method = getattr(requests, req.method)
+    try:
+        method = getattr(requests, req.method)
+    except AttributeError:
+        raise InvalidProxyFormat("Not allowed method")
 
     # Perform query
     if req.method == "get":
@@ -125,6 +130,7 @@ def send_one_input_data(input_data, args: argparse.Namespace) -> str:
 
 def run(args: argparse.Namespace):
     quiet = args.quiet or False
+    debug = args.debug or False
 
     # -------------------------------------------------------------------------
     # Read info by stdin or parameter
@@ -135,7 +141,12 @@ def run(args: argparse.Namespace):
                 "Input data must be entered as a UNIX pipeline. For example: "
                 "'cat info.json | tool-name'")
 
-        request_url, response = send_one_input_data(json_line, args)
+        try:
+            request_url, response = send_one_input_data(json_line, args)
+        except (InvalidJsonFormat, InvalidProxyFormat) as e:
+            if debug:
+                print(f"   > Error while processing input data: {e}")
+            continue
 
         # You're being piped or redirected
         if has_stdout_pipe:
@@ -153,7 +164,7 @@ def run(args: argparse.Namespace):
                 console_print = sys.stdout.write
                 console_flush = sys.stdout.flush
 
-            console_print(f"[*] Request sent: '{request_url}'\n")
+            console_print(f"[*] Request sent: '{request_url}'\n\r")
             console_flush()
 
 
@@ -164,6 +175,10 @@ def main():
     parser.add_argument("PROXY", help="proxy in format: SCHEME://HOST:PORT")
     parser.add_argument("-q", "--quiet",
                         help="don't display any information in stdout",
+                        action="store_true",
+                        default=False)
+    parser.add_argument("--debug",
+                        help="enable debug mode",
                         action="store_true",
                         default=False)
     parsed_cli = parser.parse_args()

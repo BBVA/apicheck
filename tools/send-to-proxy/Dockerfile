@@ -1,12 +1,22 @@
-FROM python:3.8-alpine
+FROM python:3.8-alpine as base
 
-RUN apk update \
-    && apk add --no-cache build-base
+RUN apk update && \
+    apk upgrade && \
+    apk --no-cache --update add openssl ca-certificates
 
-COPY ./requirements.txt /app/requirements.txt
-RUN pip install -U -r /app/requirements.txt \
-    && rm -rf /var/cache/apk/* /var/tmp/* /tmp/* /root/.cache/*
+FROM base as builder
 
-COPY ./sendtoproxy /app/sendtoproxy
+RUN apk add --no-cache build-base && \
+    python -m pip install --no-cache-dir -U pip wheel
 
-ENTRYPOINT ["python", "/app/sendtoproxy/__main__.py"]
+COPY ./ /app/
+RUN python -m pip wheel --no-cache-dir --wheel-dir=/root/wheels -r /app/requirements.txt && \
+    python -m pip wheel --no-cache-dir --wheel-dir=/root/wheels /app/
+
+FROM base
+COPY --from=builder /root/wheels /root/wheels
+
+RUN python -m pip install --no-cache --no-index /root/wheels/*
+RUN rm -rf /root/wheels
+
+ENTRYPOINT ["send-to-proxy"]
