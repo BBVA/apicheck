@@ -56,7 +56,7 @@ def to_apicheck_format(flow: http.HTTPFlow, is_error: bool = False) -> str:
 class APICheck:
 
     def response(self, flow: http.HTTPFlow):
-        print(to_apicheck_format(flow, is_error=True), flush=True)
+        print(to_apicheck_format(flow, is_error=False), flush=True)
 
     def error(self, flow: http.HTTPFlow):
         print(to_apicheck_format(flow, is_error=True), flush=True)
