@@ -9,7 +9,7 @@ Some times you need to store a navigation session in a simple but standard forma
 <!--more-->
 
 ```bash
-$ docker run --rm -it -p 8080:8080 -e APICHECK_PROXY_ALLOWED_HOST=cr0hn.com apicheck-proxy >> sessions.data
+$ docker run --rm -it -p 8080:8080 -e APICHECK_PROXY_ALLOWED_HOST=cr0hn.com bbvalabs/apicheck-proxy >> sessions.data
 ```
 
 Proxy listen in HTTP port 8080. Then we only need to configure our browser for use it:
