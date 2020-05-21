@@ -1,5 +1,5 @@
 """
-This file build the documentation for APICheck
+This file builds the documentation for APICheck
 """
 import os
 import re

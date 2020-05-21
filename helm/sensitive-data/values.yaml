@@ -1,0 +1,12 @@
+# Desired Number of instances in your deployment
+instances: 1
+# Registry from which download the container image
+imageRegistry: bbvalabs
+# Image tag to be used
+imageTag: 1.0.1
+# Pull policy to use for container image
+imagePullPolicy: Always
+# URL of a rules set you want to be applied replacing the default one
+configRuleSet:
+# A comma separated list of rules you want to ignore
+configIgnoreRules:
