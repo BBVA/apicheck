@@ -14,7 +14,7 @@ $ docker run --rm -it -p 8080:8080 -e APICHECK_PROXY_ALLOWED_HOST=cr0hn.com apic
 
 Proxy listen in HTTP port 8080. Then we only need to configure our browser for use it:
 
-![Firefox Proxy](https://ibb.co/rwMzyVV)
+![Firefox Proxy](https://i.ibb.co/2kPCKTT/Preferencias-firefox.png)
 
 You can check that `sessions.data` file contains a one-per-line [APICheck Data Objects](https://bbva.github.io/apicheck/docs/building-new-tools#apicheck-data-format) like JSON objects.
 
