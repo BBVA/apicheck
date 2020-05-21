@@ -7843,3 +7843,15 @@ body {
   padding-right: 20px; }
 
 /*# sourceMappingURL=style.css.map */
+
+
+/* Class for Google Search button on mobile version*/
+#main-menu-mobile > div {
+  width: 100%;
+  top: 0;
+  position: absolute;
+}
+
+#toggle-main-menu-mobile.is-active {
+  margin-top: 90px;
+}
