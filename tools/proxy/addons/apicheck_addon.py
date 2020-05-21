@@ -29,10 +29,10 @@ def to_apicheck_format(flow: http.HTTPFlow, is_error: bool = False) -> str:
 
     if _response:
 
-        if getattr(_request, "content", None):
-            response_content: bytes = _request.content
+        if getattr(_response, "content", None):
+            response_content: bytes = _response.content
         else:
-            response_content: bytes = _request.text.encode("UTF-8")
+            response_content: bytes = _response.text.encode("UTF-8")
 
         data["response"] = {
             "status": _response.status_code,
