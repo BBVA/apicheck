@@ -83,7 +83,22 @@ def parse_curl_trace(curl_trace_content):
     is_https = False
     
     for block in cp.curl_trace_block_iterator(curl_trace_content):
-        if block.startswith(b"=="):
+        if block.startswith(b'== Info: Issue another request'):
+            reqres = parse_binary(req, res)
+            reqres["_meta"]["curl_log"] = log
+            if is_https:
+                reqres["request"]["url"] = "https://"+reqres["request"]["url"]
+            else:
+                reqres["request"]["url"] = "http://"+reqres["request"]["url"]
+            yield reqres
+
+            log = []
+            req = bytearray()
+            res = bytearray()
+
+            is_https = False
+
+        elif block.startswith(b"=="):
             msg = block.decode("utf-8")
             msg = msg.replace("== ", "")
             log.append(msg)
@@ -106,4 +121,4 @@ def parse_curl_trace(curl_trace_content):
         reqres["request"]["url"] = "https://"+reqres["request"]["url"]
     else:
         reqres["request"]["url"] = "http://"+reqres["request"]["url"]
-    return reqres
+    yield reqres
