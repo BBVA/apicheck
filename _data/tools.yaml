@@ -1,6 +1,13 @@
 
 menu:
 
+  - title: Send data to a proxy server
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: Read a request from stdin and send it to a proxy
+    type: apicheck
+    url: /tools/apicheck/send-to-proxy
+
   - title: Replay HTTP Requests
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
@@ -14,6 +21,13 @@ menu:
     brief: Validates issued JWT tokens to check for common pitfalls
     type: apicheck
     url: /tools/apicheck/jwt-checker
+
+  - title: APICheck proxy
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: launch a local proxy and intercept request / responses a perform some actions
+    type: apicheck
+    url: /tools/apicheck/apicheck-proxy
 
   - title: acurl
     author: BBVA Labs Security
@@ -29,19 +43,12 @@ menu:
     type: apicheck
     url: /tools/apicheck/sensitive-data
 
-  - title: APICheck proxy
+  - title: OpenAPI v2 Linter
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
-    brief: launch a local proxy and intercept request / responses a perform some actions
-    type: apicheck
-    url: /tools/apicheck/apicheck-proxy
-
-  - title: Send data to a proxy server
-    author: BBVA Labs Security
-    home: https://github.com/BBVA/apicheck
-    brief: Read a request from stdin and send it to a proxy
-    type: apicheck
-    url: /tools/apicheck/send-to-proxy
+    brief: Lint the endpoint specification provided using OpenAPI v2 spec
+    type: edge
+    url: /tools/edge/openapiv2-lint
 
   - title: OpenAPI v3 Linter
     author: BBVA Labs Security
@@ -49,10 +56,3 @@ menu:
     brief: Lint the endpoint specification provided using OpenAPI v3 spec
     type: edge
     url: /tools/edge/openapiv3-lint
-
-  - title: OpenAPI v2 Linter
-    author: BBVA Labs Security
-    home: https://github.com/BBVA/apicheck
-    brief: Lint the endpoint specification provided using OpenAPI v2 spec
-    type: edge
-    url: /tools/edge/openapiv2-lint
