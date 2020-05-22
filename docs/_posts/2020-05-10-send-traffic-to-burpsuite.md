@@ -19,7 +19,7 @@ First we check BurpSuite listen port BurpSuite:
 Then, we send session to proxy:
 
 ```bash
-$ cat sessions.data| docker run --rm -it bbvalabs/apicheck-proxy http://127.0.0.1:9000
+$ cat sessions.data| docker run --rm -it bbvalabs/send-to-proxy http://127.0.0.1:9000
 [*] Request sent: 'https://cr0hn.com:443/'
 [*] Request sent: 'https://cr0hn.com:443/wp-includes/css/dist/block-library/style.min.css'
 [*] Request sent: 'https://cr0hn.com:443/wp-includes/css/dist/block-library/theme.min.css'
