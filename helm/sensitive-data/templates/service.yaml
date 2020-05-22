@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: sensitive-data
+  labels:
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app.kubernetes.io/name: apicheck.sensitive-data
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: apicheck.sensitive-data
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sensitive-data
+  labels:
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  replicas: {{ .Values.instances | default 1 }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: apicheck.sensitive-data
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+        app.kubernetes.io/name: apicheck.sensitive-data
+    spec:
+      containers:
+        - name: sensitive-data
+          image: {{ .Values.imageRegistry }}/{{ .Chart.Name }}:{{ .Values.imageTag | default .Chart.AppVersion }}
+          args: ['--server', '0.0.0.0:8080']
+          imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: SENSITIVE_RULES
+              value: {{ .Values.configRuleSet | quote }}
+            - name: SENSITIVE_IGNORES
+              value: {{ .Values.configIgnoreRules | quote }}
