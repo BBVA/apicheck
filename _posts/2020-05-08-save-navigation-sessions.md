@@ -5,7 +5,7 @@ author_link: https://twitter.com/ggdaniel
 title:  "Saving navigation session"
 ---
 
-Some times you need to store a navigation session in a simple but standard format. [APICheck proxy](https://bbva.github.io/apicheck/tools/apicheck/apicheck-proxy) intercepts you navigation traffic and output in the console. Then you only need to redirect to file.
+Some times you need to store a navigation session in a simple but standard format. [APICheck proxy](https://bbva.github.io/apicheck/tools/apicheck/apicheck-proxy) intercepts your navigation traffic and output it to the console. Then you only need to redirect to a file.
 <!--more-->
 
 ```bash
