@@ -15,13 +15,6 @@ menu:
     type: apicheck
     url: /tools/apicheck/jwt-checker
 
-  - title: APICheck proxy
-    author: BBVA Labs Security
-    home: https://github.com/BBVA/apicheck
-    brief: launch a local proxy and intercept request / responses a perform some actions
-    type: apicheck
-    url: /tools/apicheck/apicheck-proxy
-
   - title: acurl
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
@@ -29,19 +22,26 @@ menu:
     type: apicheck
     url: /tools/apicheck/acurl
 
-  - title: Send data to a proxy server
-    author: BBVA Labs Security
-    home: https://github.com/BBVA/apicheck
-    brief: Read a request from stdin and send it to a proxy
-    type: apicheck
-    url: /tools/apicheck/send-to-proxy
-
   - title: Sensitive data detector
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
     brief: Find sensitive data in HTTP Request / Response / Headers
     type: apicheck
     url: /tools/apicheck/sensitive-data
+
+  - title: APICheck proxy
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: launch a local proxy and intercept request / responses a perform some actions
+    type: apicheck
+    url: /tools/apicheck/apicheck-proxy
+
+  - title: Send data to a proxy server
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: Read a request from stdin and send it to a proxy
+    type: apicheck
+    url: /tools/apicheck/send-to-proxy
 
   - title: OpenAPI v3 Linter
     author: BBVA Labs Security
