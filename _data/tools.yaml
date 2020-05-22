@@ -1,19 +1,12 @@
 
 menu:
 
-  - title: Send data to a proxy server
+  - title: APICheck proxy
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
-    brief: Read a request from stdin and send it to a proxy
+    brief: launch a local proxy and intercept request / responses a perform some actions
     type: apicheck
-    url: /tools/apicheck/send-to-proxy
-
-  - title: Replay HTTP Requests
-    author: BBVA Labs Security
-    home: https://github.com/BBVA/apicheck
-    brief: Replays a HTTP conversation capturing the new responses obtained
-    type: apicheck
-    url: /tools/apicheck/replay
+    url: /tools/apicheck/apicheck-proxy
 
   - title: JWT token validator
     author: BBVA Labs Security
@@ -22,12 +15,12 @@ menu:
     type: apicheck
     url: /tools/apicheck/jwt-checker
 
-  - title: APICheck proxy
+  - title: Send data to a proxy server
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
-    brief: launch a local proxy and intercept request / responses a perform some actions
+    brief: Read a request from stdin and send it to a proxy
     type: apicheck
-    url: /tools/apicheck/apicheck-proxy
+    url: /tools/apicheck/send-to-proxy
 
   - title: acurl
     author: BBVA Labs Security
@@ -35,6 +28,13 @@ menu:
     brief: curl with reqres output
     type: apicheck
     url: /tools/apicheck/acurl
+
+  - title: Replay HTTP Requests
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: Replays a HTTP conversation capturing the new responses obtained
+    type: apicheck
+    url: /tools/apicheck/replay
 
   - title: Sensitive data detector
     author: BBVA Labs Security
