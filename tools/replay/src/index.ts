@@ -53,6 +53,9 @@ const doIt = flatMap( (reqres:any) => {
                 method: request["method"]
             }).then(res => {
                 if(reqres["response"] != null){
+                    if(reqres["_meta"] == null){
+                        reqres["_meta"] = {};
+                    }
                     reqres["_meta"]["original"] = reqres["response"]
                 }
                 let buf = Buffer.from(res.data);
