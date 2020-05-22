@@ -5,20 +5,20 @@ author_link: https://twitter.com/ggdaniel
 title:  "Chaining BurpSuite and OWASP ZAP"
 ---
 
-BurpSuite is a nice tool, but not OpenSource and not all their features are Free. OWASP ZAP is an Open Source alternative but, sadly, it's not so powerful than BurpSuite in some cases. But... why not to use both at the same time? 
+BurpSuite is a nice tool but not OpenSource, so not all their features are Free. OWASP ZAP is an Open Source alternative but, sadly, it's not so powerful than BurpSuite in some cases. But... why not to use both at the same time? 
 <!--more-->
 
 Ok ok, It's true that you can configure BurpSuite to outputs to another proxy but... why not use APICheck for that? It's easier and transparent.
 
 Conceptually will do:
-
-+-------------------+          +------------------------+        +--------------------------+       +-----------------+
-|  APICheck Proxy   |--------->| APICheck Send-to-Proxy |-+----->| APICheck Send-to-Proxy   |------>|   OWASP ZAP     |
-+-------------------+          +------------------------+ |      +--------------------------+       +-----------------+
-                                                          |
-                                                          |      +--------------------------+
-                                                          +----->|    BurpSuite             |
-                                                                 +--------------------------+
+    
+    +-------------------+          +------------------------+        +--------------------------+       +-----------------+
+    |  APICheck Proxy   |--------->| APICheck Send-to-Proxy |-+----->| APICheck Send-to-Proxy   |------>|   OWASP ZAP     |
+    +-------------------+          +------------------------+ |      +--------------------------+       +-----------------+
+                                                              |
+                                                              |      +--------------------------+
+                                                              +----->|    BurpSuite             |
+                                                                     +--------------------------+
 
 All we need to do is:
 
