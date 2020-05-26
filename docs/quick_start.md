@@ -1,3 +1,4 @@
+
 ---
 layout: doc
 title: Quick Start
@@ -24,251 +25,180 @@ your console:
 $ pip install apicheck-package-manager
 ```
 
+<a id="add-config-to-path"></a>
+# Add APICheck config to PATH
+
+You need to include `APICheck` binary path to your global `$PATH` var. So, add this line to your shell profile:
+
+    export PATH="$HOME/.apicheck_manager/bin:$PATH"
+
 <a id="the-first-run"></a>
 # The First Run
 
 Once installed you can run the *Package Manager* by using the command *acp*.
 
 ```console
-$ acp
+
 [!] Invalid action name
 
-usage: acp [-h] [-H DOCKER_HOST] {list,info,install,activate,describe,envs,version} ...
+usage: acp [-h] [-w] {list,info,install,version} ...
 
 APICheck Manager
 
 positional arguments:
-  {list,info,install,activate,describe,envs,version}
+  {list,info,install,version}
                         available actions
     list                search in A
     info                show expanded tool info
     install             install an APICheck tool
-    activate            activate an environment
-    describe            show info of environment
-    envs                show available environments
     version             displays version
 
 optional arguments:
   -h, --help            show this help message and exit
-  -H DOCKER_HOST, --docker-host DOCKER_HOST
-                        docker url. default: tcp://127.0.0.1:2375
+  -w, --disable-warning
+                        disable check of RC Shell File
 ```
 
 *Package Manager* allows you to list the available tools, install them and so on.
 
 ## Listing available tools
 
-The *list* subcommand shows what are the available tools in the APICheck
+The *list* command shows what are the available tools in the APICheck
 repository:
 
-```console
+```bash
 $ acp list
 +--------------------------------------------------+
 | Name           | Version                         |
 +--------------------------------------------------+
+| apicheck-proxy | 1.0.2                           |
++--------------------------------------------------+
+| jwt-checker    | 1.0.0                           |
++--------------------------------------------------+
+| send-to-proxy  | 1.0.2                           |
++--------------------------------------------------+
+| acurl          | 1.0.0                           |
++--------------------------------------------------+
 | replay         | 1.0.0                           |
 +--------------------------------------------------+
-| sensitive-json | 1.0.0                           |
+| sensitive-data | 1.0.1                           |
 +--------------------------------------------------+
-| send-to-proxy  | 1.0.0                           |
+| openapiv2-lint | 1.0.0                           |
++--------------------------------------------------+
+| openapiv3-lint | 1.0.0                           |
 +--------------------------------------------------+
 ````
-To get more info about some tool use the *info* subcommand:
 
-```console
-$ acp info sensitive-json
+To get more info about some tool use the *info* command:
+
+```bash
+$ acp info sensitive-data
+
 +---------------------------------------------------------------------------+
-| Tool name 'sensitive-json'                                                |
+| Tool name 'sensitive-data'                                                |
 +---------------------------------------------------------------------------+
-| name                       | sensitive-json                               |
+| name                       | sensitive-data                               |
 +---------------------------------------------------------------------------+
-| short-command              | asej                                         |
+| display-name               | Sensitive data detector                      |
 +---------------------------------------------------------------------------+
-| version                    | 1.0.0                                        |
+| version                    | 1.0.1                                        |
 +---------------------------------------------------------------------------+
-| description                | Find sensitive data in JSON content in HTTP  |
-|                            | / Response                                   |
+| description                | Find sensitive data in HTTP Request /        |
+|                            | / Headers                                    |
 +---------------------------------------------------------------------------+
 | home                       | https://github.com/BBVA/apicheck             |
 +---------------------------------------------------------------------------+
 | author                     | BBVA Labs Security                           |
 +---------------------------------------------------------------------------+
+| type                       | apicheck                                     |
++---------------------------------------------------------------------------+
 ```
 
 ## Installing a new tool
 
-In order to use a tool you have to first install it by using the *install*
-subcommand. Under the hoods, the installation process is as follows:
+`APICheck` uses Docker under the hoods. So when to install a new tool, Docker image fetch will be displayed.
 
-1. Download the Docker image
-2. Register the tool in the environment
-3. Create the alias
+```bash
+$ acp install sensitive-data
+[*] Creating path for storing apicheck tools at : /Users/Dani/.apicheck_manager/bin
+[*] Fetching Docker image for tool 'sensitive-data'
 
-As an example, we'll use the *sensitive-json*, a tool that allows you to search
-for sensitive data in requests and responses:
+    1.0.1: Pulling from bbvalabs/sensitive-data
+    cbdbe7a5bc2a: Already exists
+    26ebcd19a4e3: Already exists
+    a29d43ca1bb4: Pulling fs layer
+    979dbbcf63e0: Pulling fs layer
+    30beed04940c: Pulling fs layer
+    7ac3561504a8: Pulling fs layer
+    3619e044d33d: Pulling fs layer
+    d3c293fd2442: Pulling fs layer
+    d0feb92e4bbc: Pulling fs layer
+    7ac3561504a8: Waiting
+    3619e044d33d: Waiting
+    d3c293fd2442: Waiting
+    d0feb92e4bbc: Waiting
+    979dbbcf63e0: Verifying Checksum
+    979dbbcf63e0: Download complete
+    30beed04940c: Verifying Checksum
+    30beed04940c: Download complete
+    7ac3561504a8: Verifying Checksum
+    7ac3561504a8: Download complete
+    a29d43ca1bb4: Verifying Checksum
+    a29d43ca1bb4: Download complete
+    d0feb92e4bbc: Verifying Checksum
+    d0feb92e4bbc: Download complete
+    d3c293fd2442: Verifying Checksum
+    d3c293fd2442: Download complete
+    3619e044d33d: Verifying Checksum
+    3619e044d33d: Download complete
+    a29d43ca1bb4: Pull complete
+    979dbbcf63e0: Pull complete
+    30beed04940c: Pull complete
+    7ac3561504a8: Pull complete
+    3619e044d33d: Pull complete
+    d3c293fd2442: Pull complete
+    d0feb92e4bbc: Pull complete
+    Digest: sha256:be66ed12618ce5786e7a8d234ddbf0116e466180e02ef5dd75b09c830b6687dc
+    Status: Downloaded newer image for bbvalabs/sensitive-data:1.0.1
+    docker.io/bbvalabs/sensitive-data:1.0.1
 
-```console
-$ acp install sensitive-json
-[*] Fetching Docker image for tool 'sensitive-json'
-
-    Using default tag: latest
-    latest: Pulling from bbvalabs/sensitive-json
-    aad63a933944: Already exists
-    f229563217f5: Already exists
-    d999dd4b9386: Already exists
-    d40444ccd481: Already exists
-    d7d60c647873: Already exists
-    3912dac2b2dd: Already exists
-    d516a946534e: Already exists
-    60a000e25e76: Already exists
-    625097242e3f: Pulling fs layer
-    a80b3111c615: Pulling fs layer
-    8b22d3755c28: Pulling fs layer
-    3d69e0c89189: Pulling fs layer
-    3d69e0c89189: Waiting
-    a80b3111c615: Verifying Checksum
-    a80b3111c615: Download complete
-    8b22d3755c28: Verifying Checksum
-    8b22d3755c28: Download complete
-    625097242e3f: Verifying Checksum
-    625097242e3f: Download complete
-    625097242e3f: Pull complete
-    a80b3111c615: Pull complete
-    3d69e0c89189: Verifying Checksum
-    3d69e0c89189: Download complete
-    8b22d3755c28: Pull complete
-    3d69e0c89189: Pull complete
-    Digest: sha256:0455f43f6032eaaad8c40a2681ffe83ec259e710ade45f6271fdcc4c4ca9adc6
-    Status: Downloaded newer image for bbvalabs/sensitive-json:latest
-    docker.io/bbvalabs/sensitive-json:latest
-
-[*] filling environment alias file
+[*] Making launch scripts
+[*] Updating configuration file
 ```
-
-<a id="apicheck-environments"></a>
-# APICheck environments
-
-Depending on the projects you're working on, probably you may want to use
-different tools and, even, *different versions* of those tools. In order to cope
-with this scenarios APICheck has the concept of *Environments*.
-
-An environment contains its own set of tools installed, and you can (move) among
-the existing environments by using the *activate* subcommand.
-
-## List environments
-
-You can list available environments with the *envs* subcommand:
-
-```console
-$ acp envs
-+------------------------------------------------------------+
-| Environment Name | Number of installed tools               |
-+------------------------------------------------------------+
-| default          | 1                                       |
-+------------------------------------------------------------+
-```  
-
-&#9888; The *default* environment always exist and it is activated by default.
-
-## Activating an environment
-
-Activating an environment means that you select all the tools installed in that
-environmentcan and that you can use them as regular commands. To activate an
-environment use the *activate* subcommand:
-
-```console
-$ eval $(acp activate myenvironment)
-(APICheck) $
-```
-
-If you want to leave the environment use the *deactivate* subcommand:
-
-```console
-(APICheck) $ deactivate myenvironment
-$
-```
-
-&#9888; The idea of using *eval* was taken from [Docker Machine](https://docs.docker.com/machine/reference/create#specifying-configuration-options-for-the-created-docker-engine)
-
-## Environments content
-
-In order to know the tools currently installed in an environment use the
-*describe* subcommand:
-
-```console
-$ acp describe
-
-+------------------------------------------------------------+
-| Environment | default                                      |
-+------------------------------------------------------------+
-||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-+------------------------------------------------------------+
-| Tool name      | Version                                   |
-+------------------------------------------------------------+
-| sensitive-json | 1.0.0                                     |
-+------------------------------------------------------------+
-```
-
-&#9888; If no environment is given to the command, the *default* environment
-will be used.
 
 <a id="running-tools"></a>
 # Running tools
 
-Once you're in the environment you want to use you can run the tools you need
-(finally!).
+Once you installed a tool and added [APICheck binary path](https://bbva.github.io/apicheck/docs/quick-start#add-config-to-path) you will be available a tool command with the name of the tool: 
 
-Remember that for this *Quickstart* document we have only installed the
-*sensitive-json* tool, that it is available as the command: ***sensitive-json***:
+```bash
+$ sensitive-data -h
+usage: sensitive-data [-h] [-q] [-F IGNORE_FILE] [-i IGNORE_RULE]
+                      [-r RULES_FILE] [--server SERVER] [-C] [-D]
 
-```console
-(APICheck) $ sensitive-json -h
-usage: __main__.py [-h] [-F IGNORE_FILE] [-i IGNORE_RULE] [-r RULES_FILE]
-                   [-o OUTPUT_FILE] [-q] [--server SERVER]
-
-Analyze a HTTP Request / Response for sensitive data
+Analyze a HTTP Request / Response searching for sensitive data
 
 optional arguments:
   -h, --help            show this help message and exit
+  -q, --quiet           quiet mode
   -F IGNORE_FILE, --ignore-file IGNORE_FILE
                         file with ignores rules
   -i IGNORE_RULE, --ignore-rule IGNORE_RULE
                         rule to ignore
   -r RULES_FILE, --rules-file RULES_FILE
                         rules file. One rule ID per line
-  -o OUTPUT_FILE, --output-file OUTPUT_FILE
-                        output file path
-  -q, --quiet           quiet mode
-  --server SERVER       launch a as server mode at localhost:8000
+  --server SERVER       launch in server mode listening at localhost:8000
+
+Server mode options:
+  -C, --show-in-console
+                        show results in console
+  -D, --dont-check      always returns OK although a rule matches
 ```
 
 Some tools can have alias (*short-command*, you can see it with the *acp info*
-command), so you can also run the command by using its alias:
+command), so you can also run the command by using its alias.
 
-```console
-(APICheck) $ asej -h
-usage: __main__.py [-h] [-F IGNORE_FILE] [-i IGNORE_RULE] [-r RULES_FILE]
-                   [-o OUTPUT_FILE] [-q] [--server SERVER]
-
-Analyze a HTTP Request / Response for sensitive data
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -F IGNORE_FILE, --ignore-file IGNORE_FILE
-                        file with ignores rules
-  -i IGNORE_RULE, --ignore-rule IGNORE_RULE
-                        rule to ignore
-  -r RULES_FILE, --rules-file RULES_FILE
-                        rules file. One rule ID per line
-  -o OUTPUT_FILE, --output-file OUTPUT_FILE
-                        output file path
-  -q, --quiet           quiet mode
-  --server SERVER       launch a as server mode at localhost:8000
-```
-
-APICheck has a repository of tools from which you can download them and access
-to their documentation in order to get usage information,
-[APICheck documentation](https://bbva.github.io/apicheck/docs).
+APICheck has a repository of tools from which you can download them and access to their documentation in order to get usage information, [APICheck documentation](https://bbva.github.io/apicheck/docs).
 
 <a id="tools-and-pipelines"></a>
 # Tools & Pipelines
@@ -276,12 +206,17 @@ to their documentation in order to get usage information,
 The power of APICheck resides in its capability of chaining tools by using
 UNIX-like pipelines.
 
-In this example we'll use a **.json** file that contains a message
-(in [APICheck format](/docs/developers)) for searching sensitive data within the
-body of the Request (You can find this file at
-[demo .json file](https://github.com/BBVA/apicheck/blob/master/tools/sensitive-json/examples/valid-request-user-password-one-line.json))  
+In this example we'll use a **.json** file that contains a message (in [APICheck format](https://bbva.github.io/apicheck/docs/building-new-tools#apicheck-data-format)) for searching sensitive data within the body of the Request (You can find this file at [demo .json file](https://raw.githubusercontent.com/BBVA/apicheck/master/tools/sensitive-data/examples/request-password-in-response.json))  
 
-```console
-(APICheck) $ cat demo-request.json | asej
-[{"where": "request", "path": "/", "keyOrValue": "key", "sensitiveData": "password"}, {"where": "response", "path": "/", "keyOrValue": "key", "sensitiveData": "password"}]  
+```bash
+$ cat demo-request.json | sensitive-data
+
+http://my-company.com
+---------------------
+
+ > rule           -> core-001
+ > where          -> request
+ > url            -> http://my-company.com/api/entry-point
+ > description    -> Find 'password' keyword in flow data
+ > sensitiveData  -> password  
 ```
