@@ -9,13 +9,12 @@ HERE = os.path.dirname(__file__)
 def test_empty():
     res = gurl.parse_curl_trace(None)
 
-    assert res is None
+    assert next(res, None) is None
 
 
 def test_google():
     with open(os.path.join(HERE, "tracefiles", "google"), "rb") as f:
-        res = gurl.parse_curl_trace(f.read())
-    print(res)
+        res = next(gurl.parse_curl_trace(f.read()), None)
     assert res is not None
     assert "_meta" in res
     assert "request" in res
@@ -54,3 +53,10 @@ def test_https_google():
             res = gurl.parse_curl_trace(f.read())
     except Exception as e:
         pass # TODO: add http2 support
+
+
+def test_yahoo():
+    with open(os.path.join(HERE, "tracefiles", "yahoo"), "rb") as f:
+        res = list(gurl.parse_curl_trace(f.read()))
+
+    assert len(res) == 3

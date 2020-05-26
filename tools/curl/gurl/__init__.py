@@ -1,4 +1,5 @@
 from functools import reduce
+import base64
 import io
 
 import httptools
@@ -13,6 +14,9 @@ def _parse_raw_http(parser_builder, raw_http, parser_extract=None):
     parser = parser_builder(callbacks)
     parser.feed_data(raw_http)
     callbacks.data["version"] = parser.get_http_version()
+    if "body" in callbacks.data:
+        # body must be base64
+        callbacks.data["body"] = base64.encodebytes(callbacks.data["body"]).decode("utf-8")
     if parser_extract:
         parser_data, parser_meta = parser_extract(parser)
         data = reduce(_dict_reducer, [callbacks.data, parser_data], {})
@@ -95,9 +99,6 @@ def parse_curl_trace(curl_trace_content):
             log = []
             req = bytearray()
             res = bytearray()
-
-            is_https = False
-
         elif block.startswith(b"=="):
             msg = block.decode("utf-8")
             msg = msg.replace("== ", "")
