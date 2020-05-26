@@ -16,10 +16,16 @@ First we check the BurpSuite listen port:
 
 ![BurpSuite Config](https://i.ibb.co/SKyMcLk/burpsuite-listen-addr.png)
 
+Second, we'll install send-to-proxy tool:
+
+```bash
+$ acp install send-to-proxy
+```
+
 Then, we send the session to the proxy:
 
 ```bash
-$ cat sessions.data| docker run --rm -it bbvalabs/send-to-proxy http://127.0.0.1:9000
+$ cat sessions.data | send-to-proxy http://127.0.0.1:9000
 [*] Request sent: 'https://cr0hn.com:443/'
 [*] Request sent: 'https://cr0hn.com:443/wp-includes/css/dist/block-library/style.min.css'
 [*] Request sent: 'https://cr0hn.com:443/wp-includes/css/dist/block-library/theme.min.css'

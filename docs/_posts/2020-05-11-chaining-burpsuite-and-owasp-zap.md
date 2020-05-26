@@ -23,7 +23,9 @@ Conceptually we will do:
 All we need to do is:
 
 ```bash
-$ docker run --rm -it -p 9001:9001 bbvalabs/apicheck-proxy http://127.0.0.1:9000 | docker run --rm -it bbvalabs/send-to-proxy http://127.0.0.1:9000 | docker run --rm -it bbvalabs/send-to-proxy http://127.0.0.1:8080
+$ pip install apicheck-package-manager
+$ acp install send-to-proxy
+$ docker run --rm -it -p 9001:9001 bbvalabs/apicheck-proxy http://127.0.0.1:9000 | send-to-proxy http://127.0.0.1:9000 | send-to-proxy http://127.0.0.1:8080
 ```
 
 A brief explanation: 
