@@ -9,6 +9,8 @@ on:
       - "docs/**"
       - "tools/**/README.md"
       - "tools/**/META"
+      - "tools-edge/**/README.md"
+      - "tools-edge/**/META"
 
 jobs:
   deploy:
