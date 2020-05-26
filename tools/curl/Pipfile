@@ -5,10 +5,14 @@ verify_ssl = true
 
 [dev-packages]
 pytest = "*"
+pylint = "*"
 
 [packages]
 httptools = "*"
 hypothesis = "*"
+pylint = "*"
+gurl = {editable = true,path = "."}
+e1839a8 = {editable = true,path = "."}
 
 [requires]
 python_version = "3.8"
