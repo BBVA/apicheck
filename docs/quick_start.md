@@ -1,4 +1,3 @@
-
 ---
 layout: doc
 title: Quick Start

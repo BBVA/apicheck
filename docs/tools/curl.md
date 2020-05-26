@@ -29,24 +29,16 @@ log info in this field.
 
 ## Quick start
 
-### With APICheck Package Manager
-
 As simple as use curl:
 
 ```bash
 $ apc install acurl
-$ eval $(apc activate)
-(APICheck) $ acurl www.google.com
+$ acurl www.google.com
 ```
 
 You can use to retrieve also ssl protected urls:
 
 ```bash
-(APICheck) $ acurl https://www.google.com
+$ acurl https://www.google.com
 ```
 
-### With Docker
-
-```bash
-$ docker run -it --rm bbvalabs/acurl www.google.com
-```

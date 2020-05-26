@@ -9,8 +9,6 @@ permalink: /tools/apicheck/apicheck-proxy
 
 This tool launches a local proxy.
 
-**Tool type**: generator
-
 ## Tool description
 
 `APICheck-proxy` tool runs the popular `MITM Proxy` under the hoods with a custom
@@ -18,7 +16,7 @@ This tool launches a local proxy.
 
 ## Quick start
 
-```console
+```bash
 $ docker run --rm -p 8080:8080 -it bbvalabs/apicheck-proxy
 Loading script /addons/apicheck_addon.py
 Proxy server listening at http://*:8080

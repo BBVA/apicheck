@@ -36,26 +36,16 @@ In case of error a code of 1 is returned, 0 otherwise.
 
 ## Quick start
 
-You can use jwt-checker from the `APICheck Package Manager` or running directly
-with docker.
-
-### Using `APICheck Package Manager`
+You can use jwt-checker from the `APICheck Package Manager`:
 
 ```bash
-$ eval $(acp activate)
-(APICheck) $ acurl http://my-company.com/api/entry-point | jwtchk -allowAlg HS256 -allowAlg HS384 -issuer bbva-iam -subject subject-id -secret bXlTZWNyZXRQYXNzd29yZG15U2VjcmV0UGFzc3dvcmQK
-
-Issuer claim doesn't match. Expected: bbva-iam, got: other-iam
-Subject claim doesn't match. Expected: subject-id, got: other-id
+$ acp install jwtchk
 ```
 
-### Using docker
-
-Once you've pulled the needed images you can run by executing the containers.
-For example:
+## Usage example
 
 ```bash
-$ docker run --rm bbvalabs/apicheck-curl http://my-company.com/auth/ | docker run --rm -i bbvalabs/jwt-checker -allowAlg HS256 -allowAlg HS384 -issuer bbva-iam -subject subject-id -secret bXlTZWNyZXRQYXNzd29yZG15U2VjcmV0UGFzc3dvcmQK
+$ acurl http://my-company.com/api/entry-point | jwtchk -allowAlg HS256 -allowAlg HS384 -issuer bbva-iam -subject subject-id -secret bXlTZWNyZXRQYXNzd29yZG15U2VjcmV0UGFzc3dvcmQK
 
 Issuer claim doesn't match. Expected: bbva-iam, got: other-iam
 Subject claim doesn't match. Expected: subject-id, got: other-id
