@@ -3,6 +3,7 @@ import re
 import json
 import hashlib
 import argparse
+import stat
 import subprocess
 import urllib.request
 
@@ -19,9 +20,13 @@ RC_FILES = {
     "zsh": ".zshrc"
 }
 
+REMOTE_BASE = "https://bbva.github.io/apicheck/assets"
+CATALOG_REMOTE_FILE = f"{REMOTE_BASE}/catalog.json"
+CATALOG_CHECK_SUM = f"{REMOTE_BASE}/catalog.json.checksum"
+
 
 def _get_version() -> str:
-    here = os.path.dirname(__name__)
+    here = os.path.dirname(__file__)
     init_file = os.path.join(here, "__init__.py")
     with open(init_file, "r") as f:
         content = f.read()
@@ -34,7 +39,7 @@ class CatalogCheckSumError(Exception):
     pass
 
 
-def get_current_rc_file():
+def check_apicheck_is_in_path() -> bool:
     shell_name = Path(os.environ.get("SHELL", "/bin/bash")).name
 
     try:
@@ -42,7 +47,13 @@ def get_current_rc_file():
     except KeyError:
         rc_file = RC_FILES["bash"]
 
-    return rc_file
+    with open(Path().home().joinpath(rc_file), "r") as rc:
+        content = rc.read()
+
+        if "/.apicheck_manager/bin" not in content:
+            return rc_file
+        else:
+            return None
 
 
 def add_new_alias(rc_file: str, alias: str):
@@ -77,14 +88,6 @@ def create_alias():
     # Detect shell and get RC file
     rc_file = get_current_rc_file()
     add_new_alias(rc_file, 'ls="ls -a"')
-
-
-# -------------------------------------------------------------------------
-# Catalog manage
-# -------------------------------------------------------------------------
-CATALOG_REMOTE_FILE = "https://bbva.github.io/apicheck/assets/catalog.json"
-CATALOG_CHECK_SUM = \
-    "https://bbva.github.io/apicheck/assets/catalog.json.checksum"
 
 
 def get_catalog() -> List[dict] or CatalogCheckSumError:
@@ -204,13 +207,96 @@ def list_packages(args: argparse.Namespace):
 
 
 def install_package(args: argparse.Namespace):
-    def build_alias_cmd(cmd: str, docker_image: str):
-        return f'''alias {cmd}="docker run --rm -i {docker_image}"'''
+
+    def docker_hub_image(image_name: str, version: str) -> str:
+        return f"bbvalabs/{image_name}:{version}"
+
+    def get_or_create_config_path() -> Path:
+        _path = Path().home().joinpath(".apicheck_manager")
+
+        if not _path.exists():
+            print(
+                f"[*] Creating path for storing apicheck tools at : "
+                f"{str(_path)}/bin"
+            )
+            os.mkdir(str(_path))
+
+        return _path
+
+    def load_current_config(_path) -> dict:
+        if not _path.joinpath("meta.json").exists():
+            meta = {"installed": {}}
+        else:
+            with open(str(_path.joinpath("meta.json")), "r") as f:
+                meta = json.load(f)
+
+        return meta
+
+    def build_tool_script(path: Path,
+                          image_name: str,
+                          version: str,
+                          short_command: str):
+
+        base_script_path = path.joinpath("bin")
+
+        if not base_script_path.exists():
+            os.mkdir(str(base_script_path))
+
+        script_path = str(base_script_path.joinpath(image_name))
+
+        scripts = [script_path]
+
+        if short_command:
+            scripts.append(str(base_script_path.joinpath(short_command)))
+
+        content = "\n".join([
+            "#!/bin/sh",
+            "",
+            f"docker run --rm -i {docker_hub_image(image_name, version)} "
+            f"\"$@\"",
+        ])
+
+        for s in scripts:
+
+            with open(s, "w") as f:
+                f.write(content)
+            os.chmod(
+                s,
+                stat.S_IXUSR | stat.S_IRUSR | stat.S_IWUSR |
+                stat.S_IRGRP | stat.S_IROTH
+            )
+
+    def pull_docker_image(image_name: str, version: str):
+        #
+        # Pull Docker image
+        #
+        _image_name = docker_hub_image(image_name, version)
+
+        command = f"docker pull {_image_name}"
+
+        proc = subprocess.Popen(command,
+                                stdout=subprocess.PIPE,
+                                shell=True)
+        print("")
+        while 1:
+            line = proc.stdout.readline()
+
+            if not line:
+                break
+
+            print("   ", line.decode("UTF-8"), end="")
+        print("")
 
     tool_name = args.tool_name
-    env_name = args.env_name or "default"
-    docker_image_name = tool_name.replace('_', '-')
+    # docker_image_name = tool_name.replace('_', '-')
 
+    # Common config
+    config_path = get_or_create_config_path()
+    config_file = load_current_config(config_path)
+
+    # -------------------------------------------------------------------------
+    # Search in catalog
+    # -------------------------------------------------------------------------
     catalog = get_catalog()
 
     # Find tool
@@ -220,131 +306,44 @@ def install_package(args: argparse.Namespace):
         exit(1)
 
     catalog_tool_name = tool["name"]
-    catalog_short_command = tool["short-command"]
+    catalog_tool_version = tool["version"]
+    catalog_short_command = tool.get("short-command", "")
+
+    # -------------------------------------------------------------------------
+    # Install / update tool
+    # -------------------------------------------------------------------------
+    if catalog_tool_name not in config_file["installed"]:
+
+        print(f"[*] Fetching Docker image for tool '{tool_name}'")
+        pull_docker_image(catalog_tool_name, catalog_tool_version)
+    else:
+        if config_file["installed"][catalog_tool_name] != catalog_tool_version:
+            print(f"[*] Updating Docker image for tool '{tool_name}'")
+            pull_docker_image(catalog_tool_name, catalog_tool_version)
+        else:
+            print(f"\n[*] Tools is already installed\n")
+            exit(0)
 
     #
-    # Pull Docker image
+    # Making script tools
     #
-    print(f"[*] Fetching Docker image for tool '{tool_name}'")
-    docker_image_name = f"bbvalabs/{docker_image_name}"
-
-    command = f"docker pull {docker_image_name}"
-
-    proc = subprocess.Popen(command,
-                            stdout=subprocess.PIPE,
-                            shell=True)
-
-    print("")
-    while 1:
-        line = proc.stdout.readline()
-
-        if not line:
-            break
-
-        print("   ", line.decode("UTF-8"), end="")
-    print("")
-
-    #
-    # Get / create environment config file
-    #
-    path = Path().home().joinpath(".apicheck_manager")
-
-    if not path.exists():
-        print(
-            f"[*] Creating path for storing apicheck environments at : "
-            f"{str(path)}"
-        )
-        os.mkdir(str(path))
-
-    env_path_route_deactivate = path.joinpath(f"{env_name}.deactivate")
-    deactivate_env_path = str(env_path_route_deactivate)
-    if not env_path_route_deactivate.exists():
-        print(f"[*] Creating deactivate env config for '{env_name}'")
-
-        header = [
-            f"""PS1=$(echo $PS1 | sed 's/[(]APICheck[)][ ]//g')""",
-        ]
-
-        with open(str(deactivate_env_path), "w") as f:
-            f.write("\n".join(header))
-
-    env_path_route = path.joinpath(env_name)
-    activate_env_path = str(env_path_route)
-    if not env_path_route.exists():
-        print(f"[*] Creating env config for '{env_name}'")
-
-        header = [
-            '''PS1="(APICheck) $PS1"''',
-            f'''alias deactivate="source {deactivate_env_path}"''',
-        ]
-
-        with open(str(activate_env_path), "w") as f:
-            f.write("\n".join(header))
+    print("[*] Making launch scripts")
+    build_tool_script(config_path,
+                      catalog_tool_name,
+                      catalog_tool_version,
+                      catalog_short_command)
 
     #
     # Fill env-file
     #
-    print("[*] filling environment alias file ")
-
-    alias1 = build_alias_cmd(catalog_tool_name, docker_image_name)
-    alias2 = build_alias_cmd(catalog_short_command, docker_image_name)
-
-    add_new_alias(activate_env_path, alias1)
-    add_new_alias(activate_env_path, alias2)
-
-    rm_new_alias(deactivate_env_path, catalog_tool_name)
-    rm_new_alias(deactivate_env_path, catalog_tool_name)
-
-    #
-    # Add to installed packages
-    #
-    if not path.joinpath("meta.json").exists():
-        meta = defaultdict(dict)
-        meta["environments"][env_name] = {}
-    else:
-        with open(str(path.joinpath("meta.json")), "r") as f:
-            meta = json.load(f)
-
-    env_config = meta["environments"][env_name]
-
-    if "installed" not in env_config:
-        env_config["installed"] = []
-
-    # Search for already installed
-    for s in env_config["installed"]:
-        if s["name"] == tool_name and s["version"] == tool["version"]:
-            break
-    else:
-        env_config["installed"].append({
-            "name": tool_name,
-            "version": tool["version"]
-        })
+    print("[*] Updating configuration file ")
+    config_file["installed"][tool_name] = tool["version"]
 
     #
     # Dump the config
     #
-    with open(str(path.joinpath("meta.json")), "w") as f:
-        json.dump(meta, f)
-
-
-def activate_env(args: argparse.Namespace):
-    env_name = args.env_name or "default"
-
-    #
-    # Get / create environment config file
-    #
-    path = Path().home().joinpath(".apicheck_manager")
-
-    if not path.exists():
-        print("[!] Env name doesn't exits")
-        exit(1)
-
-    env_path_route = path.joinpath(env_name)
-    if not env_path_route.exists():
-        print("[!] Env name doesn't exits")
-
-    with open(str(env_path_route), "r") as f:
-        print(f.read())
+    with open(str(config_path.joinpath("meta.json")), "w") as f:
+        json.dump(config_file, f)
 
 
 def info_package(args: argparse.Namespace):
@@ -365,79 +364,19 @@ def info_package(args: argparse.Namespace):
     ], head=(f"Tool name '{tool_name}'",), width=75)
 
 
-def describe_env(args: argparse.Namespace):
-    env_name = args.env_name or "default"
-
-    meta = Path().home().joinpath(".apicheck_manager").joinpath("meta.json")
-
-    if not meta.exists():
-        print("[i] There's not APICheck tools installed yet")
-        exit(0)
-
-    with open(str(meta), "r") as f:
-        meta_json = json.load(f)
-
-    if env_name not in meta_json["environments"]:
-        print(f"[!] Environment '{env_name}' doesnt exits")
-        exit(1)
-
-    env_info = meta_json["environments"][env_name]
-
-    print_table(content=[("Environment", env_name)])
-    content = [
-        (y["name"], y["version"])
-        for y in env_info["installed"]
-    ]
-    print(f"|{'|' * 60}|")
-    print_table(content=content, head=(f"Tool name", "Version"))
-
-
-def list_environments(args: argparse.Namespace):
-    base = Path().home().joinpath(".apicheck_manager")
-    meta = base.joinpath("meta.json")
-
-    if not meta.exists():
-        print("[i] There's not APICheck tools installed yet")
-        exit(0)
-
-    with open(str(meta), "r") as f:
-        meta_json = json.load(f)
-
-    # Get environments
-    environments = [
-        x for x in os.listdir(str(base))
-        if not x.endswith("json") and not x.endswith("deactivate")
-    ]
-
-    results = []
-    for env in environments:
-        _env = meta_json["environments"][env]
-        results.append((
-            env,
-            str(len(_env.get("installed", 0))))
-        )
-
-    print_table(content=results,
-                head=(f"Environment Name", "Number of installed tools"),
-                width=50)
-
-
 def main():
     actions = {
         "list": list_packages,
         "info": info_package,
         "install": install_package,
-        "activate": activate_env,
-        "describe": describe_env,
-        "envs": list_environments,
         "version": lambda x: print(f"\nCurrent version: {_get_version()}\n"),
     }
 
     parser = argparse.ArgumentParser(description='APICheck Manager')
-    parser.add_argument("-H", "--docker-host",
-                        dest="docker_host",
-                        default=None,
-                        help="docker url. default: tcp://127.0.0.1:2375")
+    parser.add_argument("-w", "--disable-warning",
+                        action="store_true",
+                        default=False,
+                        help="disable check of RC Shell File")
 
     subparsers = parser.add_subparsers(dest="action", help='available actions')
 
@@ -450,28 +389,6 @@ def main():
     tool_install = subparsers.add_parser('install',
                                          help='install an APICheck tool')
     tool_install.add_argument("tool_name")
-    tool_install.add_argument("-e", "--environment-name",
-                              dest="env_name",
-                              default=None,
-                              help="custom environment name")
-
-    tool_activate = subparsers.add_parser('activate',
-                                          help='activate an environment')
-    tool_activate.add_argument("-e", "--environment-name",
-                               dest="env_name",
-                               default=None,
-                               help="custom environment name")
-
-    tool_activate = subparsers.add_parser('describe',
-                                          help='show info of environment')
-    tool_activate.add_argument("-e", "--environment_name",
-                               dest="env_name",
-                               nargs="*",
-                               default=None,
-                               help="show information about environments")
-
-    environments = subparsers.add_parser('envs',
-                                         help='show available environments')
 
     version = subparsers.add_parser('version',
                                     help='displays version')
@@ -482,6 +399,17 @@ def main():
         print("\n[!] Invalid action name\n")
         parser.print_help()
         exit(1)
+
+    rc_file = check_apicheck_is_in_path()
+    if not cli_parsed.disable_warning and rc_file:
+        print("\n".join([
+            "-" * 65,
+            " WARNING: \n",
+            " You must include apic heck path to your shell RC file.\n",
+            " Please add: 'export PATH=\"$HOME/.apicheck_manager/bin:$PATH\"'",
+            f" to your '{rc_file}' file",
+            "-" * 65
+        ]))
 
     # Launch action
     try:
