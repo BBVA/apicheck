@@ -12,15 +12,16 @@ in both the request and the response.
 
 ## Motivation
 
-Some times APIs can return sensitive data for some entry-points. Sensitive data
-could be user information, some data of business logic, internal IPs or os on.
+Sometimes, APIs can return sensitive data for some entry-points. Sensitive data
+could be user information, some data from the business logic, internal IPs, and
+such.
 
-Detect this data is a hard task as it depends of the business application logic.
-With `APICheck Sensitive Data` you can configure a set of rules for analyzing
-the Request / Response object of an application.
+Detecting this data is a hard task as it depends on the application's business
+logic. With `APICheck Sensitive Data`, you can configure a set of rules for
+analyzing the Request / Response object of an application.
 
 Rules are provided in a simple `YAML` file that could be hosted in a remote
-place or in local filesystem.
+place or in the local filesystem.
 
 ## Quick start
 
@@ -30,13 +31,13 @@ Install APICheck tools:
 - acurl
 
 ```bash
-$ acp install sensitive-data
-$ acp install acurl
+acp install sensitive-data
+acp install acurl
 ```
 
 Finally run tools:
 
-```bash
+```console
 $ acurl http://my-company.com/api/entry-point | sensitive-data
 
 http://my-company.com
@@ -50,7 +51,7 @@ http://my-company.com
 
 ```
 
-    You can check how to install `APICheck Package Manager <https://bbva.github.io/apicheck/docs/quick-start>`
+You can check how to install `APICheck Package Manager <https://bbva.github.io/apicheck/docs/quick-start>`
 
 # Rules format
 
@@ -74,18 +75,18 @@ The above example is from the core rules file: `core.yaml`:
 - Severity values allowed are: High, Medium, Low
 - searchIn: Allows to search in the HTTP Request / Response and HTTP Headers in Request / Response  
 
-# Running as Service
+# Running as a Service
 
 `APIcheck Sensitive Data` can be run as a service, but only when running as a
 standalone docker container
 
-```bash
+```console
 $ docker run --rm -p 9000:9000 bbvalabs/sensitive-data --server 0.0.0.0:9000
 [2020-05-08 10:18:01 +0000] [1] [INFO] Goin' Fast @ http://0.0.0.0:9000
 [2020-05-08 10:18:01 +0000] [1] [INFO] Starting worker [1]
 ```
 
-It provides only one entry-point (`/apicheck/sensitive-data`) that can be
+It provides a single entry-point (`/apicheck/sensitive-data`) that can be
 accessed by using the HTTP POST method.
 
 POST data must be a valid APICheck data object.
@@ -93,24 +94,24 @@ POST data must be a valid APICheck data object.
 Example:
 
 ```bash
-$ acurl http://myservice.com > query.json
-$ curl -X POST -H "Content-Type: application/json" -X POST --d @query.json http://localhost:9000/apicheck/sensitive-data
+acurl http://myservice.com > query.json
+curl -X POST -H "Content-Type: application/json" -X POST --d @query.json http://localhost:9000/apicheck/sensitive-data
 ```
 
 # Examples
 
 ## Common examples
 
-You can run this examples by using both the `APICheck Package Manager` or
+You can run these examples by using both the `APICheck Package Manager` or
 directly with Docker.
 
 ### Core rules
 
 By default, the tool has a set of embedded rules: **core rules**. Unless you
-provide a rules file by the use of the `-r` parameter, these core rules will be
+provide a rules file by leveraging the `-r` parameter, these core rules will be
 used:
 
-```bash
+```console
 $ acurl http://my-company.com/api/entry-point | sensitive-data
 
 http://my-company.com
@@ -126,10 +127,10 @@ http://my-company.com
 
 ### With a remote rules file
 
-You can also use rules stored remote files, `APIcheck Sensitive Data` will
+You can also use rules stored in remote files. `APIcheck Sensitive Data` will
 download the rules file prior to execution.
 
-```bash
+```console
 $ acurl http://my-company.com/api/entry-point | sensitive-data -r http://127.0.0.1:9999/rules/rules.yaml
 
 http://my-company.com
@@ -145,7 +146,7 @@ http://my-company.com
 
 ### With many rules files
 
-```bash
+```console
 $ acurl http://my-company.com/api/entry-point | sensitive-data -r http://127.0.0.1:9999/rules/java.yaml -r http://127.0.0.1:9999/rules/credentials.yaml
 
 http://my-company.com
@@ -161,13 +162,13 @@ http://my-company.com
 
 ### Filtering false positives
 
-Some times rules generate false positives, in these cases we can remove them by
-using the `-i` parameter and a comma separated list of `rule ID` or by
-providing an ignore file, containing one `rule ID` by line, with the `-F`:
+Sometimes, rules generate false positives. In these cases, we can remove them by
+using the `-i` parameter and a comma-separated list of `rule ID`, or by
+providing an ignore file, containing one `rule ID` per line, with the `-F`:
 
-For the example:
+For instance:
 
-```bash
+```console
 $ acurl http://my-company.com/api/entry-point | sensitive-data -r http://127.0.0.1:9999/rules/rules2.yaml
 
 http://my-company.com
@@ -200,9 +201,9 @@ http://my-company.com
 ```
 
 If you want to remove the errors generated by **myrules2-002** and **core-001**
-rules you can do so with the `-i` parameter:
+rules, you can do so with the `-i` parameter:
 
-```bash
+```console
 $ acurl http://my-company.com/api/entry-point | sensitive-data -r http://127.0.0.1:9999/rules/rules2.yaml -it core-001,myrules2-002
 
 http://my-company.com
@@ -216,9 +217,9 @@ http://my-company.com
 
 ```
 
-Or using a ignore file:
+Or using an ignore file:
 
-```bash
+```console
 $ cat ignore-file
 core-001
 myrules2-002
@@ -241,7 +242,7 @@ You can also use `APIcheck Sensitive Data` by running by hand with Docker:
 
 ### Running without parameters
 
-```bash
+```console
 
 $ acurl http://my-company.com/api/entry-point | docker run --rm -it bbvalabs/sensitive-data
 
@@ -258,8 +259,7 @@ http://my-company.com
 
 ### Running with parameters
 
-```bash
-
+```console
 $ acurl http://my-company.com/api/entry-point | docker run --rm -it bbvalabs/sensitive-data -r http://127.0.0.1:9999/rules/credentials.yaml
 
 http://my-company.com
@@ -280,7 +280,7 @@ You can set these environment vars to set rule file or ignore file:
 - SENSITIVE_RULES
 - SENSITIVE_IGNORES
 
-```bash
+```console
 $ acurl http://my-company.com/api/entry-point | docker run --rm -it -e SENSITIVE_RULES=/home/john/rules.yaml -e SENSITIVE_IGNORES=http://myserver.com/ignores bbvalabs/sensitive-data
 
 http://my-company.com
@@ -296,9 +296,9 @@ http://my-company.com
 
 ## Mixing with other APICheck tools
 
-When `APIcheck Sensitive Data` detects an output pipe, it writes a compatible APICheck output data to allow the connection with other APICheck tools.
+When `APIcheck Sensitive Data` detects an output pipe, it writes an APICheck-compatible output data to allow the connection with other APICheck tools.
 
-```bash
+```console
 $ acurl http://my-company.com/api/entry-point | sensitive-data | send-to-proxy http://my-proxy-addr:9000
 
 http://my-company.com
@@ -311,8 +311,8 @@ http://my-company.com
  > sensitiveData  -> password
 ```
 
-In this case is useful the `quiet` flag:
+In this case, the `--quiet` (`-q`) flag proves useful:
 
 ```bash
-$ acurl http://my-company.com/api/entry-point | sensitive-data -q | send-to-proxy http://my-proxy-addr:9000
+acurl http://my-company.com/api/entry-point | sensitive-data -q | send-to-proxy http://my-proxy-addr:9000
 ```

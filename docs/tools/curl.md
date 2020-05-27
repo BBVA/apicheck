@@ -1,44 +1,44 @@
 ---
 layout: doc
-title: Apicheck from CURL
+title: APICheck from cURL
 type: apicheck
 permalink: /tools/apicheck/acurl
 ---
 
-Apicheck from CURL
+APICheck from cURL
 ==================
 
-This tool provide a binray curl command (acurl) that will be translated into a
-valid reqres object. 
+This tool provide a binary `curl` command (`acurl`) that will be translated into
+a valid `reqres` object.
 
 *Tool type:* generator
 
 ## Tool description
 
-You can use this way:
+You can use it this way:
 
-The binary curl command accept the same parameters than the curl command. For 
-further documentation you can check curl man:
+The binary `curl` command accepts the same parameters than the `curl` command. For
+further documentation you can check `curl` man:
 
 ```bash
-$ man curl
+man curl
 ```
 
-This tool add curl_log field to the _meta data. You can find all curl internal
-log info in this field.
+This tool adds a `curl_log` field to the `_meta` data. You can find all the
+`curl` internal log info in this field.
 
 ## Quick start
 
-As simple as use curl:
+As simple as using `curl`:
 
 ```bash
-$ apc install acurl
-$ acurl www.google.com
+apc install acurl
+acurl www.google.com
 ```
 
-You can use to retrieve also ssl protected urls:
+You can use it to retrieve also ssl protected URLs:
 
 ```bash
-$ acurl https://www.google.com
+acurl https://www.google.com
 ```
 

@@ -1,11 +1,11 @@
 ---
 layout: doc
-title: OpenAPI V2 Linter
+title: OpenAPI v2 Linter
 type: edge
 permalink: /tools/edge/openapiv2-lint
 ---
 
-# OpenAPI V2 Linter
+# OpenAPI v2 Linter
 
 This tool lints the endpoint provided using OpenAPI v2 specification.
 
@@ -17,7 +17,7 @@ Almost all APIs are published using the OpenAPI specification. In order to
 provide a good API definition some best pactices should be followed.
 
 A linter is a tool that analizes files written in a specific language looking
-for incorrect constructions and suspicios or incorrect code.
+for incorrect constructions and suspicious or incorrect code.
 
 This tool accepts an endpoint definition written using OpenAPI v2 as input
 (provided as an argument or read from standard input) and will output the same
@@ -29,7 +29,7 @@ In case of error a code of 1 is returned, 0 otherwise.
 
 Install the tool:
 
-```bash
+```console
 $ acp install openapiv2-lint
 [*] Fetching Docker image for tool 'openapiv2-lint'
 
@@ -47,7 +47,7 @@ $ acp install openapiv2-lint
 
 Finally activate the default environment and run the tool:
 
-```bash
+```console
 $ curl http://my-company.com/api/entry-point.yml | openapiv2-lint
 
 # [START swagger]
@@ -70,12 +70,12 @@ paths:
 ...
 ```
 
-In this case, as the API definition satisfies the OpenAPI V2 specification, the
-tool returns a code of 0 and writes again the definition in its standard
-oputput. In case of detecting any error the code will be 1 and will write in
-standard error something like:
+In this case, as the API definition satisfies the OpenAPI v2 specification, the
+tool returns a code of 0 and writes again the definition to its standard
+output. In case of detecting any error, the code will be 1 and will write to
+its standard error something like:
 
-```bash
+```console
 $ curl http://my-company.com/api/entry-point.yml | openapiv2-lint
 
 OpenAPI Specification document is not valid!

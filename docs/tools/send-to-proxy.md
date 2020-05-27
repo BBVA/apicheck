@@ -11,19 +11,19 @@ This tool sends the APICheck Request to a remote proxy.
 
 ## Quick start
 
-Then install the APICheck tools:
+Install the APICheck tools:
 
 - send-to-proxy
 - apicheck-curl
 
 ```bash
-$ acp install send-to-proxy
-$ acp install apicheck-curl
+acp install send-to-proxy
+acp install apicheck-curl
 ```
 
-Finally run the tool:
+Finally, run the tool:
 
-```bash
+```console
 $ acurl http://my-company.com/api/entry-point | send-to-proxy http://localproxy:9000
 [*] Request sent: 'http://my-company.com/api/entry-point'
 ```
@@ -31,8 +31,8 @@ $ acurl http://my-company.com/api/entry-point | send-to-proxy http://localproxy:
 
 ## Using the quiet mode
 
-`Send-to-proxy` accepts a parameter containing the URL of the proxy to send requests to and the `-q` (`--quiet`) option to suppress output data.
+`Send-to-proxy` accepts a parameter containing the URL of the proxy to send requests to, and the `-q` (`--quiet`) option to suppress output data.
 
 ```bash
-$ acurl http://my-company.com/api/entry-point | send-to-proxy -q http://localproxy:9000
+acurl http://my-company.com/api/entry-point | send-to-proxy -q http://localproxy:9000
 ```
