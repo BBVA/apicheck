@@ -68,7 +68,7 @@ optional arguments:
 The *list* command shows what are the available tools in the APICheck
 repository:
 
-```bash
+```console
 $ acp list
 +--------------------------------------------------+
 | Name           | Version                         |
@@ -120,7 +120,7 @@ $ acp info sensitive-data
 
 `APICheck` uses Docker under the hoods. So when to install a new tool, Docker image fetch will be displayed.
 
-```bash
+```console
 $ acp install sensitive-data
 [*] Creating path for storing apicheck tools at : /Users/Dani/.apicheck_manager/bin
 [*] Fetching Docker image for tool 'sensitive-data'
