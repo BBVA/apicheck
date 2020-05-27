@@ -2,17 +2,17 @@
 layout: post
 author: cr0hn
 author_link: https://twitter.com/ggdaniel
-title:  "Saving navigation session"
+title: "Saving navigation session"
 ---
 
-Some times you need to store a navigation session in a simple but standard format. [APICheck proxy](https://bbva.github.io/apicheck/tools/apicheck/apicheck-proxy) intercepts your navigation traffic and output it to the console. Then you only need to redirect to a file.
+Sometimes, you need to store a navigation session in a simple but standard format. [APICheck proxy](https://bbva.github.io/apicheck/tools/apicheck/apicheck-proxy) intercepts your navigation traffic and outputs it to the console. Then, you only need to redirect it to a file.
 <!--more-->
 
 ```bash
-$ docker run --rm -it -p 8080:8080 -e APICHECK_PROXY_ALLOWED_HOST=cr0hn.com bbvalabs/apicheck-proxy >> sessions.data
+docker run --rm -it -p 8080:8080 -e APICHECK_PROXY_ALLOWED_HOST=cr0hn.com bbvalabs/apicheck-proxy >> sessions.data
 ```
 
-Proxy listen in HTTP port 8080. Then we only need to configure our browser for use it:
+Proxy listens in HTTP port 8080. Then we only need to configure our browser to use it:
 
 ![Firefox Proxy](https://i.ibb.co/2kPCKTT/Preferencias-firefox.png)
 

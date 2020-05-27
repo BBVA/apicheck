@@ -7,11 +7,11 @@ permalink: /docs/quick-start
 <a id="requirements"></a>
 # Requirements
 
-APICheck uses heavily Docker, so you must have the Docker daemon installed in
-order to use it.
+APICheck relies heavily on Docker, so you must have the Docker daemon installed
+in order to use it.
 
 Although you can run APICheck tools by directly pulling and running each Docker
-image, We recommend you to use the ***APICheck Package Manager***. This
+image, We recommend that you use the ***APICheck Package Manager***. This
 document will explain how to use it to run APICheck.
 
 <a id="installation"></a>
@@ -20,8 +20,8 @@ document will explain how to use it to run APICheck.
 *Package Manager* needs Python >= 3.5 installed. To install it just type in
 your console:
 
-```console
-$ pip install apicheck-package-manager
+```bash
+pip install apicheck-package-manager
 ```
 
 <a id="add-config-to-path"></a>
@@ -29,15 +29,18 @@ $ pip install apicheck-package-manager
 
 You need to include `APICheck` binary path to your global `$PATH` var. So, add this line to your shell profile:
 
-    export PATH="$HOME/.apicheck_manager/bin:$PATH"
+```bash
+export PATH="$HOME/.apicheck_manager/bin:$PATH"
+```
 
 <a id="the-first-run"></a>
+
 # The First Run
 
-Once installed you can run the *Package Manager* by using the command *acp*.
+Once installed, you can run the *Package Manager* by using the command *acp*.
 
 ```console
-
+$ acp
 [!] Invalid action name
 
 usage: acp [-h] [-w] {list,info,install,version} ...
@@ -88,9 +91,9 @@ $ acp list
 +--------------------------------------------------+
 ````
 
-To get more info about some tool use the *info* command:
+To get more info about any tool, use the *info* command:
 
-```bash
+```console
 $ acp info sensitive-data
 
 +---------------------------------------------------------------------------+
@@ -166,11 +169,12 @@ $ acp install sensitive-data
 ```
 
 <a id="running-tools"></a>
+
 # Running tools
 
-Once you installed a tool and added [APICheck binary path](https://bbva.github.io/apicheck/docs/quick-start#add-config-to-path) you will be available a tool command with the name of the tool: 
+Once you have installed a tool and added [APICheck binary path](https://bbva.github.io/apicheck/docs/quick-start#add-config-to-path) you will have available a tool command with the name of the tool: 
 
-```bash
+```console
 $ sensitive-data -h
 usage: sensitive-data [-h] [-q] [-F IGNORE_FILE] [-i IGNORE_RULE]
                       [-r RULES_FILE] [--server SERVER] [-C] [-D]
@@ -194,20 +198,21 @@ Server mode options:
   -D, --dont-check      always returns OK although a rule matches
 ```
 
-Some tools can have alias (*short-command*, you can see it with the *acp info*
+Some tools can have an alias (*short-command*, you can see it with the *acp info*
 command), so you can also run the command by using its alias.
 
 APICheck has a repository of tools from which you can download them and access to their documentation in order to get usage information, [APICheck documentation](https://bbva.github.io/apicheck/docs).
 
 <a id="tools-and-pipelines"></a>
+
 # Tools & Pipelines
 
 The power of APICheck resides in its capability of chaining tools by using
-UNIX-like pipelines.
+*NIX-like pipelines.
 
 In this example we'll use a **.json** file that contains a message (in [APICheck format](https://bbva.github.io/apicheck/docs/building-new-tools#apicheck-data-format)) for searching sensitive data within the body of the Request (You can find this file at [demo .json file](https://raw.githubusercontent.com/BBVA/apicheck/master/tools/sensitive-data/examples/request-password-in-response.json))  
 
-```bash
+```console
 $ cat demo-request.json | sensitive-data
 
 http://my-company.com

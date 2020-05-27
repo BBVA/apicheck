@@ -1,4 +1,4 @@
-# OpenAPI V3 Linter
+# OpenAPI v3 Linter
 
 This tool lints the endpoint provided using OpenAPI v3 specification.
 
@@ -10,19 +10,19 @@ Almost all APIs are published using the OpenAPI specification. In order to
 provide a good API definition some best pactices should be followed.
 
 A linter is a tool that analizes files written in a specific language looking
-for incorrect constructions and suspicios or incorrect code.
+for incorrect constructions and suspicious or incorrect code.
 
 This tool accepts an endpoint definition written using OpenAPI v3 as input
 (provided as an argument or read from standard input) and will output the same
 definition, if no erros are encounterd, or the list of errors detected.
 
-In case of error a code of 1 is returned, 0 otherwise.
+In case of error, a code of 1 is returned, 0 otherwise.
 
 ## Quick start
 
 Install the tool:
 
-```bash
+```console
 $ acp install openapiv3-lint
 [*] Fetching Docker image for tool 'openapiv3-lint'
 
@@ -38,9 +38,9 @@ $ acp install openapiv3-lint
 [*] filling environment alias file
 ```
 
-Finally activate the default environment and run the tool:
+Finally, activate the default environment and run the tool:
 
-```bash
+```console
 $ curl http://my-company.com/api/entry-point-v3.yml | openapiv3-lint
 
 openapi: "3.0.0"
@@ -56,12 +56,12 @@ paths:
 ...
 ```
 
-In this case, as the API definition satisfies the OpenAPI V3 specification, the
-tool returns a code of 0 and writes again the definition in its standard
-oputput. In case of detecting any error the code will be 1 and will write in
-standard error something like:
+In this case, since the API definition satisfies the OpenAPI v3 specification,
+the tool returns a code of 0 and writes again the definition to its standard
+output. In case of detecting any error, the code will be 1 and will write to
+its standard error something like:
 
-```bash
+```console
 $ curl http://my-company.com/api/entry-point-v3.yml | openapiv3-lint
 Specification contains lint errors: 5
 
