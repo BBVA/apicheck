@@ -1,4 +1,5 @@
 import os
+import json
 
 import gurl
 
@@ -45,6 +46,10 @@ def test_google():
     assert res["response"]["headers"]["Accept-Ranges"] == "none"
     assert res["response"]["headers"]["Vary"] == "Accept-Encoding"
     assert res["response"]["headers"]["Transfer-Encoding"] == "chunked"
+    try:
+        json.dumps(res)
+    except Exception as e:
+        assert False, e
 
 
 def test_https_google():
@@ -60,3 +65,7 @@ def test_yahoo():
         res = list(gurl.parse_curl_trace(f.read()))
 
     assert len(res) == 3
+    try:
+        json.dumps(res)
+    except Exception as e:
+        assert False, e
