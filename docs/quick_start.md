@@ -222,5 +222,5 @@ http://my-company.com
  > where          -> request
  > url            -> http://my-company.com/api/entry-point
  > description    -> Find 'password' keyword in flow data
- > sensitiveData  -> password  
+ > sensitiveData  -> password
 ```
