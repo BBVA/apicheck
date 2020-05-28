@@ -18,7 +18,7 @@ And storing the old request on _meta for further processess.
 Install replay tool:
 
 ```bash
-$ apc install replay
+apc install replay
 ```
 
 You need an valid request-response object as input in json line format. You can
