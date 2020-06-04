@@ -3,10 +3,10 @@ entries:
   sensitive-data:
   - apiVersion: v2
     appVersion: 1.0.1
-    created: "2020-06-04T07:49:41.504501918Z"
+    created: "2020-06-04T08:02:34.716446861Z"
     description: Sensitive-data is a service that searches for sensitive data in HTTP
       request/responses, both in headers and body.
-    digest: 441157da519cff542f235aca40c8c0c516f351d827df4bacdc89f3e00d5068fd
+    digest: 9955b7606919615ee76f15c0332c7304a141f94e86970477516159d9f8f6c0b3
     home: https://github.com/BBVA/apicheck
     maintainers:
     - email: security.group@bbva.com
@@ -19,4 +19,4 @@ entries:
     urls:
     - sensitive-data-1.0.0.tgz
     version: 1.0.0
-generated: "2020-06-04T07:49:41.503988216Z"
+generated: "2020-06-04T08:02:34.715853955Z"
