@@ -1,7 +1,7 @@
 ---
 layout: post
 author: cr0hn
-author_link: https://twitter.com/ggdaniel
+author_link: https://twitter.com/ggdanniel
 title: "Saving navigation session"
 ---
 
@@ -16,7 +16,7 @@ Proxy listens in HTTP port 8080. Then we only need to configure our browser to u
 
 ![Firefox Proxy](https://i.ibb.co/2kPCKTT/Preferencias-firefox.png)
 
-You can check that `sessions.data` file contains a one-per-line [APICheck Data Objects](https://bbva.github.io/apicheck/docs/building-new-tools#apicheck-data-format) like JSON objects.
+You can check that `sessions.data` file contains a one-per-line [APICheck Data Objects](https://bbva.github.io/apicheck/docs/integrating-new-tools#apicheck-data-format) like JSON objects.
 
 ```json
 {"request": {"url": "https://cr0hn.com:443/", "method": "GET", "version": "HTTP/2.0", "headers": {":authority": "cr0hn.com", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:74.0) Gecko/20100101 Firefox/74.0", "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "accept-language": "es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3", "accept-encoding": "gzip, deflate", "dnt": "1", "upgrade-insecure-requests": "1", "pragma": "no-cache", "cache-control": "no-cache", "te": "trailers", "cookie": "_ga=GA1.2.909075303.1551881907; _hjIncludedInSample=1; __cfduid=da5cc0bbb2c60d20283d8a844b37faff21589884526; _hjid=01db2950-2118-413a-9f47-77fd8b7478b7; _gid=GA1.2.1142604146.1590064671"}, "body": ""}, "response": {"status": 200, "reason": "", "headers": {"date": "Thu, 21 May 2020 13:12:08 GMT", "content-type": "text/html; charset=UTF-8", "vary": "Accept-Encoding", "x-powered-by": "ASP.NET 4.8", "link": "<https://cr0hn.com/>; rel=shortlink", "cf-cache-status": "DYNAMIC", "expect-ct": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\"", "server": "cloudflare", "cf-ray": "596e8c1aed73ff48-MAD", "content-encoding": "gzip", "cf-request-id": "02d8f5e4ce0000ff48233d6200000001"}, "body": "..."}}
