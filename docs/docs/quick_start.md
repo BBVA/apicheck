@@ -210,7 +210,7 @@ APICheck has a repository of tools from which you can download them and access t
 The power of APICheck resides in its capability of chaining tools by using
 *NIX-like pipelines.
 
-In this example we'll use a **.json** file that contains a message (in [APICheck format](https://bbva.github.io/apicheck/docs/building-new-tools#apicheck-data-format)) for searching sensitive data within the body of the Request (You can find this file at [demo .json file](https://raw.githubusercontent.com/BBVA/apicheck/master/tools/sensitive-data/examples/request-password-in-response.json))  
+In this example we'll use a **.json** file that contains a message (in [APICheck format](https://bbva.github.io/apicheck/docs/integrating-new-tools#apicheck-data-format)) for searching sensitive data within the body of the Request (You can find this file at [demo .json file](https://raw.githubusercontent.com/BBVA/apicheck/master/tools/sensitive-data/examples/request-password-in-response.json))  
 
 ```console
 $ cat demo-request.json | sensitive-data

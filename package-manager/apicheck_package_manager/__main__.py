@@ -84,12 +84,6 @@ def rm_new_alias(rc_file: str, alias: str):
         bashrc_path.write_text(f'{bashrc_text}{alias}\n')
 
 
-def create_alias():
-    # Detect shell and get RC file
-    rc_file = get_current_rc_file()
-    add_new_alias(rc_file, 'ls="ls -a"')
-
-
 def get_catalog() -> List[dict] or CatalogCheckSumError:
     # Fetch remote catalog
     with urllib.request.urlopen(CATALOG_REMOTE_FILE) as catalog, \

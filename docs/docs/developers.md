@@ -1,7 +1,7 @@
 ---
 layout: doc
 title: Building new tools
-permalink: /docs/building-new-tools
+permalink: /docs/integrating-new-tools
 ---
 
 <a id="why-create-new-a-tool"></a>

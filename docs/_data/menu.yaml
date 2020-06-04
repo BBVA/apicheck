@@ -9,5 +9,5 @@ menu:
   - menu_title: Quick start
     url: /docs/quick-start
 
-  - menu_title: Building new tools
-    url: /docs/building-new-tools
+  - menu_title: Integrating new tools
+    url: /docs/integrating-new-tools
