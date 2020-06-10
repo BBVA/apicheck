@@ -71,7 +71,7 @@ class MetaReqRes:
     is_ssl: bool = False
 
 
-def curl_trace_reqres_iterator(block_iterator):
+def curl_trace_reqres_iterator(blocks_iterator):
     """
     SSL negotiation can occur any time this method ignores it. But keep
         info about it.
@@ -80,7 +80,7 @@ def curl_trace_reqres_iterator(block_iterator):
     receiving = False
     is_ssl = False
     
-    for block in block_iterator: 
+    for block in blocks_iterator: 
         if "ssl" in block.item.lower():
             is_ssl = True
             if block.meta:

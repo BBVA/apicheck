@@ -1,6 +1,7 @@
 from functools import reduce
 import base64
 import io
+import operator
 
 import httptools
 
@@ -76,14 +77,20 @@ def _bytes_reduce(a:bytearray, b:bytes):
     return a
 
 
-def _extract_req(meta_req_res):
-    raw_data = map(lambda b: b.data, meta_req_res.req)
-    return reduce(_bytes_reduce, raw_data, bytearray())
+_just_data = operator.attrgetter('data')
+_just_req = operator.attrgetter('req')
+_just_res = operator.attrgetter('res')
 
 
-def _extract_res(meta_req_res):
-    raw_data = map(lambda b: b.data, meta_req_res.res)
-    return reduce(_bytes_reduce, raw_data, bytearray())
+def _extract_bin_block_from_multipart(from_attr, what_attr):
+    def _ext(target):
+        raw = map(what_attr, from_attr(target))
+        return reduce(_bytes_reduce, raw, bytearray())
+    return _ext
+
+
+_extract_req = _extract_bin_block_from_multipart(_just_req, _just_data)
+_extract_res = _extract_bin_block_from_multipart(_just_res, _just_data)
 
 
 def parse_curl_trace(curl_trace_content):

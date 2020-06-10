@@ -10,7 +10,7 @@ HERE = os.path.dirname(__file__)
 def test_empty():
     res = gurl.parse_curl_trace(None)
 
-    assert next(res, None) is None
+    assert not list(res)
 
 
 def test_google():
