@@ -17,13 +17,15 @@ def main():
 
     if cli.file:
         with open(cli.file, "rb") as f:
-            res = gurl.parse_curl_trace(f.read())
-            print(json.dumps(res))
+            resps = gurl.parse_curl_trace(f.read())
+            for res in resps:
+                print(json.dumps(res))
     else:
         std_input = sys.stdin.buffer.read()
         if std_input:
-            res = gurl.parse_curl_trace(std_input)
-            print(json.dumps(res))
+            resps = gurl.parse_curl_trace(std_input)
+            for res in resps:
+                print(json.dumps(res))
         else:
             sys.stderr.write("No input, please use stdin of -f to provide")
 

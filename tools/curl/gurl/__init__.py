@@ -1,5 +1,7 @@
 from functools import reduce
+import base64
 import io
+import operator
 
 import httptools
 
@@ -13,6 +15,9 @@ def _parse_raw_http(parser_builder, raw_http, parser_extract=None):
     parser = parser_builder(callbacks)
     parser.feed_data(raw_http)
     callbacks.data["version"] = parser.get_http_version()
+    if "body" in callbacks.data:
+        # body must be base64
+        callbacks.data["body"] = base64.encodebytes(callbacks.data["body"]).decode("utf-8")
     if parser_extract:
         parser_data, parser_meta = parser_extract(parser)
         data = reduce(_dict_reducer, [callbacks.data, parser_data], {})
@@ -67,43 +72,50 @@ def parse_binary(raw_request, raw_response):
     }
 
 
+def _bytes_reduce(a:bytearray, b:bytes):
+    a.extend(b)
+    return a
+
+
+_just_data = operator.attrgetter('data')
+_just_req = operator.attrgetter('req')
+_just_res = operator.attrgetter('res')
+
+
+def _extract_bin_block_from_multipart(from_attr, what_attr):
+    def _ext(target):
+        raw = map(what_attr, from_attr(target))
+        return reduce(_bytes_reduce, raw, bytearray())
+    return _ext
+
+
+_extract_req = _extract_bin_block_from_multipart(_just_req, _just_data)
+_extract_res = _extract_bin_block_from_multipart(_just_res, _just_data)
+
+
 def parse_curl_trace(curl_trace_content):
     if not curl_trace_content:
         return None
     
-    def block_to_bytes(block):
-        no_header = b'\n'.join(block.split(b'\n')[1:])
-        hex_part = hd.extract_hex_from_curl(no_header)
-        return bytes.fromhex(hex_part.decode("utf-8"))
-
     log = []
     req = bytearray()
     res = bytearray()
-
     is_https = False
-    
-    for block in cp.curl_trace_block_iterator(curl_trace_content):
-        if block.startswith(b"=="):
-            msg = block.decode("utf-8")
-            msg = msg.replace("== ", "")
-            log.append(msg)
-        elif block.startswith(b'=> Send header'): #Send header
-            req.extend(block_to_bytes(block))
-        elif block.startswith(b'=> Send data'): #Send data
-            req.extend(block_to_bytes(block))
-        elif block.startswith(b'<= Recv header'): #Recv header
-            res.extend(block_to_bytes(block))
-        elif block.startswith(b'<= Recv data'): #Recv data
-            res.extend(block_to_bytes(block))
-        elif block.startswith(b'=> Send SSL'): #Is https
-            is_https = True
-        else: # not my bussiness
-            pass
 
-    reqres = parse_binary(req, res)
-    reqres["_meta"]["curl_log"] = log
-    if is_https:
-        reqres["request"]["url"] = "https://"+reqres["request"]["url"]
-    else:
-        reqres["request"]["url"] = "http://"+reqres["request"]["url"]
-    return reqres
+    blocks = cp.curl_trace_block_iterator(curl_trace_content)
+    
+    for meta_req_res in cp.curl_trace_reqres_iterator(blocks):
+        req_bytes = _extract_req(meta_req_res)
+        res_bytes = _extract_res(meta_req_res)
+
+        reqres = parse_binary(req_bytes, res_bytes)
+
+        if not "_meta" in reqres:
+            reqres["_meta"] = {}
+        reqres["_meta"]["curl_log"] = meta_req_res.meta
+        if is_https:
+            reqres["request"]["url"] = f"https://{reqres['request']['url']}"
+        else:
+            reqres["request"]["url"] = f"http://{reqres['request']['url']}"
+        
+        yield reqres

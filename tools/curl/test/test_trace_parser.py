@@ -1,4 +1,5 @@
 import os
+import json
 
 import gurl
 
@@ -9,13 +10,12 @@ HERE = os.path.dirname(__file__)
 def test_empty():
     res = gurl.parse_curl_trace(None)
 
-    assert res is None
+    assert not list(res)
 
 
 def test_google():
     with open(os.path.join(HERE, "tracefiles", "google"), "rb") as f:
-        res = gurl.parse_curl_trace(f.read())
-    print(res)
+        res = next(gurl.parse_curl_trace(f.read()), None)
     assert res is not None
     assert "_meta" in res
     assert "request" in res
@@ -46,6 +46,10 @@ def test_google():
     assert res["response"]["headers"]["Accept-Ranges"] == "none"
     assert res["response"]["headers"]["Vary"] == "Accept-Encoding"
     assert res["response"]["headers"]["Transfer-Encoding"] == "chunked"
+    try:
+        json.dumps(res)
+    except Exception as e:
+        assert False, e
 
 
 def test_https_google():
@@ -54,3 +58,14 @@ def test_https_google():
             res = gurl.parse_curl_trace(f.read())
     except Exception as e:
         pass # TODO: add http2 support
+
+
+def test_yahoo():
+    with open(os.path.join(HERE, "tracefiles", "yahoo"), "rb") as f:
+        res = list(gurl.parse_curl_trace(f.read()))
+
+    assert len(res) == 3
+    try:
+        json.dumps(res)
+    except Exception as e:
+        assert False, e

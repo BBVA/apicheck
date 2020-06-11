@@ -1,6 +1,4 @@
 
-import base64
-
 
 class RequestResponseCallbacks:
     def __init__(self):
@@ -35,7 +33,9 @@ class RequestResponseCallbacks:
         pass
 
     def on_body(self, body: bytes):
-        self.data["body"] = base64.encodebytes(body).decode("utf-8")
+        if "body" not in self.data:
+            self.data["body"] = bytearray()
+        self.data["body"].extend(body)
 
     def on_message_complete(self):
         pass
