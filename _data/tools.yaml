@@ -8,20 +8,6 @@ menu:
     type: apicheck
     url: /tools/apicheck/replay
 
-  - title: acurl
-    author: BBVA Labs Security
-    home: https://github.com/BBVA/apicheck
-    brief: curl with reqres output
-    type: apicheck
-    url: /tools/apicheck/acurl
-
-  - title: APICheck proxy
-    author: BBVA Labs Security
-    home: https://github.com/BBVA/apicheck
-    brief: launch a local proxy and intercept request / responses a perform some actions
-    type: apicheck
-    url: /tools/apicheck/apicheck-proxy
-
   - title: JWT token validator
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
@@ -42,6 +28,20 @@ menu:
     brief: Read a request from stdin and send it to a proxy
     type: apicheck
     url: /tools/apicheck/send-to-proxy
+
+  - title: acurl
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: curl with reqres output
+    type: apicheck
+    url: /tools/apicheck/acurl
+
+  - title: APICheck proxy
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: launch a local proxy and intercept request / responses a perform some actions
+    type: apicheck
+    url: /tools/apicheck/apicheck-proxy
 
   - title: OpenAPI v2 Linter
     author: BBVA Labs Security
