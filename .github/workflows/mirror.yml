@@ -1,0 +1,26 @@
+name: Mirror repository to OWASP
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  mirror:
+    name: Mirror
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure deploy key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.MIRRORING_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+      - name: Clone repo for mirroring
+        run: |
+          echo ${GITHUB_WORKSPACE}
+          echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git"
+          git clone --mirror "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git" ./
+          git fetch -p origin
+      - name: Remove pull requests
+        run: git for-each-ref --format 'delete %(refname)' refs/pull | git update-ref --stdin
+      - name: Push to remote mirror
+        run: git push --mirror ssh://git@github.com/OWASP/apicheck.git

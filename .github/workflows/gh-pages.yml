@@ -21,7 +21,7 @@ jobs:
       - name: Build Doc
         run: python3 build_doc.py
 
-      - name: Build Helm harts
+      - name: Build Helm charts
         run: ./build_helm_charts
 
       - name: Deploy
