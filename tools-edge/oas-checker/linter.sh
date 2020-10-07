@@ -48,10 +48,9 @@ fi
 spectral lint ${rules} "$tmpfile"
 statusCode=$?
 
-if [ "$statusCode" -eq 0 ] || [ "$failonerror" ]
+if [ "$statusCode" -eq 0 ]
 then
   cat "$tmpfile"
 fi
 
 exit $statusCode
-
