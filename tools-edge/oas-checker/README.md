@@ -38,17 +38,13 @@ $ acp install oas-checker
     Status: Downloaded newer image for bbvalabs/oas-checker:latest
     docker.io/bbvalabs/oas-checker:latest
 
-    ...
-    Status: Downloaded newer image for bbvalabs/oas-check:latest
-    docker.io/bbvalabs/oas-check:latest
-
 [*] filling environment alias file
 ```
 
 Finally, activate the default environment and run the tool:
 
 ```console
-$ curl http://my-company.com/api/entry-point-v3.yml | oas-check
+$ curl http://my-company.com/api/entry-point-v3.yml | oas-checker
 
 openapi: "3.0.0"
 info:
@@ -69,7 +65,7 @@ output. In case of detecting any error, the code will be 1 and will write to
 its standard error something like:
 
 ```console
-$ curl http://my-company.com/api/entry-point-v3.yml | oas-check
+$ curl http://my-company.com/api/entry-point-v3.yml | oas-checker
 Specification contains lint errors: 5
 
 OpenAPI 3.x detected
