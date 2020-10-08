@@ -5,7 +5,7 @@ RUN apk update && \
     npm install -g @stoplight/spectral
 
 # Load default ruleset from a suitable source
-RUN wget https://teamdigitale.github.io/api-oas-checker/spectral.yml -qO .spectral.yml
+COPY spectral.yml .spectral.yml
 
 COPY linter.sh /bin
 

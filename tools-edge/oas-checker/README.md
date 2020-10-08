@@ -27,13 +27,17 @@ Install the tool:
 
 ```console
 $ acp install oas-checker
-[*] Fetching Docker image for tool 'oas-check'
+[*] Fetching Docker image for tool 'oas-checker'
 
     Using default tag: latest
-    latest: Pulling from stoplight/spectral
+    latest: Pulling from bbvalabs/oas-checker
     aad63a933944: Already exists
-    dc24e89b59ec: Already existshttp://my-company.com/api/entry-point-v3.yml
+    dc24e89b59ec: Already exists
     810779e0b9c3: Already exists
+    ...
+    Status: Downloaded newer image for bbvalabs/oas-checker:latest
+    docker.io/bbvalabs/oas-checker:latest
+
     ...
     Status: Downloaded newer image for bbvalabs/oas-check:latest
     docker.io/bbvalabs/oas-check:latest
@@ -68,9 +72,18 @@ its standard error something like:
 $ curl http://my-company.com/api/entry-point-v3.yml | oas-check
 Specification contains lint errors: 5
 
-#/info  R: info-contact  D: info object should contain contact object
-expected Object { title: 'Endpoints Example', version: '2.0.0' } to have property contact
+OpenAPI 3.x detected
 
-More information: https://speccy.io/rules/1-rulesets#info-contact
+/tmp/content.oas3
+ 1:1    error  has-contact         API MUST reference a contact, either url or email: {{path}}
+ 1:1    error  has-termsOfService  API MUST reference the URL of the Terms of Service {{path}}
+ 1:1    error  has-x-api-id        API must have an unique identifier in x-api-id {{path}}
+ 1:1    error  has-x-summary       API must have an one-liner summary field in x-summary {{path}}
+ 1:1  warning  info-contact        Info object should contain `contact` object.
+ 1:1  warning  info-description    OpenAPI object info `description` must be present and non-empty string.
+ 1:1  warning  oas3-api-servers    OpenAPI `servers` must be present and non-empty array.
+ 1:1    error  oas3-schema         Object should have required property `info`.
+ 1:1  warning  openapi-tags        OpenAPI object should have non-empty `tags` array.
+
 ...
 ```

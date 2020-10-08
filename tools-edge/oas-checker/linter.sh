@@ -30,7 +30,7 @@ fi
 file="$1"
 
 # File from stdin
-if [ -z "$file"]; then
+if [ -z "$file" ]; then
     cat /dev/stdin > "$tmpfile"
     file="$tmpfile"
 # File from the web
