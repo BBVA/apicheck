@@ -17,14 +17,14 @@ This tool is based on stoplight/spectral.
 ## Tool description
 
 Almost all APIs are published using the OpenAPI specification. In order to
-provide a good API definition some best pactices should be followed.
+provide a good API definition some best practices should be followed.
 
 A linter is a tool that analizes files written in a specific language looking
 for incorrect constructions and suspicious or incorrect code.
 
 This tool accepts an endpoint definition written using OpenAPI v3 as input
 (provided as an argument or read from standard input) and will output the same
-definition, if no erros are encounterd, or the list of errors detected.
+definition, if no errors are encounterd, or the list of errors detected.
 
 In case of error, a code of 1 is returned, 0 otherwise.
 
