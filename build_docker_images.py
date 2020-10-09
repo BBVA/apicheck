@@ -26,9 +26,9 @@ def main():
     # Getting README from plugin
     #
     for t in (TOOLS_PATH, EDGE_TOOLS_PATH):
-        print(f"**************************************************** PROCESSING {t} ****************************************************"
-                , file=sys.stderr)
+
         is_edge_tool = "tools-edge" in t
+
 
         for d in os.listdir(t):
 
@@ -36,7 +36,8 @@ def main():
                 continue
 
             # Get META file
-            meta_path = os.path.join(t, d, "META")
+            tool_path = os.path.join(t, d)
+            meta_path = os.path.join(tool_path, "META")
             tool_type = 'edge' if is_edge_tool else 'apicheck'
 
             try:
@@ -68,8 +69,7 @@ def main():
 
                     version = meta["version"]
                     docker_file_path = os.path.join(
-                        t,
-                        d,
+                        tool_path,
                         meta.get("docker-file", "Dockerfile"))
 
                     if not os.path.exists(docker_file_path):
@@ -86,7 +86,7 @@ def main():
 
                         docker_images[name] = (
                             version,
-                            os.path.join(TOOLS_PATH, d),
+                            os.path.join(tool_path),
                             f'./{meta.get("docker-file", "Dockerfile")}'
                         )
 
@@ -130,6 +130,7 @@ def main():
     for image, (version, docker_file_path, docker_file) in docker_images.items():
 
         # Go to the tool home for each building
+        print(f"          ********** GENERATING {DOCKER_HUB_REPO}/{image}:{version} **********          ", file=sys.stderr)
         commands.append(f"cd {docker_file_path}")
 
         # Docker command
