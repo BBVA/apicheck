@@ -8,6 +8,7 @@ on:
       - "tools*/**/Dockerfile"
       - "tools*/**/META"
       - .github/workflows/build-docker-images.yml
+      - build_docker_images.py
 
 
 jobs:

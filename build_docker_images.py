@@ -26,7 +26,8 @@ def main():
     # Getting README from plugin
     #
     for t in (TOOLS_PATH, EDGE_TOOLS_PATH):
-
+        print(f"**************************************************** PROCESSING {t} ****************************************************"
+                , file=sys.stderr)
         is_edge_tool = "tools-edge" in t
 
         for d in os.listdir(t):
