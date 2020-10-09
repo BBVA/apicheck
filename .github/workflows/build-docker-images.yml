@@ -5,8 +5,9 @@ on:
     branches:
       - master
     paths:
-      - "tools/**/Dockerfile"
-      - "tools/**/META"
+      - "tools*/**/Dockerfile"
+      - "tools*/**/META"
+      - .github/workflows/build-docker-images.yml
 
 
 jobs:
