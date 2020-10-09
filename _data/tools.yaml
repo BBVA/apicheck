@@ -50,6 +50,13 @@ menu:
     type: edge
     url: /tools/edge/openapiv2-lint
 
+  - title: OpenAPI v3 checker
+    author: Roberto Polli
+    home: https://github.com/BBVA/apicheck
+    brief: Check the endpoint specification provided using OpenAPI v3 spec
+    type: edge
+    url: /tools/edge/oas-check
+
   - title: OpenAPI v3 Linter
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
