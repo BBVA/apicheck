@@ -15,14 +15,6 @@
 # limitations under the License.
 #
 
-## while getops 'sf:' p
-## do
-##   case $p in
-##     s) failonerror=true ;;
-##     f) file=$OPTARG ;;
-##   esac
-## done
-
 statusCode=0
 
 if [ $# -gt 0 ]
@@ -38,7 +30,7 @@ else
   cat /dev/stdin > content
   oval validate content
   statusCode=$?
-  if [ $statusCode -eq 0 ] || [ $failonerror ]
+  if [ $statusCode -eq 0 ]
   then
     cat content
   fi
