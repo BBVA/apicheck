@@ -1,0 +1,324 @@
+#
+# See technical recommendations on Italian Guidelines
+#
+#
+#
+extends: spectral:oas
+
+rules:
+  paths-kebab-case:
+    description: >
+      Paths should be kebab-case.
+    message: "{{property}} is not kebab-case: {{error}}"
+    severity: warn
+    recommended: true
+    given: $.paths[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^(/[a-z0-9-.]+|/{[a-zA-Z0-9_]+})+$
+  request-headers-pascal-case:
+    description: |
+      Headers should be pascal-case.
+    message: "{{value}} {{error}} in {{path}}"
+    severity: hint
+    recommended: true
+    given:
+      - $.[parameters][?(@.in=="header")].name
+    then:
+      function: casing
+      functionOptions:
+        type: pascal
+        separator:
+          char: "-"
+  response-headers-pascal-case:
+    description: |
+      Headers should be pascal-case.
+    message: "Header {{error}}: {{path}}"
+    severity: hint
+    recommended: true
+    given:
+      - $.[responses][*].headers.*~
+    then:
+      function: casing
+      functionOptions:
+        type: pascal
+        separator:
+          char: "-"
+  no-x-headers-request:
+    description: All 'HTTP' headers SHOULD NOT include 'X-' headers
+      (https://tools.ietf.org/html/rfc6648).
+    severity: warn
+    given:
+      - $..parameters[?(@.in == 'header')].name
+    message: HTTP header '{{value}}' SHOULD NOT include 'X-' prefix in {{path}}
+    recommended: true
+    type: style
+    then:
+      function: pattern
+      functionOptions:
+        match: /^([^x]|.[^-])|RateLimit-/i
+  no-x-headers-response:
+    description: All 'HTTP' headers SHOULD NOT include 'X-' headers
+      (https://tools.ietf.org/html/rfc6648).
+    severity: warn
+    given:
+      - $.[responses][*].headers.*~
+    message: HTTP response header SHOULD NOT include 'X-' prefix in {{path}}
+    recommended: true
+    type: style
+    then:
+      function: pattern
+      functionOptions:
+        match: /^([^x]|.[^-])|RateLimit-/i
+  servers-description:
+    description: Servers must have a description.
+    message: Server {{path}} must have a description.
+    given: $.servers[*]
+    severity: error
+    recommended: true
+    then:
+      field: description
+      function: truthy
+  servers-use-https:
+    description: Servers must use https
+    message: "Non-sandbox url  {{value}} {{error}}. Add `x-sandbox: true` to declare
+      the server as a sandbox."
+    given: $.servers[?(@["x-sandbox"] != true)]
+    severity: error
+    recommended: true
+    then:
+      field: url
+      function: pattern
+      functionOptions:
+        match: ^https://.*
+  has-x-summary:
+    description: API must have an one-liner summary field in x-summary {{path}}
+    given: $
+    severity: error
+    recommended: true
+    type: style
+    formats:
+      - oas3
+    then:
+      field: info.x-summary
+      function: truthy
+  has-termsOfService:
+    description: API MUST reference the URL of the Terms of Service {{path}}
+    given: $
+    severity: error
+    recommended: true
+    type: style
+    formats:
+      - oas3
+    then:
+      field: info.termsOfService
+      function: truthy
+  has-contact:
+    description: "API MUST reference a contact, either url or email: {{path}}"
+    given: $
+    severity: error
+    recommended: true
+    type: style
+    formats:
+      - oas3
+    then:
+      field: info.contact
+      function: truthy
+  has-x-api-id:
+    description: API must have an unique identifier in x-api-id {{path}}
+    given: $
+    severity: error
+    recommended: true
+    type: style
+    then:
+      field: info.x-api-id
+      function: truthy
+  number-format:
+    description: Number must specify a format.
+    message: Schema of type number must specify a format. {{path}}
+
+    formats:
+      - oas3
+    severity: error
+    recommended: true
+    given: |
+      $.[?(@.type=="number")]
+    then:
+      field: format
+      function: truthy
+  integer-format:
+    description: Integer must specify a format.
+    message: Schema of type integer must specify a format. {{path}}
+
+    formats:
+      - oas3
+    severity: error
+    recommended: true
+    given: |
+      $.[?(@.type=="integer")]
+    then:
+      field: format
+      function: truthy
+  allowed-integer-format:
+    description: Integer format should be in the table.
+    message: integer format is "{{value}}", expected one of [int32, int64]. {{path}}
+    formats:
+      - oas3
+    severity: hint
+    recommended: true
+    given: |
+      $.[?(@.type=="integer")]
+    then:
+      field: format
+      function: enumeration
+      functionOptions:
+        values:
+          - int32
+          - int64
+  allowed-number-format:
+    description: Integer format should be in the table.
+    message: number format is "{{value}}", expected one of [decimal32, decimal64,
+      decimal128, float, double]. {{path}}
+
+    formats:
+      - oas3
+    severity: hint
+    recommended: true
+    given: |
+      $.[?(@.type=="number")]
+    then:
+      field: format
+      function: enumeration
+      functionOptions:
+        values:
+          - decimal32
+          - decimal64
+          - float
+          - double
+          - decimal128
+  oas2: false
+  no-swagger-2:
+    description: Swagger 2 files are not allowed. Use OpenAPI >= 3.0
+    given: $
+    severity: error
+    recommended: true
+    type: style
+    formats:
+      - oas2
+    then:
+      field: swagger
+      function: falsy
+  patch-media-type:
+    description: >-
+      application/json is not an appropriate media-type for PATCH.
+
+
+    message: application/json is not an appropriate media-type for PATCH. {{path}}
+    formats:
+      - oas3
+    severity: error
+    recommended: true
+    given: $.[patch][requestBody][content]
+    then:
+      field: application/json
+      function: falsy
+  use-problem-json-for-errors:
+    description: "Error responses should support [RFC
+      7807](https://tools.ietf.org/html/rfc6648) "
+    message: Error responses should support [RFC
+      7807](https://tools.ietf.org/html/rfc6648) in {{path}}.
+    formats:
+      - oas3
+    severity: error
+    given: $.paths.[*].responses[?(@property.match(/^(4|5|default)/))].content.*~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+          - application/problem+xml
+          - application/problem+json
+  use-problem-schema:
+    description: "WARN: This rule is under implementation. Your problem schema
+      doesn't seem to match RFC7807. Are you sure it is ok?  "
+    message: Your schema doesn't seem to match RFC7807. Are you sure it is ok? {{path}}
+    formats:
+      - oas3
+    severity: hint
+    recommended: false
+    given: $.paths.[*].responses[?(@property.match(/^(4|5|default)/))][[schema]]
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+            title:
+              type: string
+            detail:
+              type: string
+  hint-problem-schema:
+    description: Your problem schema doesn't seem to match RFC7807. Are you sure
+      it is ok?
+
+    message: Error response doesn't seem to match RFC7807. Are you sure it is ok?
+      {{path}}
+    formats:
+      - oas3
+    severity: hint
+    recommended: true
+    given: $.[responses][?(@property.match(/^(4|5|default)/))][[schema]][properties].*~
+    then:
+      field: "@key"
+      function: pattern
+      functionOptions:
+        notMatch: message|code|msg
+  missing-retry-after:
+    description: APIs should use Retry-After on 429 and 503 responses.
+    message: "Missing ratelimit header: {{property}} in {{path}} "
+    formats:
+      - oas3
+    severity: warn
+    recommended: true
+    given: $.[responses][?(@property == "429" || @property == "503"  )][headers]
+    then:
+      field: Retry-After
+      function: truthy
+  missing-ratelimit:
+    description: APIs should use ratelimit headers at least on successful responses.
+    message: Missing ratelimit headers. {{property}} {{error}} {{path}}
+
+    formats:
+      - oas3
+    severity: warn
+    recommended: true
+    given: $.[responses][?(@property[0] == "2" )][headers]
+    then:
+      - functionOptions:
+          properties:
+            - X-RateLimit-Limit
+            - RateLimit-Limit
+        function: xor
+      - functionOptions:
+          properties:
+            - X-RateLimit-Remaining
+            - RateLimit-Remaining
+        function: xor
+      - functionOptions:
+          properties:
+            - X-RateLimit-Reset
+            - RateLimit-Reset
+        function: xor
+  response-with-json-object:
+    message: JSON responses must use json objects (eg "{}"), not {{value}}. {{path}}
+    severity: warn
+    recommended: true
+    given: $.[responses][*][content][?(@property.match("json$"))][schema]
+    then:
+      field: type
+      function: pattern
+      functionOptions:
+        match: object
+
