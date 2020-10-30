@@ -15,4 +15,4 @@ WORKDIR /root/
 
 COPY --from=build /jwtvalidator/jwt-checker .
 
-ENTRYPOINT ["./jwtchk"]
+ENTRYPOINT ["./jwt-checker"]
