@@ -225,9 +225,9 @@ rules:
       function: falsy
   use-problem-json-for-errors:
     description: "Error responses should support [RFC
-      7807](https://tools.ietf.org/html/rfc6648) "
+      7807](https://tools.ietf.org/html/rfc7807) "
     message: Error responses should support [RFC
-      7807](https://tools.ietf.org/html/rfc6648) in {{path}}.
+      7807](https://tools.ietf.org/html/rfc7807) in {{path}}.
     formats:
       - oas3
     severity: error
