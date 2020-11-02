@@ -6,7 +6,7 @@ APICheck - The DevSecOps toolset for REST APIs
    :target: https://github.com/BBVA/apicheck/blob/master/LICENSE
    :alt: License
 .. image:: https://readthedocs.org/projects/apicheck/badge/?version=latest
-   :target: https://apicheck.readthedocs.io
+   :target: https://bbva.github.io/apicheck/docs
    :alt: Documentation Status
 
 .. figure:: https://bbva.github.io/apicheck/assets/images/apicheck-logo-150x150.png
