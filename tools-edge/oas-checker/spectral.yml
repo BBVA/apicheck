@@ -1,6 +1,6 @@
 #
 # See technical recommendations on Italian Guidelines
-#
+#  in https://github.com/italia/api-oas-checker for discussing rules.
 #
 #
 extends: spectral:oas
