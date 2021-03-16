@@ -1,6 +1,6 @@
 PyYAML
 user_agent
-aiohttp==3.5.4
+aiohttp==3.7.4
 Cython==0.29.6
 Faker==1.0.4
 Jinja2==2.10
