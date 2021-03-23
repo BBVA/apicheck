@@ -3,7 +3,7 @@ user_agent
 aiohttp==3.7.4
 Cython==0.29.6
 Faker==1.0.4
-Jinja2==2.10
+Jinja2==2.11.3
 mitmproxy==4.0.4
 numpy==1.16.2
 pandas==0.24.2
