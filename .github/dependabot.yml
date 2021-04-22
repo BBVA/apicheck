@@ -1,0 +1,14 @@
+# Hi, Dependabot!
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "pip"
+    directory: "/_apicheck"
+    schedule:
+      interval: "daily"
+    ignore:
+      - dependency-name: "*"
