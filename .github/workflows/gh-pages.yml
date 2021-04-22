@@ -16,7 +16,7 @@ jobs:
   deploy:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v1  # v2 does not have submodules option now
+      - uses: actions/checkout@v2.3.4  # v2 does not have submodules option now
 
       - name: Build Doc
         run: python3 build_doc.py
