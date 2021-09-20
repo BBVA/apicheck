@@ -87,7 +87,7 @@ def _load_rules(args: argparse.Namespace) -> List[dict]:
         rules.append(env_rules)
 
     if args.rules_file:
-        rules.update(args.rules_file)
+        rules_files = rules_files + args.rules_file
 
     for rule_file in rules_files:
         if rule_file.startswith("http"):
