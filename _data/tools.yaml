@@ -1,6 +1,13 @@
 
 menu:
 
+  - title: JWT token validator
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: Validates issued JWT tokens to check for common pitfalls
+    type: apicheck
+    url: /tools/apicheck/jwt-checker
+
   - title: acurl
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
@@ -15,26 +22,19 @@ menu:
     type: apicheck
     url: /tools/apicheck/send-to-proxy
 
-  - title: Sensitive data detector
-    author: BBVA Labs Security
-    home: https://github.com/BBVA/apicheck
-    brief: Find sensitive data in HTTP Request / Response / Headers
-    type: apicheck
-    url: /tools/apicheck/sensitive-data
-
-  - title: JWT token validator
-    author: BBVA Labs Security
-    home: https://github.com/BBVA/apicheck
-    brief: Validates issued JWT tokens to check for common pitfalls
-    type: apicheck
-    url: /tools/apicheck/jwt-checker
-
   - title: APICheck proxy
     author: BBVA Labs Security
     home: https://github.com/BBVA/apicheck
     brief: launch a local proxy and intercept request / responses a perform some actions
     type: apicheck
     url: /tools/apicheck/apicheck-proxy
+
+  - title: Sensitive data detector
+    author: BBVA Labs Security
+    home: https://github.com/BBVA/apicheck
+    brief: Find sensitive data in HTTP Request / Response / Headers
+    type: apicheck
+    url: /tools/apicheck/sensitive-data
 
   - title: Replay HTTP Requests
     author: BBVA Labs Security
