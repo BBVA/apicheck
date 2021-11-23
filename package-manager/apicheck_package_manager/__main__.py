@@ -399,7 +399,7 @@ def main():
         print("\n".join([
             "-" * 65,
             " WARNING: \n",
-            " You must include apic heck path to your shell RC file.\n",
+            " You must include api check path to your shell RC file.\n",
             " Please add: 'export PATH=\"$HOME/.apicheck_manager/bin:$PATH\"'",
             f" to your '{rc_file}' file",
             "-" * 65
