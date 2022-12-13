@@ -15,7 +15,7 @@ jobs:
   deploy:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v2.3.4  # v2 does not have submodules option now
+      - uses: actions/checkout@v3.2.0  # v2 does not have submodules option now
 
       - name: Build images
         run: python3 build_docker_images.py | sh
